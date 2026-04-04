@@ -21,17 +21,21 @@ function EmotionChip({ entry }) {
 }
 
 export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
-  const [text, setText]       = useState('');
-  const [loading, setLoading] = useState(false);
-  const [result, setResult]   = useState(null);
-  const [error, setError]     = useState(null);
-  const [entries, setEntries] = useLocalStorage('emowheel-journal', []);
-  const textareaRef           = useRef(null);
+  const [text, setText]         = useState('');
+  const [loading, setLoading]   = useState(false);
+  const [result, setResult]     = useState(null);
+  const [error, setError]       = useState(null);
+  const [useAI, setUseAI]       = useLocalStorage('emowheel-use-ai', false);
+  const [entries, setEntries]   = useLocalStorage('emowheel-journal', []);
+  const textareaRef             = useRef(null);
 
   const hasApiKey = Boolean(
     import.meta.env.VITE_ANTHROPIC_API_KEY &&
     import.meta.env.VITE_ANTHROPIC_API_KEY !== 'your_key_here'
   );
+
+  // AI mode is only active if explicitly toggled on AND a key is present
+  const aiActive = useAI && hasApiKey;
 
   const handleSubmit = async () => {
     const trimmed = text.trim();
@@ -40,14 +44,17 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
 
     try {
       let detected;
-      if (hasApiKey) {
-        try { detected = { ...await analyzeWithClaude(trimmed), segmentId: null }; }
-        catch { detected = detectEmotion(trimmed); }
+      if (aiActive) {
+        try {
+          detected = { ...await analyzeWithClaude(trimmed), segmentId: null };
+        } catch (apiErr) {
+          // Fall back to keyword silently, note the fallback
+          detected = { ...detectEmotion(trimmed), fellBack: true };
+        }
       } else {
         detected = detectEmotion(trimmed);
       }
 
-      // Resolve segmentId if missing (from Claude response)
       if (!detected.segmentId) {
         detected.segmentId = findSegmentId(detected.emotion, detected.intensity);
       }
@@ -88,23 +95,64 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
       {/* Drawer */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-40 transition-transform duration-300 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
-        style={{ maxHeight: '58vh' }}
+        style={{ maxHeight: '62vh' }}
       >
-        <div className="bg-white rounded-t-3xl border-t border-x border-slate-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: '58vh' }}>
+        <div className="bg-white rounded-t-3xl border-t border-x border-slate-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: '62vh' }}>
           {/* Handle */}
-          <div className="flex justify-center pt-3 pb-1">
+          <div className="flex justify-center pt-3 pb-1 shrink-0">
             <div className="w-9 h-1 rounded-full bg-slate-200" />
           </div>
 
           <div className="flex-1 overflow-y-auto px-4 pb-6 pt-2">
-            <div className="flex items-center justify-between mb-3">
+
+            {/* Header row with AI toggle */}
+            <div className="flex items-start justify-between mb-3 gap-3">
               <div>
                 <h2 className="text-base font-semibold text-slate-800">Emotion Journal</h2>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  {hasApiKey ? 'AI-powered · Claude analysis' : 'Keyword analysis · add API key for AI'}
+                  {aiActive
+                    ? 'Claude Haiku · AI analysis'
+                    : 'Keyword analysis · fully private'}
                 </p>
               </div>
+
+              {/* AI toggle — only show if a key is configured */}
+              {hasApiKey && (
+                <div className="flex items-center gap-2 shrink-0 mt-0.5">
+                  <span className="text-xs text-slate-500">AI</span>
+                  <button
+                    role="switch"
+                    aria-checked={useAI}
+                    onClick={() => setUseAI(v => !v)}
+                    className={`relative w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-400 ${useAI ? 'bg-slate-700' : 'bg-slate-200'}`}
+                  >
+                    <span
+                      className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${useAI ? 'translate-x-4' : 'translate-x-0'}`}
+                    />
+                  </button>
+                </div>
+              )}
             </div>
+
+            {/* Privacy notice — shown when AI is on */}
+            {aiActive && (
+              <div className="mb-3 flex gap-2 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-700 leading-relaxed">
+                <span className="shrink-0 mt-0.5">⚠</span>
+                <span>
+                  <strong>Privacy notice:</strong> AI mode sends your journal text to Anthropic's API for analysis. If this app is public or shared, use <strong>Keyword mode</strong> (toggle off) to keep all text private — it runs entirely in your browser.
+                </span>
+              </div>
+            )}
+
+            {/* Private mode badge — shown when AI is off */}
+            {!aiActive && (
+              <div className="mb-3 flex items-center gap-1.5 text-xs text-green-700">
+                <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd"/>
+                </svg>
+                <span>Private — text never leaves your browser</span>
+              </div>
+            )}
 
             {/* Textarea */}
             <textarea
@@ -167,7 +215,9 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
                   >
                     {result.intensity}
                   </span>
-                  {!hasApiKey && <span className="text-[9px] text-slate-300 ml-auto">keyword</span>}
+                  <span className="text-[9px] text-slate-300 ml-auto">
+                    {result.fellBack ? 'keyword (AI unavailable)' : aiActive ? 'claude haiku' : 'keyword'}
+                  </span>
                 </div>
                 <p className="text-slate-500 text-xs leading-relaxed">{result.insight}</p>
               </div>

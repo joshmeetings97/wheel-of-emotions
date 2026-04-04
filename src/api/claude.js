@@ -19,7 +19,7 @@ export async function analyzeWithClaude(journalEntry) {
       'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 256,
       system: `You are an expert emotion analyst using Plutchik's Wheel of Emotions.
 Analyze the journal entry and return ONLY valid JSON — no prose, no markdown, no explanation.
