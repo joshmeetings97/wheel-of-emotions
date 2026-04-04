@@ -4,15 +4,21 @@
 // Angle 0° = right (3 o\'clock), 90° = bottom, -90° = top (12 o\'clock).
 // Joy is at the top (-90°), then clockwise: Trust, Fear, Surprise, Sadness, Disgust, Anger, Anticipation.
 
+// Ring colors: [ring1_inner, ring2, ring3, ring4_outer] — darkest to lightest
+// Text is dark (#1e293b) on rings 3–4, white on rings 1–2
+
 export const CORE_EMOTIONS = [
   {
     id: 'joy',
     name: 'Joy',
     centerAngle: -90,
+    // Ring colors inner→outer (ring1 most intense, ring4 palest)
+    ringColors: ['#8FA918', '#BDD23F', '#D9E897', '#EFF5C8'],
+    outer: ['Elated', 'Peaceful'],   // 2 sub-words for outermost ring
     colors: {
-      intense: '#CA8A04', // deep gold
-      core:    '#FDE047', // bright yellow
-      mild:    '#FEFCE8', // pale yellow
+      intense: '#8FA918',
+      core:    '#BDD23F',
+      mild:    '#D9E897',
     },
     intensities: [
       {
@@ -67,10 +73,12 @@ export const CORE_EMOTIONS = [
     id: 'trust',
     name: 'Trust',
     centerAngle: -45,
+    ringColors: ['#2D7F34', '#52A95A', '#92C896', '#C8E6CA'],
+    outer: ['Faithful', 'Assured'],
     colors: {
-      intense: '#15803D', // deep green
-      core:    '#4ADE80', // bright green
-      mild:    '#DCFCE7', // pale green
+      intense: '#2D7F34',
+      core:    '#52A95A',
+      mild:    '#92C896',
     },
     intensities: [
       {
@@ -125,10 +133,12 @@ export const CORE_EMOTIONS = [
     id: 'fear',
     name: 'Fear',
     centerAngle: 0,
+    ringColors: ['#1A6E6A', '#3A9990', '#82C4BE', '#C4E6E4'],
+    outer: ['Worried', 'Nervous'],
     colors: {
-      intense: '#065F46', // very dark teal-green
-      core:    '#10B981', // emerald
-      mild:    '#D1FAE5', // pale mint
+      intense: '#1A6E6A',
+      core:    '#3A9990',
+      mild:    '#82C4BE',
     },
     intensities: [
       {
@@ -183,10 +193,12 @@ export const CORE_EMOTIONS = [
     id: 'surprise',
     name: 'Surprise',
     centerAngle: 45,
+    ringColors: ['#1B7A9E', '#3AA5CD', '#82CCE8', '#C4E8F5'],
+    outer: ['Astonished', 'Speechless'],
     colors: {
-      intense: '#0E7490', // deep cyan
-      core:    '#22D3EE', // bright cyan
-      mild:    '#ECFEFF', // pale cyan
+      intense: '#1B7A9E',
+      core:    '#3AA5CD',
+      mild:    '#82CCE8',
     },
     intensities: [
       {
@@ -241,10 +253,12 @@ export const CORE_EMOTIONS = [
     id: 'sadness',
     name: 'Sadness',
     centerAngle: 90,
+    ringColors: ['#2E4DA0', '#5575C4', '#93ABE0', '#C8D4F2'],
+    outer: ['Lonely', 'Hopeless'],
     colors: {
-      intense: '#1D4ED8', // deep blue
-      core:    '#60A5FA', // bright blue
-      mild:    '#DBEAFE', // pale blue
+      intense: '#2E4DA0',
+      core:    '#5575C4',
+      mild:    '#93ABE0',
     },
     intensities: [
       {
@@ -299,10 +313,12 @@ export const CORE_EMOTIONS = [
     id: 'disgust',
     name: 'Disgust',
     centerAngle: 135,
+    ringColors: ['#7B3298', '#A459BD', '#C99DDA', '#E6CEF0'],
+    outer: ['Repulsed', 'Offended'],
     colors: {
-      intense: '#6D28D9', // deep violet
-      core:    '#A78BFA', // bright violet
-      mild:    '#EDE9FE', // pale violet
+      intense: '#7B3298',
+      core:    '#A459BD',
+      mild:    '#C99DDA',
     },
     intensities: [
       {
@@ -357,10 +373,12 @@ export const CORE_EMOTIONS = [
     id: 'anger',
     name: 'Anger',
     centerAngle: 180,
+    ringColors: ['#B52A2A', '#D95C5C', '#ECA0A0', '#F7D4D4'],
+    outer: ['Hostile', 'Seething'],
     colors: {
-      intense: '#B91C1C', // deep red
-      core:    '#F87171', // bright red
-      mild:    '#FEE2E2', // pale red
+      intense: '#B52A2A',
+      core:    '#D95C5C',
+      mild:    '#ECA0A0',
     },
     intensities: [
       {
@@ -415,10 +433,12 @@ export const CORE_EMOTIONS = [
     id: 'anticipation',
     name: 'Anticipation',
     centerAngle: 225,
+    ringColors: ['#C46500', '#E08A1A', '#EDBB73', '#F7E0C0'],
+    outer: ['Eager', 'Hopeful'],
     colors: {
-      intense: '#C2410C', // deep orange
-      core:    '#FB923C', // bright orange
-      mild:    '#FFEDD5', // pale orange
+      intense: '#C46500',
+      core:    '#E08A1A',
+      mild:    '#EDBB73',
     },
     intensities: [
       {
