@@ -101,7 +101,7 @@ export default function App() {
   }, []);
 
   const handleWheelSelect = useCallback((sel) => {
-    const segId = sel.type === 'blend' ? sel.data.id : `${sel.emotion.id}-${sel.level}`;
+    const segId = sel.type === 'blend' ? sel.data.id : (sel.segmentId || `${sel.emotion.id}-${sel.level}`);
     openSelection(sel, segId);
     setJournalOpen(false);
   }, [openSelection]);

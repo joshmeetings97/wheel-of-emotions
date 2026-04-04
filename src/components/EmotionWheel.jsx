@@ -110,6 +110,7 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
         intensity,
         level: intensity?.level || 'mild',
         outerName: isOuter ? seg.name : undefined,
+        segmentId: seg.id,
       });
     }
   }, [onSelect]);
