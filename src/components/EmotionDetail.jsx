@@ -48,11 +48,16 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
   const { type, data, emotion, intensity, level, outerName } = selection;
   const isBlend = type === 'blend';
 
-  const name        = isBlend ? data.name : outerName || intensity?.name || emotion?.name;
-  const description = isBlend ? data.description   : intensity?.description;
-  const feelTips    = isBlend ? data.feelTips      : intensity?.feelTips;
-  const remedyTips  = isBlend ? data.remedyTips    : intensity?.remedyTips;
-  const related     = isBlend ? data.related       : emotion?.related;
+  // Look up the full outer emotion object when an outer segment is clicked
+  const outerData = outerName && !isBlend
+    ? emotion?.outer?.find(o => o.name === outerName)
+    : undefined;
+
+  const name        = isBlend ? data.name        : outerName || intensity?.name || emotion?.name;
+  const description = isBlend ? data.description : outerData?.description || intensity?.description;
+  const feelTips    = isBlend ? data.feelTips    : outerData?.feelTips    || intensity?.feelTips;
+  const remedyTips  = isBlend ? data.remedyTips  : outerData?.remedyTips  || intensity?.remedyTips;
+  const related     = isBlend ? data.related     : emotion?.related;
   const accentColor = isBlend
     ? data.color
     : emotion?.ringColors?.[level === 'intense' ? 0 : level === 'moderate' ? 1 : 2] || '#4f46e5';

@@ -66,11 +66,11 @@ function buildSegments() {
 
     // Outer ring — 2 sub-segments; each extends BLEND_SPAN/2 into the adjacent blend gap
     // so the outer ring has no dead zones where clicks fall through to the background.
-    (emotion.outer || []).forEach((outerName, idx) => {
+    (emotion.outer || []).forEach((outerObj, idx) => {
       const sa = idx === 0 ? a1 - BLEND_SPAN / 2 : ca;
       const ea = idx === 0 ? ca : a2 + BLEND_SPAN / 2;
       segs.push({ id:`${emotion.id}-outer-${idx}`, type:'emotion', emotionId:emotion.id,
-        level:'mild', name:outerName, color:c4,
+        level:'mild', name:outerObj.name, color:c4,
         a1:sa, a2:ea, r1:R.r3, r2:R.r4,
         path:wedge(R.r3,R.r4,sa,ea), mid:midPt(R.r3,R.r4,sa,ea) });
     });
@@ -201,7 +201,8 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
         })}
 
         {/* ── Ring 4 labels (outer sub-emotions) ── */}
-        {CORE_EMOTIONS.map((e) => (e.outer||[]).map((word, idx) => {
+        {CORE_EMOTIONS.map((e) => (e.outer||[]).map((outerObj, idx) => {
+          const word = outerObj.name;
           const ca = e.centerAngle;
           const sa = idx===0 ? ca-HALF : ca;
           const ea = idx===0 ? ca : ca+HALF;

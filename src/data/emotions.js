@@ -14,7 +14,36 @@ export const CORE_EMOTIONS = [
     centerAngle: -90,
     // Ring colors inner→outer (ring1 most intense, ring4 palest)
     ringColors: ['#8FA918', '#BDD23F', '#D9E897', '#EFF5C8'],
-    outer: ['Cheerful', 'Peaceful'],   // 2 sub-words for outermost ring
+    outer: [
+      {
+        name: 'Cheerful',
+        description: 'Cheerfulness is a light, easy good mood — a natural buoyancy that makes smiling and laughing come without effort. It is joy in its most accessible, everyday form: small pleasures landing well, interactions feeling warm, and the world feeling generally friendly.',
+        feelTips: [
+          'Let cheerfulness be simple — it doesn\'t need a reason. Resist the urge to interrogate it.',
+          'Share it freely: a warm comment, a smile, a small act of kindness amplifies the feeling.',
+          'Notice the small things sustaining it — good weather, a song, a kind word — and appreciate them consciously.',
+        ],
+        remedyTips: [
+          'Lower the bar: a short walk, a favourite drink, or five minutes of music you love can shift the mood.',
+          'Don\'t force it — manufactured cheerfulness is exhausting; small, genuine mood-lifting actions work better.',
+          'Check whether tiredness or hunger is suppressing your natural lightness; the basics matter more than we admit.',
+        ],
+      },
+      {
+        name: 'Peaceful',
+        description: 'Peacefulness is joy distilled to its quietest form — a deep settledness that asks nothing of the moment. It is the experience of being fully okay with where you are, free from urgency, resistance, or want. Many find it more nourishing and sustainable than intense happiness.',
+        feelTips: [
+          'Protect pockets of silence in your day — even ten minutes without input can sustain this state.',
+          'Pair peacefulness with gentle activity: slow walks, unhurried meals, or light reading.',
+          'Allow yourself to simply be present without producing, fixing, or improving anything.',
+        ],
+        remedyTips: [
+          'If peace feels inaccessible, identify the primary source of inner noise and address just that one thing.',
+          'Brief nature exposure — even a few minutes outside — reliably reduces cortisol and invites calm.',
+          'A body scan meditation helps locate and release the physical tension that blocks peacefulness.',
+        ],
+      },
+    ],
     colors: {
       intense: '#8FA918',
       core:    '#BDD23F',
@@ -74,7 +103,36 @@ export const CORE_EMOTIONS = [
     name: 'Trust',
     centerAngle: -45,
     ringColors: ['#2D7F34', '#52A95A', '#92C896', '#C8E6CA'],
-    outer: ['Faithful', 'Assured'],
+    outer: [
+      {
+        name: 'Faithful',
+        description: 'Faithfulness is trust expressed through consistent, committed presence over time. It is the emotional experience of loyalty — choosing to show up, honour a bond, and remain reliable even when it costs something. Faithfulness transforms trust from a feeling into an action.',
+        feelTips: [
+          'Reflect on the people or commitments you feel genuinely faithful to — acknowledge that bond explicitly.',
+          'Let faithfulness be a source of identity and stability: "I am someone who shows up."',
+          'Express your faithfulness directly to those it is directed toward — they may not know how deeply you feel it.',
+        ],
+        remedyTips: [
+          'If faithfulness feels strained, check whether the relationship or commitment is still genuinely reciprocal.',
+          'Distinguish between healthy loyalty and obligation that no longer serves either person.',
+          'Renew the meaning behind the commitment rather than just performing it — faith without feeling becomes hollow.',
+        ],
+      },
+      {
+        name: 'Assured',
+        description: 'Assurance is trust that has matured into a quiet, stable certainty. Unlike early trust which requires effort, assurance is settled — you no longer need to monitor, test, or doubt. It is the emotional experience of knowing something or someone is reliably safe.',
+        feelTips: [
+          'Let yourself rest in assurance without waiting for it to be disproven — not everything needs vigilance.',
+          'Name what you feel assured about; making it conscious deepens its stabilising effect.',
+          'Use assurance as a foundation for risk-taking in other areas — it frees energy you\'d otherwise spend on defending.',
+        ],
+        remedyTips: [
+          'If assurance has become complacency, a gentle, honest check-in with the relationship or situation is healthy.',
+          'Assurance lost suddenly can feel like betrayal; give yourself time to process before drawing conclusions.',
+          'Rebuild through small, consistent interactions rather than large gestures.',
+        ],
+      },
+    ],
     colors: {
       intense: '#2D7F34',
       core:    '#52A95A',
@@ -134,7 +192,36 @@ export const CORE_EMOTIONS = [
     name: 'Fear',
     centerAngle: 0,
     ringColors: ['#1A6E6A', '#3A9990', '#82C4BE', '#C4E6E4'],
-    outer: ['Worried', 'Nervous'],
+    outer: [
+      {
+        name: 'Worried',
+        description: 'Worry is a low-grade, persistent form of fear focused on uncertain future outcomes. Unlike acute fear it tends to be cognitive rather than physical — a circling of possible problems. In small doses it is productive, prompting preparation; when chronic, it becomes a significant drain on well-being.',
+        feelTips: [
+          'Use worry as a prompt to act: write down what you\'re worried about and identify one concrete step.',
+          'Give worry a contained time slot — 15 minutes of deliberate "worry time" — then redirect attention.',
+          'Share your worry with someone you trust; verbalising it often reduces its weight significantly.',
+        ],
+        remedyTips: [
+          'Distinguish what is within your control from what is not; release energy spent on the latter.',
+          'Ask: "What is the realistic outcome?" — worry typically catastrophises well beyond likely reality.',
+          'Physical activity is one of the most effective ways to interrupt chronic worry loops.',
+        ],
+      },
+      {
+        name: 'Nervous',
+        description: 'Nervousness is anticipatory fear with a physical signature — the butterflies, the dry mouth, the tight chest before something that matters. It signals that you care about an outcome. At the right level it sharpens performance; too much tips into distress.',
+        feelTips: [
+          'Reframe nervousness as readiness: the same arousal that creates anxiety can fuel peak performance.',
+          'Acknowledge it out loud — "I\'m nervous about this" — which activates the prefrontal cortex and calms the amygdala.',
+          'Prepare thoroughly; nervousness often stems from a perceived gap in readiness.',
+        ],
+        remedyTips: [
+          'Box breathing (4 counts in, hold 4, out 4, hold 4) reliably lowers physiological arousal within minutes.',
+          'Warm up the body — a short walk or light stretch before a high-stakes moment reduces nervous tension.',
+          'Remind yourself that nervousness is temporary and typically dissipates once the event begins.',
+        ],
+      },
+    ],
     colors: {
       intense: '#1A6E6A',
       core:    '#3A9990',
@@ -194,7 +281,36 @@ export const CORE_EMOTIONS = [
     name: 'Surprise',
     centerAngle: 45,
     ringColors: ['#1B7A9E', '#3AA5CD', '#82CCE8', '#C4E8F5'],
-    outer: ['Puzzled', 'Unsettled'],
+    outer: [
+      {
+        name: 'Puzzled',
+        description: 'Puzzlement is mild surprise at something that doesn\'t quite add up — a gentle cognitive dissonance between what was expected and what appeared. It is the emotion of "that\'s odd" rather than shock, and it often serves as the first signal to look more carefully at something.',
+        feelTips: [
+          'Let puzzlement slow you down: it is often the first sign that something deserves more attention.',
+          'Approach it with curiosity rather than frustration — something interesting may be waiting to be understood.',
+          'Ask clarifying questions rather than filling in the gaps with assumptions.',
+        ],
+        remedyTips: [
+          'If puzzlement has become nagging confusion, spend deliberate time gathering the missing information.',
+          'Distinguish between things that are genuinely unclear and things you simply haven\'t examined carefully yet.',
+          'Talk it through with someone — externalising a puzzle often reveals what you were missing.',
+        ],
+      },
+      {
+        name: 'Unsettled',
+        description: 'Being unsettled is mild surprise combined with a vague discomfort — something unexpected has landed in a way that feels slightly off. It is subtler than alarm but more persistent than simple puzzlement. It often points to a value or expectation that was quietly disrupted.',
+        feelTips: [
+          'Sit with the feeling long enough to identify what specifically shifted — the discomfort holds information.',
+          'Name what you expected versus what occurred; the gap often reveals an unspoken assumption.',
+          'Don\'t rush to resolve or dismiss it — unsettled feelings that are ignored tend to resurface.',
+        ],
+        remedyTips: [
+          'Grounding helps: name what is stable and known in your environment to re-establish a sense of baseline.',
+          'If the feeling persists, journal about what the unexpected event means to you — why did it land that way?',
+          'Speak to someone you trust; an outside perspective often clarifies quickly.',
+        ],
+      },
+    ],
     colors: {
       intense: '#1B7A9E',
       core:    '#3AA5CD',
@@ -254,7 +370,36 @@ export const CORE_EMOTIONS = [
     name: 'Sadness',
     centerAngle: 90,
     ringColors: ['#2E4DA0', '#5575C4', '#93ABE0', '#C8D4F2'],
-    outer: ['Gloomy', 'Forlorn'],
+    outer: [
+      {
+        name: 'Gloomy',
+        description: 'Gloominess is a low, overcast emotional state — not the acute pain of sadness but a dull heaviness that mutes colour and enthusiasm. It can arrive without a clear cause, often tied to tiredness, lack of light, isolation, or a quiet accumulation of small disappointments.',
+        feelTips: [
+          'Acknowledge the gloom without trying to immediately fix it — it often lifts more quickly when not resisted.',
+          'Gentle sensory inputs help: a warm drink, natural light, a familiar scent, or a piece of music.',
+          'A short walk outside — even in grey weather — reliably shifts gloomy states through light and movement.',
+        ],
+        remedyTips: [
+          'Check the basics: sleep, food, and hydration have an outsized effect on low-grade mood states.',
+          'If gloominess is persistent and without clear cause, it may be worth discussing with a doctor.',
+          'Small social contact — even a brief exchange — is disproportionately helpful against a gloomy mood.',
+        ],
+      },
+      {
+        name: 'Forlorn',
+        description: 'Forlornness is a gentle, resigned sadness — the feeling of being left behind, forgotten, or without a clear path forward. It carries a quality of quiet aloneness and longing. It is less sharp than grief but more hollow than simple sadness, often arriving when connection or purpose feels distant.',
+        feelTips: [
+          'Let yourself acknowledge the longing underneath — what is it that feels absent or far away?',
+          'Reach toward a small point of warmth: a person, a memory, a piece of music that feels like company.',
+          'Creative expression — writing, drawing, making something — can give forlornness a container and a voice.',
+        ],
+        remedyTips: [
+          'Reach out to someone, even briefly — forlornness feeds on isolation and diminishes with contact.',
+          'Identify one small thing that could reintroduce a sense of direction or purpose, however modest.',
+          'If forlornness is chronic, explore whether loneliness or lack of meaning is its root and address that directly.',
+        ],
+      },
+    ],
     colors: {
       intense: '#2E4DA0',
       core:    '#5575C4',
@@ -314,7 +459,36 @@ export const CORE_EMOTIONS = [
     name: 'Disgust',
     centerAngle: 135,
     ringColors: ['#7B3298', '#A459BD', '#C99DDA', '#E6CEF0'],
-    outer: ['Displeased', 'Offended'],
+    outer: [
+      {
+        name: 'Displeased',
+        description: 'Displeasure is mild disgust or dissatisfaction — a quiet sense that something fell short of what it should have been. It is not strong enough to be revulsion, but it clearly signals that a standard, preference, or value was not met. It is useful information about what you need and expect.',
+        feelTips: [
+          'Use displeasure as a clear signal: something here doesn\'t meet your standards — that is worth knowing.',
+          'Express mild displeasure directly rather than suppressing it; small things addressed early prevent resentment.',
+          'Distinguish between personal preference and genuine value violation — both matter, but differently.',
+        ],
+        remedyTips: [
+          'Ask whether the situation is changeable; if so, take one small step toward the version you\'d prefer.',
+          'If the displeasure involves someone\'s behaviour, raise it calmly and specifically rather than letting it simmer.',
+          'Check whether your expectations were reasonable and clearly communicated — unexpressed expectations cause much displeasure.',
+        ],
+      },
+      {
+        name: 'Offended',
+        description: 'Feeling offended is the socially-oriented form of mild disgust — the sense that something said, done, or implied crossed a line of respect, decency, or personal dignity. It combines a value signal with a social wound, and how it is handled often determines whether it damages or strengthens a relationship.',
+        feelTips: [
+          'Identify specifically what was crossed — the more clearly you can name it, the better you can address it.',
+          'Allow yourself to feel the offence without immediately suppressing it or escalating it.',
+          'Consider whether the offence was intentional — this matters greatly for how to respond.',
+        ],
+        remedyTips: [
+          'Raise it directly with the person if the relationship matters: "That landed badly for me because..."',
+          'Distinguish between being genuinely harmed and being challenged by something merely uncomfortable.',
+          'If the offence was unintentional, a calm explanation usually resolves it; if intentional, a harder conversation is needed.',
+        ],
+      },
+    ],
     colors: {
       intense: '#7B3298',
       core:    '#A459BD',
@@ -374,7 +548,36 @@ export const CORE_EMOTIONS = [
     name: 'Anger',
     centerAngle: 180,
     ringColors: ['#B52A2A', '#D95C5C', '#ECA0A0', '#F7D4D4'],
-    outer: ['Cross', 'Peeved'],
+    outer: [
+      {
+        name: 'Cross',
+        description: 'Being cross is mild, short-lived irritation — a brief flare of frustration that doesn\'t escalate. It typically has a clear, specific cause: someone was thoughtless, something didn\'t work, a plan was disrupted. It usually passes quickly once the cause is addressed or acknowledged.',
+        feelTips: [
+          'Let yourself be briefly cross without guilt — it\'s a legitimate minor signal and need not be suppressed.',
+          'Name the specific cause rather than letting it diffuse into a general bad mood.',
+          'A short pause — a breath, a moment away from the situation — often resolves low-level crossness entirely.',
+        ],
+        remedyTips: [
+          'Address the cause if possible; crossness that lingers usually means the source hasn\'t been acknowledged.',
+          'Avoid taking it out on unrelated people or situations — it amplifies rather than resolves it.',
+          'Check whether tiredness or hunger is lowering your threshold; physical depletion exaggerates minor irritation.',
+        ],
+      },
+      {
+        name: 'Peeved',
+        description: 'Being peeved is a low-grade, lingering annoyance — a small grievance that hasn\'t fully resolved. Unlike brief crossness, peevishness tends to stay and colour interactions. It often signals something small that is consistently tolerated rather than addressed.',
+        feelTips: [
+          'Take peevishness seriously as information: it usually points to something that keeps happening and needs addressing.',
+          'Acknowledge it to yourself explicitly rather than pushing it down — "I\'m genuinely annoyed about this."',
+          'A small release — venting briefly to a trusted person or writing it out — can clear the residue.',
+        ],
+        remedyTips: [
+          'Identify the recurring pattern causing the peevishness and decide whether to address it or genuinely let it go.',
+          'One clear, calm conversation usually relieves peevishness more than prolonged tolerance.',
+          'If you find yourself frequently peeved, check whether broader stress or fatigue is lowering your threshold.',
+        ],
+      },
+    ],
     colors: {
       intense: '#B52A2A',
       core:    '#D95C5C',
@@ -434,7 +637,36 @@ export const CORE_EMOTIONS = [
     name: 'Anticipation',
     centerAngle: 225,
     ringColors: ['#C46500', '#E08A1A', '#EDBB73', '#F7E0C0'],
-    outer: ['Eager', 'Hopeful'],
+    outer: [
+      {
+        name: 'Eager',
+        description: 'Eagerness is anticipation with energy — an active, leaning-forward readiness for something coming. It combines positive expectation with motivation to move toward the anticipated thing. Unlike passive hope, eagerness involves a sense of agency and aliveness.',
+        feelTips: [
+          'Channel eagerness into preparation: let the energy move you toward making the anticipated thing even better.',
+          'Share your eagerness when appropriate — enthusiasm is genuinely contagious and strengthens connection.',
+          'Savour the feeling itself; eagerness is one of the most pleasant anticipatory states and is worth inhabiting.',
+        ],
+        remedyTips: [
+          'If eagerness tips into impatience, redirect the energy into preparation or related action rather than waiting.',
+          'Ensure eagerness is grounded: overestimating what\'s coming sets up disappointment when it arrives.',
+          'If eagerness is consistently absent from your life, examine whether you have enough to genuinely look forward to.',
+        ],
+      },
+      {
+        name: 'Hopeful',
+        description: 'Hope is a gentle, forward-looking belief that things could go well — an openness to positive outcomes without requiring certainty. It is quieter than eagerness and more sustainable, requiring only the belief that good is possible. Research consistently identifies hope as a significant predictor of resilience and well-being.',
+        feelTips: [
+          'Nurture hope deliberately: recall times when things turned out better than expected.',
+          'Keep hope attached to action where possible — "I hope, and here is what I am doing about it."',
+          'Share hope with others; like most positive emotions, it is amplified through connection.',
+        ],
+        remedyTips: [
+          'When hope is hard to access, start very small: "What is one thing that could go better today?"',
+          'Distinguish hope from denial — genuine hope acknowledges difficulty while believing in possibility.',
+          'If hope feels consistently inaccessible, speak to a doctor or therapist; this can be an early sign of depression.',
+        ],
+      },
+    ],
     colors: {
       intense: '#C46500',
       core:    '#E08A1A',
