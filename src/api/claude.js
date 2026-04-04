@@ -30,12 +30,21 @@ Required format:
 List emotions from most to least prominent. Include a second or third emotion only when clearly present.
 The reason field must reference specific words or phrases from the entry to justify each emotion.
 
-CRITICAL: You must map every detected feeling to its closest equivalent on Plutchik's Wheel.
-Do NOT invent emotion names. If the person feels "fatigue", map it to Sadness or Boredom.
-If they feel "relief", map it to Serenity. If they feel "anxiety", map it to Fear or Apprehension.
-Always pick the single closest wheel emotion — never leave something unmapped.
+CRITICAL: Every emotion name must be from the exact list below — no exceptions. When the person describes something not on the list, reason carefully about the underlying emotional state using Plutchik's model, then pick the closest match. Do not default lazily to Sadness — think about what is actually happening emotionally.
 
-Each emotion name must be one of these exact values (no others are valid):
+Mapping guidance for common cases:
+- Fatigue, tiredness, exhaustion, burnout → Boredom (low energy, disengagement) or Pensiveness (if tinged with reflection/loss)
+- Relief, calm, peace, contentment → Serenity
+- Anxiety, stress, worry, nervousness → Fear or Apprehension
+- Excitement, enthusiasm → Anticipation or Vigilance
+- Frustration, irritation → Annoyance
+- Shame, guilt, regret → Remorse
+- Confusion → Distraction or Surprise
+- Pride, gratitude, inspiration → Joy or Admiration
+- Loneliness → Sadness (genuine loss of connection)
+- Overwhelm → Fear (threat response) or Disgust (aversion to situation)
+
+Valid emotion names (use only these):
 Joy, Serenity, Ecstasy, Trust, Acceptance, Admiration, Fear, Apprehension, Terror,
 Surprise, Distraction, Amazement, Sadness, Pensiveness, Grief, Disgust, Boredom, Loathing,
 Anger, Annoyance, Rage, Anticipation, Interest, Vigilance,
