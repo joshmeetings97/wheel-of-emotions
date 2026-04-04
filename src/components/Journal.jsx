@@ -415,20 +415,33 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
               <div className="mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 animate-[fadeIn_0.2s_ease-out]">
                 <div className="flex flex-wrap gap-2 mb-3">
                   {result.emotions.map((e, i) => (
-                    <button
-                      key={i}
-                      onClick={() => e.segmentId && onEmotionOpen(e.segmentId)}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border bg-white hover:bg-slate-50 active:scale-95 transition-all text-left"
-                      style={{ borderColor: INTENSITY_COLORS[e.intensity] + '50' }}
-                      title="Tap to explore on wheel"
-                    >
-                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: INTENSITY_COLORS[e.intensity] }} />
-                      <span className="font-semibold text-slate-800 text-sm">{e.emotion}</span>
-                      <span className="text-[10px] uppercase tracking-wide font-medium" style={{ color: INTENSITY_COLORS[e.intensity] }}>
-                        {e.intensity}
-                      </span>
-                      {e.segmentId && <span className="text-slate-300 text-[9px] ml-0.5">↗</span>}
-                    </button>
+                    e.segmentId ? (
+                      <button
+                        key={i}
+                        onClick={() => onEmotionOpen(e.segmentId)}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border bg-white hover:bg-slate-50 active:scale-95 transition-all text-left"
+                        style={{ borderColor: INTENSITY_COLORS[e.intensity] + '50' }}
+                        title="Tap to explore on wheel"
+                      >
+                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: INTENSITY_COLORS[e.intensity] }} />
+                        <span className="font-semibold text-slate-800 text-sm">{e.emotion}</span>
+                        <span className="text-[10px] uppercase tracking-wide font-medium" style={{ color: INTENSITY_COLORS[e.intensity] }}>
+                          {e.intensity}
+                        </span>
+                        <span className="text-slate-300 text-[9px] ml-0.5">↗</span>
+                      </button>
+                    ) : (
+                      <div
+                        key={i}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border bg-slate-50 text-left"
+                        style={{ borderColor: INTENSITY_COLORS[e.intensity] + '30' }}
+                        title="This emotion isn't directly mapped on the wheel"
+                      >
+                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: INTENSITY_COLORS[e.intensity] + '60' }} />
+                        <span className="font-semibold text-slate-500 text-sm">{e.emotion}</span>
+                        <span className="text-[9px] text-slate-400 ml-0.5">not on wheel</span>
+                      </div>
+                    )
                   ))}
                 </div>
                 {/* Collapsible "Why these emotions?" */}
@@ -505,12 +518,56 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
   );
 }
 
+// Common emotions the AI might name that aren't on Plutchik's wheel,
+// mapped to the closest wheel equivalent.
+const EMOTION_FALLBACK_MAP = {
+  relief:        'joy-mild',       // tension released → serenity
+  excitement:    'anticipation-intense', // high arousal forward-looking
+  contentment:   'joy-mild',
+  happiness:     'joy-moderate',
+  gladness:      'joy-moderate',
+  elation:       'joy-intense',
+  enthusiasm:    'anticipation-moderate',
+  nervousness:   'fear-mild',
+  anxiety:       'fear-moderate',
+  stress:        'fear-moderate',
+  overwhelm:     'fear-moderate',
+  embarrassment: 'fear-mild',
+  shame:         'remorse',
+  guilt:         'remorse',
+  jealousy:      'anger-moderate',
+  envy:          'anger-mild',
+  frustration:   'anger-mild',
+  loneliness:    'sadness-moderate',
+  nostalgia:     'sadness-mild',
+  melancholy:    'sadness-mild',
+  disappointment:'disapproval',
+  regret:        'remorse',
+  pride:         'joy-moderate',
+  gratitude:     'joy-moderate',
+  compassion:    'love',
+  empathy:       'love',
+  curiosity:     'anticipation-mild',
+  confusion:     'surprise-mild',
+  shock:         'surprise-intense',
+  wonder:        'awe',
+  inspiration:   'joy-moderate',
+  calm:          'joy-mild',
+  peace:         'joy-mild',
+  bittersweet:   'remorse',
+  vulnerability: 'fear-mild',
+};
+
 function findSegmentId(emotionName, intensity) {
   const lower = emotionName.toLowerCase();
+  // Direct match in the name map (covers all wheel emotion names)
   if (EMOTION_NAME_MAP[lower]) return EMOTION_NAME_MAP[lower];
+  // Match core or blend by name
   const core = CORE_EMOTIONS.find(e => e.name.toLowerCase() === lower);
   if (core) return `${core.id}-${intensity || 'moderate'}`;
   const blend = BLEND_EMOTIONS.find(e => e.name.toLowerCase() === lower);
   if (blend) return blend.id;
+  // Fallback map for emotions the AI names that aren't on the wheel
+  if (EMOTION_FALLBACK_MAP[lower]) return EMOTION_FALLBACK_MAP[lower];
   return null;
 }
