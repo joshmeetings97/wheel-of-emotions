@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { detectEmotion, CORE_EMOTIONS, BLEND_EMOTIONS, EMOTION_NAME_MAP } from '../data/emotions';
 import { analyzeWithClaude } from '../api/claude';
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -8,6 +8,17 @@ const INTENSITY_COLORS = {
   moderate: '#3b82f6',
   mild:     '#22c55e',
 };
+
+// Strip common PII patterns before sending to API.
+// This is a best-effort measure — it removes the most obvious identifiers
+// but is not a substitute for users exercising discretion.
+function scrubPII(text) {
+  return text
+    .replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, '[email]')
+    .replace(/\b(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b/g, '[phone]')
+    .replace(/https?:\/\/\S+/gi, '[url]')
+    .replace(/\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/g, '[date]');
+}
 
 function EmotionChip({ entry }) {
   return (
@@ -20,22 +31,182 @@ function EmotionChip({ entry }) {
   );
 }
 
+// Collapsible privacy notice shown while AI mode is active
+function AINotice({ onReviewDetails }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div className="mb-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 overflow-hidden">
+      {/* Summary row — always visible */}
+      <div className="flex items-center gap-2 px-3 py-2.5">
+        <span className="shrink-0">⚠</span>
+        <span className="flex-1 leading-snug">
+          AI mode — text sent to Anthropic (PII stripped first)
+        </span>
+        <button
+          onClick={() => setExpanded(v => !v)}
+          className="shrink-0 flex items-center gap-0.5 font-medium underline underline-offset-2 hover:text-amber-900 transition-colors"
+          aria-expanded={expanded}
+        >
+          {expanded ? 'Less' : 'Details'}
+          <svg
+            className={`w-3 h-3 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+            viewBox="0 0 20 20" fill="currentColor"
+          >
+            <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Expanded detail */}
+      {expanded && (
+        <div className="border-t border-amber-200 px-3 py-3 space-y-2 bg-amber-50/60">
+          <Detail icon="✓" color="text-green-700">
+            <strong>Encrypted in transit</strong> — sent over HTTPS, protected from interception.
+          </Detail>
+          <Detail icon="✓" color="text-green-700">
+            <strong>Not used to train AI</strong> — Anthropic's API policy excludes API calls from model training.
+          </Detail>
+          <Detail icon="✓" color="text-green-700">
+            <strong>PII stripped before sending</strong> — emails, phone numbers, URLs and dates are removed from your text automatically.
+          </Detail>
+          <Detail icon="✓" color="text-green-700">
+            <strong>Text not stored here</strong> — only the detected emotion label is saved in your session log, never your words.
+          </Detail>
+          <Detail icon="↺" color="text-amber-700">
+            <strong>Processed by Anthropic</strong> — your text is still read by Anthropic's servers. Toggle AI off for fully private analysis.
+          </Detail>
+          <div className="pt-1 flex items-center justify-between">
+            <a
+              href="https://www.anthropic.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] text-amber-700 underline underline-offset-2 hover:text-amber-900"
+            >
+              Anthropic Privacy Policy →
+            </a>
+            <button
+              onClick={onReviewDetails}
+              className="text-[10px] text-amber-700 underline underline-offset-2 hover:text-amber-900"
+            >
+              Re-read full consent
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Detail({ icon, color, children }) {
+  return (
+    <div className="flex gap-2 leading-relaxed">
+      <span className={`shrink-0 mt-0.5 font-bold ${color}`}>{icon}</span>
+      <span>{children}</span>
+    </div>
+  );
+}
+
+// One-time consent modal shown before AI mode is first activated
+function ConsentModal({ onAccept, onDecline }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-md p-6 animate-[fadeIn_0.2s_ease-out]">
+        <h3 className="text-base font-bold text-slate-800 mb-1">Enable AI analysis?</h3>
+        <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+          Before your journal text is sent, here's exactly what happens:
+        </p>
+
+        <ul className="space-y-3 mb-5">
+          <li className="flex gap-2.5 text-xs text-slate-600 leading-relaxed">
+            <span className="mt-0.5 shrink-0 text-green-600">✓</span>
+            <span><strong>Encrypted in transit.</strong> Text is sent over HTTPS — protected from interception.</span>
+          </li>
+          <li className="flex gap-2.5 text-xs text-slate-600 leading-relaxed">
+            <span className="mt-0.5 shrink-0 text-green-600">✓</span>
+            <span><strong>Not used to train AI.</strong> Anthropic's API policy explicitly excludes API data from model training, unlike the claude.ai consumer product.</span>
+          </li>
+          <li className="flex gap-2.5 text-xs text-slate-600 leading-relaxed">
+            <span className="mt-0.5 shrink-0 text-green-600">✓</span>
+            <span><strong>PII is stripped first.</strong> Emails, phone numbers, URLs, and dates are automatically removed from your text before it is sent.</span>
+          </li>
+          <li className="flex gap-2.5 text-xs text-slate-600 leading-relaxed">
+            <span className="mt-0.5 shrink-0 text-green-600">✓</span>
+            <span><strong>Not stored here.</strong> Only the detected emotion label is saved locally — never the text itself.</span>
+          </li>
+          <li className="flex gap-2.5 text-xs text-slate-600 leading-relaxed">
+            <span className="mt-0.5 shrink-0 text-amber-500">↺</span>
+            <span><strong>Processed by Anthropic.</strong> Your text is still read by Anthropic's servers to classify emotion. If you'd rather nothing leave your device, use Keyword mode instead.</span>
+          </li>
+        </ul>
+
+        <a
+          href="https://www.anthropic.com/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] text-slate-400 underline underline-offset-2 block mb-4 hover:text-slate-600"
+        >
+          Anthropic Privacy Policy →
+        </a>
+
+        <div className="flex gap-2">
+          <button
+            onClick={onAccept}
+            className="flex-1 py-2.5 rounded-xl text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-white transition-all"
+          >
+            I understand, enable AI
+          </button>
+          <button
+            onClick={onDecline}
+            className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-800 transition-all"
+          >
+            Keep keyword mode
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
-  const [text, setText]         = useState('');
-  const [loading, setLoading]   = useState(false);
-  const [result, setResult]     = useState(null);
-  const [error, setError]       = useState(null);
-  const [useAI, setUseAI]       = useLocalStorage('emowheel-use-ai', false);
-  const [entries, setEntries]   = useLocalStorage('emowheel-journal', []);
-  const textareaRef             = useRef(null);
+  const [text, setText]               = useState('');
+  const [loading, setLoading]         = useState(false);
+  const [result, setResult]           = useState(null);
+  const [error, setError]             = useState(null);
+  const [useAI, setUseAI]             = useLocalStorage('emowheel-use-ai', false);
+  const [consentGiven, setConsentGiven] = useLocalStorage('emowheel-ai-consent', false);
+  const [showConsent, setShowConsent] = useState(false);
+  const [entries, setEntries]         = useLocalStorage('emowheel-journal', []);
+  const textareaRef                   = useRef(null);
 
   const hasApiKey = Boolean(
     import.meta.env.VITE_ANTHROPIC_API_KEY &&
     import.meta.env.VITE_ANTHROPIC_API_KEY !== 'your_key_here'
   );
 
-  // AI mode is only active if explicitly toggled on AND a key is present
-  const aiActive = useAI && hasApiKey;
+  const aiActive = useAI && hasApiKey && consentGiven;
+
+  const handleAIToggle = () => {
+    if (!useAI) {
+      // Turning AI on — show consent if not already given
+      if (!consentGiven) {
+        setShowConsent(true);
+      } else {
+        setUseAI(true);
+      }
+    } else {
+      setUseAI(false);
+    }
+  };
+
+  const handleConsentAccept = () => {
+    setConsentGiven(true);
+    setUseAI(true);
+    setShowConsent(false);
+  };
+
+  const handleConsentDecline = () => {
+    setShowConsent(false);
+  };
 
   const handleSubmit = async () => {
     const trimmed = text.trim();
@@ -46,9 +217,9 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
       let detected;
       if (aiActive) {
         try {
-          detected = { ...await analyzeWithClaude(trimmed), segmentId: null };
-        } catch (apiErr) {
-          // Fall back to keyword silently, note the fallback
+          const sanitized = scrubPII(trimmed);
+          detected = { ...await analyzeWithClaude(sanitized), segmentId: null };
+        } catch {
           detected = { ...detectEmotion(trimmed), fellBack: true };
         }
       } else {
@@ -64,7 +235,8 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
       const color = INTENSITY_COLORS[detected.intensity] || '#3b82f6';
       setEntries(prev => [{
         id:        Date.now(),
-        text:      trimmed.length > 60 ? trimmed.slice(0, 57) + '…' : trimmed,
+        // Store only the emotion label, never the raw text
+        text:      `[${detected.emotion}]`,
         emotion:   detected.emotion,
         intensity: detected.intensity,
         segmentId: detected.segmentId,
@@ -82,6 +254,10 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
 
   return (
     <>
+      {showConsent && (
+        <ConsentModal onAccept={handleConsentAccept} onDecline={handleConsentDecline} />
+      )}
+
       {/* Toggle button */}
       <button
         onClick={onToggle}
@@ -98,61 +274,49 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
         style={{ maxHeight: '62vh' }}
       >
         <div className="bg-white rounded-t-3xl border-t border-x border-slate-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: '62vh' }}>
-          {/* Handle */}
           <div className="flex justify-center pt-3 pb-1 shrink-0">
             <div className="w-9 h-1 rounded-full bg-slate-200" />
           </div>
 
           <div className="flex-1 overflow-y-auto px-4 pb-6 pt-2">
 
-            {/* Header row with AI toggle */}
+            {/* Header */}
             <div className="flex items-start justify-between mb-3 gap-3">
               <div>
                 <h2 className="text-base font-semibold text-slate-800">Emotion Journal</h2>
                 <p className="text-xs text-slate-400 mt-0.5">
                   {aiActive
-                    ? 'Claude Haiku · AI analysis'
+                    ? 'Claude Haiku · PII stripped before sending'
                     : 'Keyword analysis · fully private'}
                 </p>
               </div>
-
-              {/* AI toggle — always visible */}
               <div className="flex items-center gap-2 shrink-0 mt-0.5">
                 <span className="text-xs text-slate-500">AI</span>
                 <button
                   role="switch"
-                  aria-checked={useAI}
-                  onClick={() => setUseAI(v => !v)}
-                  className={`relative w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-400 ${useAI ? 'bg-slate-700' : 'bg-slate-200'}`}
+                  aria-checked={useAI && consentGiven}
+                  onClick={handleAIToggle}
+                  className={`relative w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-400 ${aiActive ? 'bg-slate-700' : 'bg-slate-200'}`}
                 >
-                  <span
-                    className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${useAI ? 'translate-x-4' : 'translate-x-0'}`}
-                  />
+                  <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${aiActive ? 'translate-x-4' : 'translate-x-0'}`} />
                 </button>
               </div>
             </div>
 
-            {/* No key configured warning */}
+            {/* No key notice */}
             {useAI && !hasApiKey && (
               <div className="mb-3 flex gap-2 p-3 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-600 leading-relaxed">
                 <span className="shrink-0 mt-0.5">ℹ</span>
                 <span>
-                  No API key found in this build. Add <code className="font-mono bg-slate-200 px-1 rounded">VITE_ANTHROPIC_API_KEY</code> to your Netlify environment variables and redeploy to enable AI analysis.
+                  No API key found in this build. Add <code className="font-mono bg-slate-200 px-1 rounded">VITE_ANTHROPIC_API_KEY</code> to your Netlify environment variables and redeploy.
                 </span>
               </div>
             )}
 
-            {/* Privacy notice — shown when AI is on and key exists */}
-            {aiActive && (
-              <div className="mb-3 flex gap-2 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-700 leading-relaxed">
-                <span className="shrink-0 mt-0.5">⚠</span>
-                <span>
-                  <strong>Privacy notice:</strong> AI mode sends your journal text to Anthropic's API for analysis. If this app is public or shared, use <strong>Keyword mode</strong> (toggle off) to keep all text private — it runs entirely in your browser.
-                </span>
-              </div>
-            )}
+            {/* Active AI notice — collapsible */}
+            {aiActive && <AINotice onReviewDetails={() => setShowConsent(true)} />}
 
-            {/* Private mode badge — shown when AI is off */}
+            {/* Private badge */}
             {!aiActive && (
               <div className="mb-3 flex items-center gap-1.5 text-xs text-green-700">
                 <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
