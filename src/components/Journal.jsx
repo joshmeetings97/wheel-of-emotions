@@ -544,6 +544,15 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
 function findSegmentId(emotionName, intensity) {
   const lower = emotionName.toLowerCase();
   if (EMOTION_NAME_MAP[lower]) return EMOTION_NAME_MAP[lower];
+  // Common noun→adjective normalisations (Claude sometimes returns noun forms)
+  const nounToAdj = {
+    'curiosity': 'curious', 'inspiration': 'inspired', 'gratitude': 'grateful',
+    'playfulness': 'playful', 'loneliness': 'lonely', 'disappointment': 'disappointed',
+    'frustration': 'frustrated', 'impatience': 'impatient', 'hesitation': 'hesitant',
+    'withdrawal': 'withdrawn', 'reluctance': 'reluctant',
+  };
+  const normalised = nounToAdj[lower];
+  if (normalised && EMOTION_NAME_MAP[normalised]) return EMOTION_NAME_MAP[normalised];
   const core = CORE_EMOTIONS.find(e => e.name.toLowerCase() === lower);
   if (core) return `${core.id}-${intensity || 'moderate'}`;
   const blend = BLEND_EMOTIONS.find(e => e.name.toLowerCase() === lower);

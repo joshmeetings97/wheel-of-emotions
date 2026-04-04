@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CORE_EMOTIONS, BLEND_EMOTIONS } from '../data/emotions';
+import { PROCESS_QUESTIONS } from '../data/processQuestions';
+import ProcessEmotion from './ProcessEmotion';
 
 const INTENSITY_BADGE = {
   intense:  { label: 'Intense',  cls: 'bg-red-50 text-red-700 border-red-200'      },
@@ -43,6 +45,11 @@ function RelatedChip({ id, accentColor, onClick }) {
 }
 
 export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
+  const [processing, setProcessing] = useState(false);
+
+  // Reset processing view whenever the selected emotion changes
+  useEffect(() => { setProcessing(false); }, [selection]);
+
   if (!selection) return null;
 
   const { type, data, emotion, intensity, level, outerName } = selection;
@@ -124,20 +131,52 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
       <div className="h-1 w-full rounded-full mb-5"
         style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}30)` }} />
 
-      {/* Scrollable body */}
-      <div className="flex-1 overflow-y-auto space-y-0.5 pr-0.5">
-        <div className="mb-5">
-          <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
-        </div>
-        {feelTips   && <Section title="Feel It"   items={feelTips}   icon="✦" />}
-        {remedyTips && <Section title="Remedy It" items={remedyTips} icon="✓" />}
-        {related?.length > 0 && (
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Related</h3>
-            <div className="flex flex-wrap gap-1.5">
-              {related.map(id => (
-                <RelatedChip key={id} id={id} accentColor={accentColor} onClick={handleRelatedClick} />
-              ))}
+      {/* Scrollable body — switches between detail view and processing view */}
+      <div className="flex-1 overflow-y-auto pr-0.5">
+        {processing ? (
+          <ProcessEmotion
+            emotionId={isBlend ? data.id : (outerName ? outerName.toLowerCase() : emotion?.id)}
+            emotionName={name}
+            accentColor={accentColor}
+            onBack={() => setProcessing(false)}
+          />
+        ) : (
+          <div className="space-y-0.5">
+            <div className="mb-5">
+              <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
+            </div>
+            {feelTips   && <Section title="Feel It"   items={feelTips}   icon="✦" />}
+            {remedyTips && <Section title="Remedy It" items={remedyTips} icon="✓" />}
+            {related?.length > 0 && (
+              <div>
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Related</h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {related.map(id => (
+                    <RelatedChip key={id} id={id} accentColor={accentColor} onClick={handleRelatedClick} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Process this emotion */}
+            <div className="pt-5 pb-1">
+              <div className="h-px bg-slate-100 mb-4" />
+              <button
+                onClick={() => setProcessing(true)}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all group"
+              >
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-slate-700 group-hover:text-slate-900 transition-colors">
+                    Process this emotion
+                  </p>
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    {(() => { const id = isBlend ? data.id : emotion?.id; return (PROCESS_QUESTIONS[id] || PROCESS_QUESTIONS.default).length; })()} questions · optional AI reflection
+                  </p>
+                </div>
+                <svg className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.17 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd"/>
+                </svg>
+              </button>
             </div>
           </div>
         )}

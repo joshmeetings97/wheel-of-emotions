@@ -64,16 +64,22 @@ function buildSegments() {
         path:wedge(r1,r2,a1,a2), mid:midPt(r1,r2,a1,a2) });
     });
 
-    // Outer ring — 2 sub-segments; each extends BLEND_SPAN/2 into the adjacent blend gap
-    // so the outer ring has no dead zones where clicks fall through to the background.
-    (emotion.outer || []).forEach((outerObj, idx) => {
-      const sa = idx === 0 ? a1 - BLEND_SPAN / 2 : ca;
-      const ea = idx === 0 ? ca : a2 + BLEND_SPAN / 2;
-      segs.push({ id:`${emotion.id}-outer-${idx}`, type:'emotion', emotionId:emotion.id,
-        level:'mild', name:outerObj.name, color:c4,
-        a1:sa, a2:ea, r1:R.r3, r2:R.r4,
-        path:wedge(R.r3,R.r4,sa,ea), mid:midPt(R.r3,R.r4,sa,ea) });
-    });
+    // Outer ring — N sub-segments evenly dividing the full angular span
+    // (including BLEND_SPAN/2 overlap on each side so there are no click dead-zones)
+    const outerList = emotion.outer || [];
+    if (outerList.length > 0) {
+      const outerStart = a1 - BLEND_SPAN / 2;
+      const outerEnd   = a2 + BLEND_SPAN / 2;
+      const segWidth   = (outerEnd - outerStart) / outerList.length;
+      outerList.forEach((outerObj, idx) => {
+        const sa = outerStart + idx * segWidth;
+        const ea = outerStart + (idx + 1) * segWidth;
+        segs.push({ id:`${emotion.id}-outer-${idx}`, type:'emotion', emotionId:emotion.id,
+          level:'mild', name:outerObj.name, color:c4,
+          a1:sa, a2:ea, r1:R.r3, r2:R.r4,
+          path:wedge(R.r3,R.r4,sa,ea), mid:midPt(R.r3,R.r4,sa,ea) });
+      });
+    }
   });
 
   // Blend zones — span r1→r3 only (middle two rings).
@@ -201,18 +207,23 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
         })}
 
         {/* ── Ring 4 labels (outer sub-emotions) ── */}
-        {CORE_EMOTIONS.map((e) => (e.outer||[]).map((outerObj, idx) => {
-          const word = outerObj.name;
-          const ca = e.centerAngle;
-          const sa = idx===0 ? ca-HALF : ca;
-          const ea = idx===0 ? ca : ca+HALF;
-          const {x,y,angle} = midPt(R.r3,R.r4,sa,ea);
-          const fs = autoFont(word, R.r4-R.r3, 8.5);
-          return <text key={`r4-${e.id}-${idx}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
-            transform={`rotate(${textRot(angle)},${x},${y})`}
-            fontSize={fs} fontFamily="Inter,Arial,sans-serif"
-            fill={textClr(e.ringColors?.[3])} style={{pointerEvents:'none'}}>{word}</text>;
-        }))}
+        {CORE_EMOTIONS.map((e) => {
+          const outerList = e.outer || [];
+          if (outerList.length === 0) return null;
+          const outerStart = e.centerAngle - HALF - BLEND_SPAN / 2;
+          const outerEnd   = e.centerAngle + HALF + BLEND_SPAN / 2;
+          const segWidth   = (outerEnd - outerStart) / outerList.length;
+          return outerList.map((outerObj, idx) => {
+            const sa = outerStart + idx * segWidth;
+            const ea = sa + segWidth;
+            const {x, y, angle} = midPt(R.r3, R.r4, sa, ea);
+            const fs = autoFont(outerObj.name, R.r4 - R.r3, 8.5);
+            return <text key={`r4-${e.id}-${idx}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+              transform={`rotate(${textRot(angle)},${x},${y})`}
+              fontSize={fs} fontFamily="Inter,Arial,sans-serif"
+              fill={textClr(e.ringColors?.[3])} style={{pointerEvents:'none'}}>{outerObj.name}</text>;
+          });
+        })}
 
         {/* ── Blend zone labels (always visible, small) ── */}
         {BLEND_EMOTIONS.map((blend) => {

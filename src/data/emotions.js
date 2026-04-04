@@ -30,6 +30,20 @@ export const CORE_EMOTIONS = [
         ],
       },
       {
+        name: 'Playful',
+        description: 'Playfulness is joy in its most active, unguarded form — the impulse to explore, improvise, and engage without agenda or outcome. It surfaces when you feel safe enough to shed self-consciousness and simply be in the moment. This lighthearted energy is deeply restorative and creative.',
+        feelTips: [
+          'Honor it by doing something with no goal: doodle, make silly sounds, move your body freely.',
+          'Invite others in — playfulness is contagious and deepens connection when shared.',
+          'Notice what triggered it; environments where you feel safe and un-judged are worth returning to.',
+        ],
+        remedyTips: [
+          'If playfulness feels blocked, reduce performance pressure — you can\'t play when you\'re being evaluated.',
+          'Start physical: running, dancing, or even fidgeting can unlock a playful mode.',
+          'Spend time with children or animals, who model unselfconscious play naturally.',
+        ],
+      },
+      {
         name: 'Peaceful',
         description: 'Peacefulness is joy distilled to its quietest form — a deep settledness that asks nothing of the moment. It is the experience of being fully okay with where you are, free from urgency, resistance, or want. Many find it more nourishing and sustainable than intense happiness.',
         feelTips: [
@@ -41,6 +55,20 @@ export const CORE_EMOTIONS = [
           'If peace feels inaccessible, identify the primary source of inner noise and address just that one thing.',
           'Brief nature exposure — even a few minutes outside — reliably reduces cortisol and invites calm.',
           'A body scan meditation helps locate and release the physical tension that blocks peacefulness.',
+        ],
+      },
+      {
+        name: 'Grateful',
+        description: 'Gratitude is a warm recognition that something good arrived partly through others — and that you want to acknowledge it. It softens self-reliance, opens warmth toward people, and has one of the strongest links to sustained well-being of any emotional state.',
+        feelTips: [
+          'Name the specific thing you\'re grateful for, not just a vague sense — specificity intensifies the feeling.',
+          'Express it directly to the person involved when you can; it deepens the emotion for both of you.',
+          'Let gratitude be a complete thought without turning it into a task or obligation.',
+        ],
+        remedyTips: [
+          'Try a "three specific things" practice each evening — vague gratitude lists wear thin; specific moments don\'t.',
+          'When you feel ungrateful or resentful, work with the difficult feeling first before reaching for gratitude.',
+          'Find something genuinely small if large gratitude feels inaccessible: a warm drink, a functioning body, today\'s light.',
         ],
       },
     ],
@@ -132,6 +160,34 @@ export const CORE_EMOTIONS = [
           'Rebuild through small, consistent interactions rather than large gestures.',
         ],
       },
+      {
+        name: 'Comfortable',
+        description: 'Comfort in the context of trust is settled ease with a person, place, or situation — you don\'t need to be on guard or perform. It\'s a low-key but foundational feeling: the sense that you can just be yourself without managing impressions or preparing for threat.',
+        feelTips: [
+          'Notice the cues that create comfort — they reveal what safety looks like for you specifically.',
+          'Comfort is best felt slowly; rushing it, especially with people, undermines it.',
+          'Let yourself relax physically when comfort arises — it deepens the felt sense.',
+        ],
+        remedyTips: [
+          'If comfort feels absent, identify what specific thing would need to be true for you to feel safe enough to relax.',
+          'Small, consistent experiences of safety build comfort more reliably than big reassurances.',
+          'It\'s worth asking whether the environment warrants discomfort — sometimes the absence of comfort is accurate information.',
+        ],
+      },
+      {
+        name: 'Valued',
+        description: 'Feeling valued is the gentle recognition that others see your worth — not just your outputs, but you. It arises when contributions are acknowledged, when opinions are sought, or simply when presence is welcomed. It is one of the most fundamental needs in human connection.',
+        feelTips: [
+          'Receive it fully — resist deflecting compliments or minimizing what you contributed.',
+          'Notice which relationships and environments tend to produce this feeling; invest in them.',
+          'Let the feeling settle rather than immediately looking for confirmation it\'s true.',
+        ],
+        remedyTips: [
+          'If you feel undervalued, first check whether you\'ve clearly communicated your contributions and needs.',
+          'Chronic under-valuation in a relationship is important information — it may be telling you about fit, not your worth.',
+          'Build your sense of value from within as well: keep a record of what you\'ve made, solved, or improved.',
+        ],
+      },
     ],
     colors: {
       intense: '#2D7F34',
@@ -221,6 +277,34 @@ export const CORE_EMOTIONS = [
           'Remind yourself that nervousness is temporary and typically dissipates once the event begins.',
         ],
       },
+      {
+        name: 'Hesitant',
+        description: 'Hesitation is a micro-pause at the threshold of action — a signal that some part of you needs more information, more readiness, or more permission before proceeding. It is the mildest form of fear: not enough to stop you, but enough to slow you. Often it is genuinely useful.',
+        feelTips: [
+          'Acknowledge the hesitation before pushing past it — it may contain important data about readiness or fit.',
+          'Name specifically what you\'re hesitant about: the first step? The whole thing? One person\'s reaction?',
+          'Sometimes holding the hesitation just a moment longer lets it resolve on its own.',
+        ],
+        remedyTips: [
+          'Break the action into smaller pieces; hesitation often dissolves when the first step is tiny enough.',
+          'Distinguish between "I need more information" hesitation and "I\'m avoiding discomfort" hesitation — they call for different responses.',
+          'Talk it through with someone you trust; verbalizing hesitation often clarifies what\'s actually holding you back.',
+        ],
+      },
+      {
+        name: 'Timid',
+        description: 'Timidity is a mild inhibition — a tendency to hold back, speak softly, or shrink in the face of the unfamiliar or the imposing. It is often rooted in awareness of social evaluation and a desire not to be exposed. While it can feel limiting, it is also a form of sensitivity and attunement.',
+        feelTips: [
+          'Timidity is not weakness — it often reflects genuine awareness of social context. Don\'t pathologize it.',
+          'Breathe slowly and let yourself take up slightly more space physically; posture shifts can shift the feeling.',
+          'Notice that timidity is context-dependent — you are likely bold in areas where you feel competent.',
+        ],
+        remedyTips: [
+          'Practice the smallest version of the bold action first; each small success rewires the link between exposure and safety.',
+          'Distinguish between timidity that is protecting you from genuine threat and timidity that is limiting you unnecessarily.',
+          'Find contexts where you naturally feel confident and use them as a reference point for who you can be.',
+        ],
+      },
     ],
     colors: {
       intense: '#1A6E6A',
@@ -297,6 +381,20 @@ export const CORE_EMOTIONS = [
         ],
       },
       {
+        name: 'Confused',
+        description: 'Confusion is the cognitive experience of holding multiple possibilities or signals that don\'t yet resolve into meaning. It sits in the mild-surprise family: something has disrupted your expectations enough that you cannot immediately orient. It is uncomfortable, but it is also the state just before understanding.',
+        feelTips: [
+          'Allow confusion to be present without demanding it immediately resolve — rushing it often produces false clarity.',
+          'Write down what specifically you\'re confused about; articulating the confusion often points directly at what\'s missing.',
+          'Confusion in learning contexts is normal and productive — it means you\'re working at the edge of understanding.',
+        ],
+        remedyTips: [
+          'Ask a specific question rather than stewing generally — confusion that can be named can be addressed.',
+          'Break the unclear thing into smaller parts and orient to just one piece at a time.',
+          'Talk it through with someone; confusion often clears faster in dialogue than in solo reflection.',
+        ],
+      },
+      {
         name: 'Unsettled',
         description: 'Being unsettled is mild surprise combined with a vague discomfort — something unexpected has landed in a way that feels slightly off. It is subtler than alarm but more persistent than simple puzzlement. It often points to a value or expectation that was quietly disrupted.',
         feelTips: [
@@ -308,6 +406,20 @@ export const CORE_EMOTIONS = [
           'Grounding helps: name what is stable and known in your environment to re-establish a sense of baseline.',
           'If the feeling persists, journal about what the unexpected event means to you — why did it land that way?',
           'Speak to someone you trust; an outside perspective often clarifies quickly.',
+        ],
+      },
+      {
+        name: 'Startled',
+        description: 'Being startled is a brief, involuntary jolt of attention caused by something sudden and unexpected. It is the most transient expression of surprise: an instinctive orienting response that fades quickly once the surprise is registered as safe. Most startles resolve within seconds.',
+        feelTips: [
+          'Let the wave pass — the physical sensation (racing heart, catch of breath) resolves quickly once the stimulus is processed as safe.',
+          'Notice that the sharp initial sensation is not the emotion; it\'s the nervous system doing its job.',
+          'There can be a moment of comedy in being startled — lean into it if the context allows.',
+        ],
+        remedyTips: [
+          'If you\'re easily startled in a particular context, examine whether underlying anxiety is raising your baseline alertness.',
+          'Familiar environments and predictable routines lower startle sensitivity; chaos and unpredictability raise them.',
+          'Grounding practices (feet on the floor, slow breath) quickly reset the system after being startled.',
         ],
       },
     ],
@@ -386,6 +498,20 @@ export const CORE_EMOTIONS = [
         ],
       },
       {
+        name: 'Lonely',
+        description: 'Loneliness is the ache of felt disconnection — a sense that the quality or quantity of meaningful contact in your life is below what you need. It is distinct from being alone: you can be lonely in a crowd or among people who only see you shallowly. It is one of the most common and quietly painful states.',
+        feelTips: [
+          'Name it plainly to yourself — "I am lonely" is easier to work with than a vague sense of emptiness.',
+          'Reach toward low-pressure connection: a brief message to someone you\'ve been meaning to contact, or a public place with gentle social presence.',
+          'Distinguish between wanting depth and wanting company — they require different responses.',
+        ],
+        remedyTips: [
+          'Initiate contact, even when a voice says "no one wants to hear from me" — loneliness amplifies that voice and it is usually wrong.',
+          'Build regular touchpoints: a weekly call, a standing gathering; consistent structure supports connection more than one-off efforts.',
+          'Consider whether digital interaction is substituting for but not satisfying the need for real presence.',
+        ],
+      },
+      {
         name: 'Forlorn',
         description: 'Forlornness is a gentle, resigned sadness — the feeling of being left behind, forgotten, or without a clear path forward. It carries a quality of quiet aloneness and longing. It is less sharp than grief but more hollow than simple sadness, often arriving when connection or purpose feels distant.',
         feelTips: [
@@ -397,6 +523,20 @@ export const CORE_EMOTIONS = [
           'Reach out to someone, even briefly — forlornness feeds on isolation and diminishes with contact.',
           'Identify one small thing that could reintroduce a sense of direction or purpose, however modest.',
           'If forlornness is chronic, explore whether loneliness or lack of meaning is its root and address that directly.',
+        ],
+      },
+      {
+        name: 'Disappointed',
+        description: 'Disappointment is the gap between expectation and outcome — the deflation that comes when something you were hoping for doesn\'t arrive the way you imagined. It is a mild-sadness state: there is loss here, but usually a proportionate one. Its intensity is often a direct measure of how much you cared.',
+        feelTips: [
+          'Acknowledge it rather than immediately minimizing it — "it\'s fine" before it\'s actually fine skips a real feeling.',
+          'Locate exactly what you were hoping for; clarity about the expectation helps place the disappointment accurately.',
+          'Let yourself be briefly sad about it — disappointment that\'s acknowledged moves through faster.',
+        ],
+        remedyTips: [
+          'Check whether the expectation was communicated or only held internally — unexpressed expectations set up more disappointment.',
+          'Some disappointments are information: this matters to me, I need to adjust how I\'m pursuing it.',
+          'Allow time; the sting of disappointment fades more reliably than we expect in the moment.',
         ],
       },
     ],
@@ -488,6 +628,34 @@ export const CORE_EMOTIONS = [
           'If the offence was unintentional, a calm explanation usually resolves it; if intentional, a harder conversation is needed.',
         ],
       },
+      {
+        name: 'Withdrawn',
+        description: 'Withdrawal is the mild aversion-based pulling back from something that feels distasteful, wrong, or simply incompatible with who you are. It is the body\'s quiet way of creating distance without open confrontation. Unlike disgust\'s more active rejection, withdrawal is passive and protective.',
+        feelTips: [
+          'Notice whether you\'re withdrawing from a specific thing or from everything — broad withdrawal is a signal worth attending to.',
+          'Allow yourself to create distance without needing to justify it in the moment.',
+          'Physical withdrawal often mirrors emotional withdrawal; let your body\'s instinct inform you.',
+        ],
+        remedyTips: [
+          'Check whether the withdrawal is responding to something real or to a pattern from the past that no longer applies.',
+          'If withdrawal has become chronic or automatic, explore what would need to change for re-engagement to feel possible.',
+          'Sometimes withdrawal is the correct response — not every aversion needs to be overcome.',
+        ],
+      },
+      {
+        name: 'Reluctant',
+        description: 'Reluctance is mild resistance — a dragging of the feet in the face of something you don\'t want to do or engage with. It is the softest form of disgust-aversion: not a hard no, but a sustained not-quite-yes. It often signals a values conflict, a depletion of energy, or a sense of poor fit.',
+        feelTips: [
+          'Investigate the reluctance rather than just powering through it — it may be telling you something important.',
+          'Sometimes naming it to someone else ("I feel reluctant about this") is enough to clarify what it\'s about.',
+          'Distinguish between reluctance from genuine aversion and reluctance from discomfort with starting — they call for different responses.',
+        ],
+        remedyTips: [
+          'If you must proceed despite reluctance, identify one small aspect of the task that is genuinely manageable or worthwhile.',
+          'If reluctance is chronic in a given area of life, it is worth examining whether the context itself needs to change.',
+          'Avoid habitually overriding reluctance — it can numb an important signal over time.',
+        ],
+      },
     ],
     colors: {
       intense: '#7B3298',
@@ -577,6 +745,34 @@ export const CORE_EMOTIONS = [
           'If you find yourself frequently peeved, check whether broader stress or fatigue is lowering your threshold.',
         ],
       },
+      {
+        name: 'Frustrated',
+        description: 'Frustration is the emotion of blocked goals — a tight, hot feeling that arises when effort meets obstacle, when persistence meets resistance, or when things simply refuse to go as planned. It lives in the mild-anger range: the goal still feels reachable, but something keeps getting in the way.',
+        feelTips: [
+          'Name the specific obstacle — frustration loses some of its grip when you can identify exactly what\'s blocking you.',
+          'Give the energy somewhere to go: a brief physical outlet or a moment to vent to someone you trust.',
+          'Frustration usually points at something you care about — it\'s worth noting what that is.',
+        ],
+        remedyTips: [
+          'Take a break before the frustration escalates; returning fresh often reveals a solution the stuck state couldn\'t see.',
+          'Distinguish between obstacles that need more effort, those that need a different approach, and those telling you to stop.',
+          'If frustration is chronic, step back and examine whether the goal itself needs revision.',
+        ],
+      },
+      {
+        name: 'Impatient',
+        description: 'Impatience is mild anger at the pace of things — the friction of wanting the outcome before the process has finished. It arises when time feels wasted, when momentum stalls, or when others move slower than you need. It is energy looking for faster release than the situation allows.',
+        feelTips: [
+          'Notice the gap between the pace you want and the pace that\'s actually required — sometimes adjusting the expectation is the real fix.',
+          'Channel the energy productively: if you\'re waiting, do something useful with the time.',
+          'Recognize what the impatience is pointing toward — what do you care so much about arriving at?',
+        ],
+        remedyTips: [
+          'Practice the distinction between what you can control (your next action) and what you can\'t (other people\'s pace, timing).',
+          'Building tolerance for necessary waiting is a skill; small, deliberate practices with delay can develop it.',
+          'Examine whether your speed expectations are realistic or whether they\'re importing urgency from another area of your life.',
+        ],
+      },
     ],
     colors: {
       intense: '#B52A2A',
@@ -664,6 +860,34 @@ export const CORE_EMOTIONS = [
           'When hope is hard to access, start very small: "What is one thing that could go better today?"',
           'Distinguish hope from denial — genuine hope acknowledges difficulty while believing in possibility.',
           'If hope feels consistently inaccessible, speak to a doctor or therapist; this can be an early sign of depression.',
+        ],
+      },
+      {
+        name: 'Curious',
+        description: 'Curiosity is the pull of the unknown — a gentle, energized openness to what you don\'t yet know or understand. It is the mildest and most sustainable form of anticipation: interest without urgency, engagement without anxiety. It is the emotional state most associated with learning and creative exploration.',
+        feelTips: [
+          'Follow the thread of curiosity wherever it leads, even without an obvious payoff — this is what makes it valuable.',
+          'Ask questions without needing to know the answer yet; sit with the open question for a moment.',
+          'Notice how different curiosity feels from anxious anticipation — the pull is lighter and wider.',
+        ],
+        remedyTips: [
+          'If curiosity has gone quiet, reduce input — overstimulation tends to dull it; boredom tends to revive it.',
+          'Expose yourself to adjacent domains: curiosity is often sparked by unexpected collisions between things you already know.',
+          'Protect your curiosity from being immediately monetized or turned into a task; not every interest needs a purpose.',
+        ],
+      },
+      {
+        name: 'Inspired',
+        description: 'Inspiration is the felt sense of possibility opening — a sudden clarity that something remarkable is attainable or that an idea wants to be realized. It lives in mild-anticipation: there is forward energy here, but it hasn\'t yet tipped into the urgency of vigilance. It feels generative and light.',
+        feelTips: [
+          'Act on inspiration quickly, even in a small way — capture the idea, take one step, send one message.',
+          'Notice what triggered it; inspiration tends to return to the same wells.',
+          'Share it with someone who will meet it with genuine interest — verbalizing inspiration tends to crystallize it.',
+        ],
+        remedyTips: [
+          'If inspiration rarely visits, examine your environment — it thrives in novelty, beauty, and connection, and withers under relentless routine.',
+          'When it arrives, protect the time it wants — don\'t schedule it out of existence.',
+          'Distinguish between genuine inspiration (a pull) and the performance of enthusiasm — they feel different and require different responses.',
         ],
       },
     ],
@@ -892,22 +1116,40 @@ CORE_EMOTIONS.forEach(emotion => {
   emotion.intensities.forEach(intensity => {
     EMOTION_NAME_MAP[intensity.name.toLowerCase()] = `${emotion.id}-${intensity.level}`;
   });
+  // Outer ring emotions → resolve to outer-N segment IDs
+  (emotion.outer || []).forEach((outerObj, idx) => {
+    EMOTION_NAME_MAP[outerObj.name.toLowerCase()] = `${emotion.id}-outer-${idx}`;
+  });
 });
 BLEND_EMOTIONS.forEach(blend => {
   EMOTION_NAME_MAP[blend.name.toLowerCase()] = blend.id;
 });
 
 // Keyword-based emotion detection
+import nlp from 'compromise';
+
 // ─── Text normalisation ──────────────────────────────────────────────────────
 // Collapse 3+ repeated characters to 1: "sooo" → "so", "tireddd" → "tired"
-// Preserves legitimate double letters: "feel" (ee), "good" (oo), "well" (ll)
 function normalizeText(raw) {
   return raw
     .toLowerCase()
-    .replace(/[''`]/g, "'")         // smart/backtick quotes → straight apostrophe
-    .replace(/(.)\1{2,}/g, '$1')    // 3+ repeated chars → 1: "sooo"→"so", "!!!"→"!"
+    .replace(/[''`]/g, "'")
+    .replace(/(.)\1{2,}/g, '$1')    // sooo→so, tireddd→tired
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+// ─── Lemmatize via compromise ────────────────────────────────────────────────
+// Returns a space-joined string of root (lemma) forms for all tokens in `text`.
+// e.g. "I was worrying about everything" → "i be worry about everything"
+// This lets us match root-form keywords against any conjugation/tense.
+function lemmatize(text) {
+  const doc = nlp(text);
+  // Convert verbs to infinitive form and nouns to singular
+  return doc.json().flatMap(s => s.terms).map(t => {
+    const root = t.root || t.normal || t.text.toLowerCase();
+    return root.toLowerCase();
+  }).join(' ');
 }
 
 // ─── Negation detection ───────────────────────────────────────────────────────
@@ -916,17 +1158,13 @@ const NEGATORS = ["not","no","never","dont","don't","didn't","didnt","doesn't","
   "shouldn't","shouldnt","haven't","havent","hasn't","hasnt","barely","hardly",
   "nothing","nowhere","nor","without","lack","lacking","far from","anything but"];
 
-// Returns true if `keyword` appears negated in `text` (a negator within 5 words before it)
 function isNegated(text, keyword) {
   let searchFrom = 0;
   while (true) {
     const idx = text.indexOf(keyword, searchFrom);
     if (idx === -1) break;
-    // Grab up to 40 chars before the keyword
     const before = text.slice(Math.max(0, idx - 40), idx);
-    const beforeWords = before.trim().split(/\s+/);
-    // Check if any of the last 5 words before keyword is a negator
-    const window = beforeWords.slice(-5);
+    const window = before.trim().split(/\s+/).slice(-5);
     if (window.some(w => NEGATORS.includes(w.replace(/[^a-z']/g, '')))) return true;
     searchFrom = idx + 1;
   }
@@ -937,299 +1175,385 @@ function isNegated(text, keyword) {
 const INTENSIFIERS = ["very","so","really","extremely","incredibly","deeply","truly",
   "absolutely","totally","utterly","completely","super","insanely","overwhelmingly",
   "profoundly","genuinely","beyond","unbearably","intensely","massively","terribly",
-  "awfully","desperately","hopelessly","wildly","fiercely","burning","burning with"];
+  "awfully","desperately","hopelessly","wildly","fiercely","burning"];
 
-// Returns a score multiplier (1.0 baseline, up to 1.6) based on intensifiers near keyword
 function intensifierBoost(text, keyword) {
   const idx = text.indexOf(keyword);
   if (idx === -1) return 1.0;
-  const before = text.slice(Math.max(0, idx - 35), idx);
-  const after  = text.slice(idx + keyword.length, idx + keyword.length + 20);
-  const context = (before + ' ' + after).toLowerCase();
+  const context = text.slice(Math.max(0, idx - 35), idx + keyword.length + 20);
   const count = INTENSIFIERS.filter(w => context.includes(w)).length;
   return count === 0 ? 1.0 : Math.min(1.0 + count * 0.2, 1.6);
 }
 
 // ─── Keyword map ──────────────────────────────────────────────────────────────
+// Keywords use ROOT/LEMMA forms wherever possible — compromise lemmatizes the input
+// before matching, so "worrying"/"worried"/"worries" all match the root "worry".
+// Multi-word phrases match against the original normalized text (not lemmatized).
 const KEYWORD_MAP = {
   joy: [
-    'happy','happiness','joyful','glad','delighted','pleased','wonderful','great','amazing',
-    'fantastic','cheerful','elated','thrilled','content','satisfied','enjoy','enjoying',
-    'enjoyed','love','blessed','lucky','grateful','thankful','smile','smiling','laugh',
-    'laughing','laughed','fun','celebrate','celebration','celebrating','good mood',
-    'feeling good','feels good','feel good','bright','lit up','beaming','grinning',
-    'floating','on cloud nine','over the moon','stoked','pumped','buzzing','alive',
-    'radiant','gleaming','wonderful time','great time','best time','having a good',
-    'so good','loving it','absolutely love','wonderful day','beautiful day',
-    'positive','upbeat','uplifted','lifted','light','lighthearted','buoyant',
-    'spring in my step','full of life','energized','refreshed','renewed','vibrant',
-    'good news','great news','exciting news','so happy','really happy','very happy',
+    // Root-form single words (auto-match all conjugations via lemmatization)
+    'happy','joy','glad','delight','please','wonderful','great','fantastic','cheerful',
+    'elate','thrill','content','satisfy','enjoy','bless','lucky','grateful','thankful',
+    'smile','laugh','fun','celebrate','positive','upbeat','uplift','vibrant','radiant',
+    'rejoice','grin','beam','gleam','flourish','thrive','alive','exhilarate',
+    // Phrases (matched against original text)
+    'good mood','feeling good','feel good','on cloud nine','over the moon','full of life',
+    'spring in my step','good news','great news','loving it','having a great',
   ],
 
   ecstasy: [
-    'ecstatic','euphoric','blissful','overjoyed','on top of the world','best day ever',
-    'incredible feeling','unbelievable','never felt better','beyond happy','best feeling',
-    'peak of happiness','so alive','absolutely incredible','nothing better','pure bliss',
-    'pure joy','complete happiness','absolute happiness','flying high','on fire',
-    'unstoppable','invincible','in heaven','seventh heaven','cloud nine',
+    'ecstatic','euphoric','blissful','overjoyed','bliss',
+    'on top of the world','best day ever','never felt better','beyond happy','pure bliss',
+    'pure joy','flying high','seventh heaven','cloud nine','absolute happiness',
   ],
 
   serenity: [
-    'serene','calm','peaceful','at ease','relaxed','tranquil','gentle','quiet','still',
-    'rest','restful','settled','centered','grounded','zen','mellow','at peace',
-    'chill','chilled','chilling','easy','cozy','comfortable','no stress','stress free',
-    'worry free','unbothered','going well','all good','doing well','okay','fine',
-    'not bad','pretty good','alright','decent','steady','stable','balanced',
-    'taking it easy','slow day','slow morning','enjoying the quiet','just relaxing',
+    'serene','calm','peaceful','ease','relax','tranquil','gentle','quiet','still',
+    'rest','settle','center','ground','mellow','chill','cozy','comfortable','steady',
+    'stable','balance','unbothered',
+    'at ease','at peace','no stress','stress free','worry free','all good','doing well',
+    'taking it easy','just relaxing','enjoying the quiet',
   ],
 
   trust: [
-    'trust','trusting','trusted','believe','believing','rely','relying','confident',
-    'confidence','safe','secure','security','faith','honest','honesty','loyal','loyalty',
-    'reliable','dependable','support','supportive','open','comfortable','sure of',
-    'count on','counted on','backed up','in good hands','well supported','believe in',
-    'i know they will','have faith in','solid relationship','strong bond','feel supported',
+    'trust','believe','rely','confident','safe','secure','faith','honest','loyal',
+    'reliable','dependable','support','open','comfortable',
+    'count on','in good hands','strong bond','feel supported','have faith in',
   ],
 
   admiration: [
-    'admire','admiration','respect','respecting','look up to','inspired by','hero',
-    'role model','mentor','idol','brilliant','genius','talented','gifted','extraordinary',
-    'impressive','inspiring','in awe of','look at what they did','incredible person',
-    'amazing person','so talented','what a person','what they achieved','aspire to be',
-    'i want to be like','they are incredible','they are amazing',
+    'admire','respect','inspire','hero','brilliant','genius','talented','gifted',
+    'extraordinary','impressive','aspire',
+    'look up to','role model','in awe of','so talented','amazing person',
   ],
 
   acceptance: [
-    'accept','accepting','accepted','okay with it','fine with it','at peace with','embrace',
-    'embracing','acknowledge','acknowledging','open minded','tolerant','understanding',
-    'let it go','letting go','made peace','moved on','moving on','whatever happens',
-    'come to terms','coming to terms','it is what it is','thats okay','that is okay',
-    'live with it','living with it','okay with how','i can deal','i can handle',
+    'accept','embrace','acknowledge','tolerant','understand',
+    'let go','made peace','move on','come to terms','it is what it is',
+    'okay with it','fine with it','at peace with','live with it','i can deal',
   ],
 
   fear: [
-    'fear','fearing','afraid','scared','frightened','terrified','nervous','anxious',
-    'anxiety','worry','worrying','worried','dread','dreading','panic','panicking',
-    'panicked','threat','threatened','dangerous','danger','unsafe','insecure','uneasy',
-    'stressed','stress','stressing','overwhelmed','overwhelming','on edge','shaky',
-    'trembling','heart racing','can\'t breathe','freaking out','spiraling','what if',
-    'worst case','something bad','going wrong','something wrong','scared of','afraid of',
-    'scared that','worried that','nervous about','anxious about','stressed about',
-    'terror','terrifying','frightening','petrifying','crippling','debilitating',
-    'losing control','out of control','helpless','powerless','vulnerable',
-    'tight chest','pit in my stomach','knot in my stomach','can\'t sleep','sleepless',
+    'fear','afraid','scare','frighten','nervous','anxious','anxiety','worry','dread',
+    'panic','threaten','dangerous','unsafe','insecure','uneasy','stress','overwhelm',
+    'shake','tremble','spiral','helpless','powerless','vulnerable','sleepless',
+    'on edge','what if','worst case','losing control','out of control','heart racing',
+    'pit in my stomach','knot in my stomach','tight chest','freaking out','something wrong',
   ],
 
   terror: [
-    'terrified','terror','petrified','horror','horrified','nightmare','catastrophe',
-    'disaster','paralyzed by fear','frozen with fear','worst fear','complete terror',
-    'absolute horror','traumatized','traumatic','traumatizing','horrifying',
-    'blood runs cold','heart stopped','shaking uncontrollably','can\'t move',
+    'terrified','terror','petrify','horrify','nightmare','catastrophe','disaster',
+    'traumatize','traumatic',
+    'paralyzed by fear','frozen with fear','blood runs cold','shaking uncontrollably',
+    'absolute horror','worst fear',
   ],
 
   apprehension: [
-    'apprehensive','uneasy','unsure','uncertain','hesitant','wary','cautious',
-    'nervous about','worried about','concerned about','second guessing','second guess',
-    'not sure how','i hope it goes well','might not','could go wrong','don\'t know if',
-    'hard to tell','feels risky','taking a risk','uncertain about','not convinced',
-    'mixed feelings about','not sure if i','doubting','having doubts','doubt myself',
+    'apprehensive','hesitant','wary','cautious','doubt','uncertain',
+    'second guess','mixed feelings','not convinced','feels risky','taking a risk',
+    'nervous about','worried about','concerned about','not sure how','could go wrong',
   ],
 
   surprise: [
-    'surprised','unexpected','shocked','astonishing','astonished','caught off guard',
-    'didn\'t expect','didn\'t see that coming','wow','out of nowhere','sudden','suddenly',
-    'plot twist','came out of nowhere','blindsided','out of the blue','not expecting',
-    'who knew','can you believe','i had no idea','news to me','total surprise',
-    'taken aback','jaw dropped','stunned','completely unexpected','never saw it coming',
+    'surprise','shock','astonish','unexpected','sudden','stun','blindside',
+    'wow','out of nowhere','out of the blue','plot twist','jaw drop','never saw it coming',
+    'caught off guard','taken aback','i had no idea','total surprise',
   ],
 
   amazement: [
-    'amazed','awestruck','stunned','blown away','mind blown','speechless','extraordinary',
-    'jaw dropping','can\'t believe it','unbelievable','how is that possible','incredible',
-    'phenomenal','breathtaking','magnificent','spectacular','remarkable','unreal',
-    'beyond words','words can\'t describe','i have no words','stunning','mind blowing',
+    'amaze','awestruck','phenomenal','breathtaking','magnificent','spectacular',
+    'remarkable','unreal','speechless','extraordinary','incredible','mind blown',
+    'blown away','beyond words','i have no words','how is that possible',
   ],
 
   distraction: [
-    'distracted','unfocused','scattered','lost focus','hard to concentrate','can\'t focus',
-    'all over the place','zoning out','mind wandering','drifting off','spacing out',
-    'can\'t stay on track','keep losing track','off task','diverted','pulled in every direction',
-    'not sure what to think','confused','confusing','mixed up','puzzled','muddled',
-    'foggy','brain fog','not sure what i feel','lost my train of thought','unclear',
+    'distract','unfocused','scatter','confuse','puzzled','muddle','foggy',
+    'hard to concentrate','all over the place','zoning out','mind wandering',
+    'brain fog','spacing out','lost my train of thought','keep losing track',
   ],
 
   sadness: [
-    'sad','sadness','unhappy','down','depressed','depression','blue','gloomy','miserable',
-    'disappointed','heartbroken','hurt','crying','tears','cry','upset','low','empty',
-    'hollow','lonely','alone','isolated','miss','missing','lost','grief','mourning',
-    'sorrow','hopeless','worthless','broken','devastated','in pain','ache','aching',
-    'longing','yearning','nothing matters','what\'s the point','can\'t stop crying',
-    'feel like crying','want to cry','no one cares','no one understands','feel unseen',
-    'feel unheard','invisible','left out','left behind','abandoned','neglected',
-    'rejected','unwanted','unloved','never good enough','not good enough','failure',
-    'failed','let everyone down','heavy','heaviness','weight on my chest','so heavy',
-    'dragging myself','barely getting through','just getting through','numb',
-    'feeling nothing','disconnected','feel disconnected','don\'t feel anything',
-    'emotionally exhausted','emotionally drained','been through so much',
+    'sad','unhappy','depress','blue','gloomy','miserable','disappoint','heartbroken',
+    'hurt','cry','tear','upset','empty','hollow','lonely','alone','isolate','miss',
+    'grief','mourn','sorrow','hopeless','worthless','broken','devastate','ache','long',
+    'yearn','numb','disconnect','abandon','neglect','reject','unwanted','unloved',
+    'nothing matters','what\'s the point','no one cares','feel unseen','feel unheard',
+    'weight on my chest','barely getting through','just getting through',
+    'never good enough','not good enough','been through so much','emotionally drained',
+    'left out','left behind','want to cry','feel like crying',
   ],
 
   grief: [
-    'grief','grieving','grieve','devastated','heartbroken','lost someone','death',
-    'died','passed away','mourning','bereaved','inconsolable','gone forever','never coming back',
-    'miss them so much','i miss them','i miss her','i miss him','hole in my life',
-    'hole in my heart','they\'re gone','i lost','loss of','losing them','lost my',
+    'grieve','bereave','inconsolable',
+    'lost someone','passed away','never coming back','hole in my heart','they\'re gone',
+    'miss them so much','i miss them','gone forever','loss of','lost my',
   ],
 
   pensiveness: [
     'pensive','wistful','nostalgic','nostalgia','melancholy','bittersweet','reflective',
-    'reminiscing','wishing things were different','longing for','thinking about the past',
-    'looking back','used to','back when','remember when','things used to be','i miss how',
-    'simpler times','things have changed','not the same','miss the old days','old times',
-    'long ago','years ago','thinking back','reflecting on','fond memories','fond of',
-    'what could have been','might have been','if only','what if i had','regret but',
+    'reminisce','longing for',
+    'thinking about the past','looking back','remember when','used to be','miss the old days',
+    'things have changed','what could have been','if only','what if i had',
   ],
 
   disgust: [
-    'disgusting','disgusted','revolting','repulsed','gross','nauseating','horrible',
-    'appalling','yuck','eww','repulsive','makes me sick','feel sick','stomach turning',
-    'vile','putrid','foul','nauseated','that\'s wrong','morally wrong','unacceptable',
-    'outraged by','sickened','can\'t stand to look at','can\'t stomach','repugnant',
-    'abhorrent','offensive','deeply offensive','revolted','turns my stomach',
+    'disgust','revolt','repulse','gross','nauseate','horrible','appalling','repulsive',
+    'vile','putrid','foul','sicken','abhor',
+    'yuck','eww','makes me sick','stomach turning','turns my stomach','morally wrong',
+    'can\'t stomach','can\'t stand to look at','outraged by',
   ],
 
   loathing: [
-    'loathe','loathing','hate','hating','detest','abhor','despise','cannot stand',
-    'can\'t stand','utterly disgusting','complete disgust','deep hatred','deeply hate',
-    'i despise','i detest','absolute hatred','burning hatred','intense dislike',
-    'makes me furious just thinking','everything about it disgusts','pure hatred',
+    'loathe','hate','detest','despise',
+    'cannot stand','deep hatred','burning hatred','pure hatred','intense dislike',
+    'utterly disgusting','complete disgust','absolute hatred',
   ],
 
   boredom: [
-    'bored','boring','dull','tedious','monotonous','uninteresting','nothing to do',
-    'listless','unstimulated','tired','tiredness','exhausted','exhaustion','fatigued',
-    'fatigue','worn out','drained','run down','depleted','burned out','burnt out',
-    'burnout','no energy','low energy','flat','can\'t be bothered','apathetic',
-    'apathy','unmotivated','disengaged','checked out','going through the motions',
-    'zoned out','detached','lifeless','sluggish','lethargic','weary','spent',
-    'running on empty','no drive','lost all motivation','can\'t get started',
-    'can\'t get going','drag myself','dragging myself','so tired','really tired',
-    'absolutely exhausted','completely drained','feel empty','feel hollow',
-    'nothing feels worth it','just existing','surviving not thriving','autopilot',
-    'same thing every day','groundhog day','what\'s the point','no point',
-    'can\'t find the energy','just too tired','too tired to','tired of everything',
+    // Fatigue/energy-depletion words map here per Plutchik (low energy = Boredom pole)
+    'bore','dull','tedious','monotonous','listless','unstimulate','apathy','apathetic',
+    'unmotivate','disengage','detach','lifeless','sluggish','lethargic','weary',
+    'tire','exhaust','drain','deplete','fatigue','burnout','spent',
+    'nothing to do','no energy','low energy','flat','can\'t be bothered','checked out',
+    'going through the motions','zoned out','running on empty','no drive',
+    'lost all motivation','same thing every day','worn out','run down','burned out',
+    'burnt out','just existing','surviving not thriving','autopilot','groundhog day',
+    'too tired to','tired of everything','can\'t get going','can\'t get started',
   ],
 
   anger: [
-    'angry','anger','mad','furious','irate','livid','outraged','frustrated','frustration',
-    'irritated','annoyed','pissed','resentful','resentment','bitter','bitterness','hostile',
-    'hostility','incensed','enraged','seething','infuriated','heated','steaming','fuming',
-    'boiling','this is unfair','that\'s unfair','so unfair','not fair','not right',
-    'this is wrong','can\'t believe this','how could they','how dare','this is ridiculous',
-    'absolutely ridiculous','fed up','sick of this','sick of it','over it','done with it',
-    'had enough','enough of this','i\'ve had it','at my limit','at my breaking point',
-    'this makes me so angry','makes me furious','makes me mad','drives me crazy',
-    'drives me nuts','ticked off','wound up','riled up','seeing red','lost my temper',
+    'angry','anger','mad','furious','irate','livid','outrage','frustrate','irritate',
+    'annoy','piss','resent','bitter','hostile','incense','enrage','seethe','infuriate',
+    'heat','steam','fume','boil','explode',
+    'this is unfair','that\'s unfair','not fair','not right','how dare',
+    'fed up','sick of this','had enough','at my limit','at my breaking point',
+    'drives me crazy','drives me nuts','ticked off','wound up','riled up','seeing red',
+    'lost my temper','this is wrong','how could they','this is ridiculous',
   ],
 
   rage: [
-    'rage','raging','fuming','seething','exploding','volcanic','enraged','blind rage',
-    'losing it','out of control anger','seeing red','beyond furious','cannot control',
-    'losing control','going to explode','absolutely livid','screaming','want to scream',
-    'want to break something','want to hit something','uncontrollable anger','violent anger',
+    'rage','raging','volcanic','blind rage',
+    'losing it','beyond furious','going to explode','want to scream',
+    'want to break something','uncontrollable anger','violent anger','absolutely livid',
   ],
 
   annoyance: [
-    'annoyed','irritated','bugged','irked','exasperated','fed up','minor frustration',
-    'slightly frustrated','little things','pet peeve','trivial','petty annoyance',
-    'mildly irritating','getting on my nerves','a bit annoying','kind of irritating',
-    'small thing that bothers','not a big deal but','bit of a nuisance','tiresome',
+    'annoyed','irk','exasperate','bugged','tiresome',
+    'pet peeve','petty annoyance','getting on my nerves','a bit annoying',
+    'bit of a nuisance','small thing that bothers','mildly irritating',
   ],
 
   anticipation: [
-    'anticipating','looking forward to','excited about','can\'t wait','upcoming','eager',
-    'hopeful','expectation','planning','preparing','about to','countdown','building up to',
-    'soon','coming up','in the future','what\'s next','next step','hope to','hoping to',
-    'plan to','plans to','intend to','going to','about to','ready for','waiting for',
-    'can barely wait','getting ready','gearing up','counting down','ready to','pumped for',
+    'anticipate','eager','hopeful','expect','plan','prepare','upcoming',
+    'look forward to','can\'t wait','excited about','building up to',
+    'what\'s next','hope to','intend to','pumped for','counting down','gearing up',
   ],
 
   vigilance: [
-    'vigilant','hyper alert','on guard','watching carefully','hypervigilant','can\'t relax',
-    'on edge','high alert','ready for anything','tense','suspicious','keeping watch',
-    'eyes open','staying alert','watching out','not letting my guard down','prepared for',
-    'bracing for','bracing myself','waiting for the other shoe','waiting for it to go wrong',
-    'ready for the worst','something feels off','something is wrong','gut feeling',
-    'uneasy feeling','can\'t shake the feeling','something doesn\'t feel right',
+    'vigilant','hypervigilant','tense','suspicious',
+    'on guard','high alert','on edge','can\'t relax','not letting my guard down',
+    'something feels off','gut feeling','something doesn\'t feel right',
+    'bracing for','waiting for the other shoe','ready for the worst',
   ],
 
   interest: [
-    'interested','curious','curiosity','intrigued','fascinated','fascination','engaged',
-    'drawn to','want to learn','wondering','exploring','captivated','absorbed','invested in',
-    'keen on','want to know more','tell me more','learning about','digging into',
-    'researching','looking into','finding out','what if','how does','why does','how come',
-    'fascinating topic','really interesting','so interesting','that\'s interesting',
-    'want to understand','can\'t stop reading','fell down a rabbit hole','deep dive',
+    'interest','intrigue','fascinate','captivate','absorb',
+    'wonder','explore','research',
+    'drawn to','want to learn','want to know more','fell down a rabbit hole','deep dive',
+    'really interesting','so interesting','how does','why does',
   ],
 
   // blends
   love: [
-    'love','loving','adore','cherish','devoted','devotion','affectionate','affection',
-    'compassionate','compassion','warmth','tenderness','care deeply','in love','cared for',
-    'feel cared for','feel loved','feel cherished','unconditional','dearly','dear to me',
-    'means the world','everything to me','my everything','my world','heart full',
-    'full of love','overflowing with love','loving feelings','deep connection','soulmate',
+    'love','adore','cherish','devote','affection','compassion','warmth','tenderness',
+    'soulmate',
+    'care deeply','in love','feel loved','feel cherished','means the world',
+    'my everything','heart full','full of love','deep connection',
   ],
 
   optimism: [
-    'optimistic','optimism','hopeful','positive','bright future','things will get better',
-    'looking up','promising','excited for future','it\'ll work out','will get through',
-    'going to be okay','it will be okay','better days','brighter days','turning around',
-    'silver lining','glass half full','believe it will work','confident about','see the good',
+    'optimistic','optimism','hopeful','positive','promise','promising',
+    'bright future','things will get better','going to be okay','it will be okay',
+    'better days','silver lining','glass half full','see the good','turning around',
   ],
 
   awe: [
-    'awe','awestruck','majestic','sublime','transcendent','bigger than me','perspective',
-    'humbled','wonder','put things in perspective','feels so small','vast','infinite',
-    'overwhelmed by beauty','stunned by nature','beautiful beyond words','so much bigger',
-    'so much grander','reminds me how small','universe','cosmos','nature\'s beauty',
+    'awe','awestruck','majestic','sublime','transcendent','humble','wonder',
+    'bigger than me','put things in perspective','overwhelmed by beauty',
+    'beautiful beyond words','reminds me how small','so much grander',
   ],
 
   remorse: [
-    'remorse','regret','guilty','guilt','ashamed','shame','sorry','apologize','did wrong',
-    'messed up','let down','let someone down','failed them','failed myself','i should have',
-    'shouldn\'t have','wish i hadn\'t','wish i had','made a mistake','i\'m so sorry',
-    'feel terrible about','feel awful about','can\'t forgive myself','what was i thinking',
-    'why did i do that','i regret','deep regret','filled with guilt','i feel guilty',
-    'terrible decision','bad choice i made','i hurt them','i caused harm',
+    'remorse','regret','guilty','guilt','ashamed','shame','sorry','apologize',
+    'did wrong','messed up','let down','made a mistake','can\'t forgive myself',
+    'i should have','wish i hadn\'t','feel terrible about','feel awful about',
+    'what was i thinking','i hurt them','i caused harm','deep regret',
   ],
 
   contempt: [
-    'contempt','disdain','scorn','dismissive','superiority','look down on','pathetic',
-    'beneath me','worthless person','not worth my time','waste of time','don\'t deserve',
-    'ridiculous person','so beneath me','what a joke','that\'s laughable','not impressed',
-    'couldn\'t care less','don\'t respect','zero respect','no respect for',
+    'contempt','disdain','scorn','dismissive','superiority',
+    'look down on','not worth my time','what a joke','zero respect','no respect for',
+    'so beneath me','couldn\'t care less',
   ],
 
   aggressiveness: [
-    'aggressive','assertive','forceful','fighting for','will not back down','charging ahead',
-    'competitive','determined to win','going to fight','not giving up','pushing back',
-    'standing my ground','not letting them','taking action','going on the offensive',
-    'ready to fight','combative','driven hard','refuse to lose','i will not let',
+    'aggressive','assertive','forceful','combative','competitive',
+    'fighting for','will not back down','charging ahead','pushing back',
+    'standing my ground','taking action','refuse to lose','going on the offensive',
   ],
 
   disapproval: [
-    'disapprove','disapproving','disappointed','not what i expected','let down','should have been',
-    'fell short','below expectations','not good enough','didn\'t meet','failed to',
-    'not what they promised','could have been better','expected more','expected better',
-    'that\'s not right','that\'s not okay','shouldn\'t have done that','shouldn\'t have said',
-    'wrong choice','bad decision','poor judgment','that was wrong of them',
+    'disapprove','disappoint',
+    'not what i expected','let down','fell short','below expectations',
+    'expected more','expected better','wrong choice','bad decision','poor judgment',
+    'that was wrong of them','shouldn\'t have done that',
   ],
 
   submission: [
-    'submitted','deferred','yielded','not my place','gave in','comply','complied','obey',
-    'followed orders','had to do it','no choice','had no choice','couldn\'t say no',
-    'went along with','just did what','had to go along','not worth fighting','let it happen',
-    'gave up trying','stopped resisting','accepted their decision',
+    'submit','defer','yield','comply','obey',
+    'gave in','not my place','had no choice','couldn\'t say no',
+    'went along with','not worth fighting','gave up trying','stopped resisting',
+  ],
+
+  // ── Outer ring emotions ────────────────────────────────────────────────────
+  // These have their own keyword entries so keyword mode can resolve directly
+  // to an outer segment rather than always falling back to a core intensity.
+
+  cheerful: [
+    'cheerful','chipper','bright-eyed','in a good mood','good spirits','feel bright',
+    'light mood','feel light','breezy','bubbly',
+  ],
+  playful: [
+    'playful','playfulness','silly','goofy','mischievous','having fun','horsing around',
+    'goofing around','feeling giddy','giddy','whimsical','frisky',
+  ],
+  peaceful: [
+    'peaceful','at peace','inner peace','quiet peace','stillness','tranquil','serene',
+    'no worries','undisturbed','calm and content',
+  ],
+  grateful: [
+    'grateful','gratitude','thankful','appreciate','appreciative','blessed','so thankful',
+    'counting my blessings','feel fortunate','lucky to have',
+  ],
+
+  faithful: [
+    'faithful','loyalty','loyal','devoted to','stand by','always there','dependable',
+    'keep my word','follow through','committed to',
+  ],
+  assured: [
+    'assured','reassured','certain','confident in','no doubt','sure of','feel secure',
+    'solid ground','steady feeling','know it\'s okay',
+  ],
+  comfortable: [
+    'comfortable','at ease','relaxed around','feel safe with','no pretense','be myself',
+    'don\'t have to perform','settled in','feel right at home',
+  ],
+  valued: [
+    'valued','feel valued','appreciated','feel seen','feel heard','feel respected',
+    'feel recognized','feel important','my opinion matters','feel acknowledged',
+  ],
+
+  worried: [
+    'worried','worrying','worry','keep worrying','can\'t stop worrying','anxious about',
+    'concerned about','fear the worst','what if something goes wrong',
+  ],
+  nervous: [
+    'nervous','nerves','butterflies','jittery','on edge about','sweating it','heart racing',
+    'stomach in knots','before the big',
+  ],
+  hesitant: [
+    'hesitant','hesitate','on the fence','unsure whether','not sure if I should',
+    'holding back','second-guessing','torn about','can\'t decide whether',
+  ],
+  timid: [
+    'timid','shy','bashful','meek','soft-spoken','quiet around','shrink back',
+    'don\'t want to speak up','afraid to say','too scared to say',
+  ],
+
+  puzzled: [
+    'puzzled','baffled','confused by','can\'t figure out','doesn\'t add up','makes no sense',
+    'something\'s off','odd','strange','peculiar','that\'s weird',
+  ],
+  confused: [
+    'confused','confusion','mixed up','don\'t understand','hard to follow','all mixed up',
+    'can\'t make sense of','lost track','not following',
+  ],
+  unsettled: [
+    'unsettled','off-kilter','thrown off','slightly off','can\'t put my finger on it',
+    'something doesn\'t feel right','vaguely uneasy','strange feeling about',
+  ],
+  startled: [
+    'startled','jumped','nearly jumped out','caught me off guard','gave me a fright',
+    'made me jump','sudden shock','gasped',
+  ],
+
+  gloomy: [
+    'gloomy','overcast feeling','bleak','grey','cloudy mood','dull mood','heavy mood',
+    'not feeling it','uninspired','flat feeling',
+  ],
+  lonely: [
+    'lonely','loneliness','feel alone','so alone','no one to talk to','feel disconnected',
+    'nobody around','feel left out','isolated','no company','miss people',
+  ],
+  forlorn: [
+    'forlorn','abandoned feeling','left behind','forgotten','hopeless feeling','wishing for',
+    'longing for something','aimless','drifting','feel lost without',
+  ],
+  disappointed: [
+    'disappointed','disappointment','let down','didn\'t live up','not what I hoped',
+    'fell flat','expected better','underwhelmed','what a letdown','deflated',
+  ],
+
+  displeased: [
+    'displeased','unsatisfied','dissatisfied','not satisfied','not happy with','falls short',
+    'that\'s not okay','doesn\'t meet','leaves something to be desired',
+  ],
+  offended: [
+    'offended','that offended me','felt disrespected','crossed a line','felt insulted',
+    'taken aback by','that was uncalled for','below the belt','rude',
+  ],
+  withdrawn: [
+    'withdrawn','pulling away','distancing myself','don\'t want to engage','shutting down',
+    'retreating','stepping back','not participating','closing off',
+  ],
+  reluctant: [
+    'reluctant','don\'t want to','dragging my feet','going through with it anyway',
+    'not keen','not willing but','resistance to','holding off on',
+  ],
+
+  cross: [
+    'cross','a bit cross','bit irritated','slightly irritated','minor annoyance',
+    'that bothered me','a little upset','slightly bothered',
+  ],
+  peeved: [
+    'peeved','petty annoyance','still bugging me','can\'t let it go','lingers',
+    'low-key annoyed','keeps bugging me','gets to me',
+  ],
+  frustrated: [
+    'frustrated','frustration','so frustrated','ugh','can\'t make it work',
+    'hitting a wall','nothing works','going nowhere','stuck','keep trying but',
+    'not getting anywhere','feel blocked','blocked',
+  ],
+  impatient: [
+    'impatient','can\'t wait any longer','take too long','why is this taking so long',
+    'hurry up','enough waiting','move faster','losing patience','patience is gone',
+  ],
+
+  eager: [
+    'eager','eagerness','raring to go','can\'t wait to','ready to dive in',
+    'jumping at the chance','chomping at the bit','fired up to',
+  ],
+  hopeful: [
+    'hopeful','full of hope','keeping hope','bright side','maybe it will','could still work',
+    'not giving up hope','fingers crossed','things might turn around',
+  ],
+  curious: [
+    'curious','curiosity','wonder about','can\'t stop thinking about','want to find out',
+    'digging into this','going down a rabbit hole','obsessed with learning',
+  ],
+  inspired: [
+    'inspired','inspiration','had an idea','light bulb moment','suddenly see it',
+    'feel motivated to create','feel driven to','something clicked','vision for',
   ],
 };
 
@@ -1249,12 +1573,32 @@ const INTENSITY_TO_CORE = {
   vigilance: 'anticipation', interest: 'anticipation',
 };
 
+// Build a lookup from outer emotion key (lowercase name) → { segmentId, coreId, name }
+// so keyword detection can resolve directly to outer ring segments.
+const OUTER_EMOTION_LOOKUP = {};
+CORE_EMOTIONS.forEach(emotion => {
+  (emotion.outer || []).forEach((outerObj, idx) => {
+    OUTER_EMOTION_LOOKUP[outerObj.name.toLowerCase()] = {
+      segmentId: `${emotion.id}-outer-${idx}`,
+      coreId: emotion.id,
+      name: outerObj.name,
+    };
+  });
+});
+
 function resolveEmotionEntry(key) {
+  // 1. Blend emotions
   const blendIds = BLEND_EMOTIONS.map(e => e.id);
   if (blendIds.includes(key)) {
     const blend = BLEND_EMOTIONS.find(e => e.id === key);
     return { emotion: blend.name, intensity: 'moderate', segmentId: blend.id, _coreId: key };
   }
+  // 2. Outer ring emotions
+  if (OUTER_EMOTION_LOOKUP[key]) {
+    const { segmentId, coreId, name } = OUTER_EMOTION_LOOKUP[key];
+    return { emotion: name, intensity: 'mild', segmentId, _coreId: coreId };
+  }
+  // 3. Core intensity levels
   let intensity = 'moderate';
   if (INTENSITY_KEYWORDS.intense.includes(key)) intensity = 'intense';
   if (INTENSITY_KEYWORDS.mild.includes(key)) intensity = 'mild';
@@ -1269,15 +1613,26 @@ function resolveEmotionEntry(key) {
 
 export function detectEmotion(text) {
   const normalized = normalizeText(text);
+  // Lemmatized version for root-form keyword matching
+  // (e.g. "worrying" → "worry", "exhausted" → "exhaust")
+  const lemmatized = lemmatize(normalized);
   const scores = {};
-  const termsByKey = {}; // emotionKey -> matched keyword strings
+  const termsByKey = {}; // emotionKey -> matched keyword strings (original text shown in UI)
 
   Object.entries(KEYWORD_MAP).forEach(([emotion, keywords]) => {
     let score = 0;
     const matched = [];
     keywords.forEach(kw => {
-      if (!normalized.includes(kw)) return;
-      if (isNegated(normalized, kw)) return; // skip negated matches
+      // Match against lemmatized text OR original normalized text
+      // Multi-word phrases (e.g. "worn out") match normalized; single root words match lemmatized
+      const isPhrase = kw.includes(' ');
+      const haystack = isPhrase ? normalized : lemmatized;
+      // Word-boundary check for single words to avoid false substring matches
+      const found = isPhrase
+        ? haystack.includes(kw)
+        : new RegExp(`(?:^|\\s)${kw}(?:\\s|$|[.,!?])`).test(haystack);
+      if (!found) return;
+      if (isNegated(normalized, kw)) return;
       const wordCount = kw.split(' ').length;
       const boost = intensifierBoost(normalized, kw);
       score += wordCount * boost;
