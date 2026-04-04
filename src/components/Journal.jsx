@@ -527,56 +527,12 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
   );
 }
 
-// Common emotions the AI might name that aren't on Plutchik's wheel,
-// mapped to the closest wheel equivalent.
-const EMOTION_FALLBACK_MAP = {
-  relief:        'joy-mild',       // tension released → serenity
-  excitement:    'anticipation-intense', // high arousal forward-looking
-  contentment:   'joy-mild',
-  happiness:     'joy-moderate',
-  gladness:      'joy-moderate',
-  elation:       'joy-intense',
-  enthusiasm:    'anticipation-moderate',
-  nervousness:   'fear-mild',
-  anxiety:       'fear-moderate',
-  stress:        'fear-moderate',
-  overwhelm:     'fear-moderate',
-  embarrassment: 'fear-mild',
-  shame:         'remorse',
-  guilt:         'remorse',
-  jealousy:      'anger-moderate',
-  envy:          'anger-mild',
-  frustration:   'anger-mild',
-  loneliness:    'sadness-moderate',
-  nostalgia:     'sadness-mild',
-  melancholy:    'sadness-mild',
-  disappointment:'disapproval',
-  regret:        'remorse',
-  pride:         'joy-moderate',
-  gratitude:     'joy-moderate',
-  compassion:    'love',
-  empathy:       'love',
-  curiosity:     'anticipation-mild',
-  confusion:     'surprise-mild',
-  shock:         'surprise-intense',
-  wonder:        'awe',
-  inspiration:   'joy-moderate',
-  calm:          'joy-mild',
-  peace:         'joy-mild',
-  bittersweet:   'remorse',
-  vulnerability: 'fear-mild',
-};
-
 function findSegmentId(emotionName, intensity) {
   const lower = emotionName.toLowerCase();
-  // Direct match in the name map (covers all wheel emotion names)
   if (EMOTION_NAME_MAP[lower]) return EMOTION_NAME_MAP[lower];
-  // Match core or blend by name
   const core = CORE_EMOTIONS.find(e => e.name.toLowerCase() === lower);
   if (core) return `${core.id}-${intensity || 'moderate'}`;
   const blend = BLEND_EMOTIONS.find(e => e.name.toLowerCase() === lower);
   if (blend) return blend.id;
-  // Fallback map for emotions the AI names that aren't on the wheel
-  if (EMOTION_FALLBACK_MAP[lower]) return EMOTION_FALLBACK_MAP[lower];
   return null;
 }

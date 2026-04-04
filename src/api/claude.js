@@ -29,7 +29,13 @@ Required format:
 
 List emotions from most to least prominent. Include a second or third emotion only when clearly present.
 The reason field must reference specific words or phrases from the entry to justify each emotion.
-Each emotion name must be one of these exact values:
+
+CRITICAL: You must map every detected feeling to its closest equivalent on Plutchik's Wheel.
+Do NOT invent emotion names. If the person feels "fatigue", map it to Sadness or Boredom.
+If they feel "relief", map it to Serenity. If they feel "anxiety", map it to Fear or Apprehension.
+Always pick the single closest wheel emotion — never leave something unmapped.
+
+Each emotion name must be one of these exact values (no others are valid):
 Joy, Serenity, Ecstasy, Trust, Acceptance, Admiration, Fear, Apprehension, Terror,
 Surprise, Distraction, Amazement, Sadness, Pensiveness, Grief, Disgust, Boredom, Loathing,
 Anger, Annoyance, Rage, Anticipation, Interest, Vigilance,
