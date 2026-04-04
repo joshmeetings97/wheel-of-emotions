@@ -20,14 +20,15 @@ export async function analyzeWithClaude(journalEntry) {
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 256,
+      max_tokens: 384,
       system: `You are an expert emotion analyst using Plutchik's Wheel of Emotions.
-Analyze the journal entry and return ONLY valid JSON — no prose, no markdown, no explanation.
+Analyze the journal entry and identify 1–3 distinct emotions present. Return ONLY valid JSON — no prose, no markdown, no explanation.
 
 Required format:
-{"emotion": "<name>", "intensity": "<mild|moderate|intense>", "insight": "<1-2 sentence insight>"}
+{"emotions": [{"emotion": "<name>", "intensity": "<mild|moderate|intense>"}, ...], "insight": "<1-2 sentence insight>"}
 
-The emotion must be one of these exact names:
+List emotions from most to least prominent. Include a second or third emotion only when clearly present.
+Each emotion name must be one of these exact values:
 Joy, Serenity, Ecstasy, Trust, Acceptance, Admiration, Fear, Apprehension, Terror,
 Surprise, Distraction, Amazement, Sadness, Pensiveness, Grief, Disgust, Boredom, Loathing,
 Anger, Annoyance, Rage, Anticipation, Interest, Vigilance,
@@ -45,11 +46,19 @@ Love, Submission, Awe, Disapproval, Remorse, Contempt, Aggressiveness, Optimism`
   const text = data.content[0]?.text || '';
 
   // Parse JSON — try raw then extract with regex
+  let parsed;
   try {
-    return JSON.parse(text);
+    parsed = JSON.parse(text);
   } catch {
-    const match = text.match(/\{[\s\S]*?\}/);
-    if (match) return JSON.parse(match[0]);
-    throw new Error('Unexpected response format from API');
+    const match = text.match(/\{[\s\S]*\}/);
+    if (match) parsed = JSON.parse(match[0]);
+    else throw new Error('Unexpected response format from API');
   }
+
+  // Normalise to { emotions: [...], insight } regardless of old single-emotion format
+  if (parsed.emotions) return parsed;
+  if (parsed.emotion) {
+    return { emotions: [{ emotion: parsed.emotion, intensity: parsed.intensity }], insight: parsed.insight };
+  }
+  throw new Error('Unexpected response format from API');
 }

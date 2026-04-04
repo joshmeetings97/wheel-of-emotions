@@ -167,7 +167,7 @@ function ConsentModal({ onAccept, onDecline }) {
   );
 }
 
-export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
+export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotionOpen }) {
   const [text, setText]               = useState('');
   const [loading, setLoading]         = useState(false);
   const [result, setResult]           = useState(null);
@@ -215,36 +215,43 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
 
     try {
       let detected;
+      let fellBack = false;
       if (aiActive) {
         try {
           const sanitized = scrubPII(trimmed);
-          detected = { ...await analyzeWithClaude(sanitized), segmentId: null };
+          detected = await analyzeWithClaude(sanitized);
         } catch {
-          detected = { ...detectEmotion(trimmed), fellBack: true };
+          detected = detectEmotion(trimmed);
+          fellBack = true;
         }
       } else {
         detected = detectEmotion(trimmed);
       }
 
-      if (!detected.segmentId) {
-        detected.segmentId = findSegmentId(detected.emotion, detected.intensity);
+      // Ensure emotions array with resolved segmentIds
+      const emotions = (detected.emotions || []).map(e => ({
+        ...e,
+        segmentId: e.segmentId || findSegmentId(e.emotion, e.intensity),
+      }));
+
+      const finalResult = { emotions, insight: detected.insight, fellBack };
+      setResult(finalResult);
+
+      // Add primary emotion to session log (label only, never raw text)
+      const primary = emotions[0];
+      if (primary) {
+        const color = INTENSITY_COLORS[primary.intensity] || '#3b82f6';
+        setEntries(prev => [{
+          id:        Date.now(),
+          emotion:   emotions.map(e => e.emotion).join(' · '),
+          intensity: primary.intensity,
+          segmentId: primary.segmentId,
+          color,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        }, ...prev].slice(0, 5));
+
+        if (primary.segmentId) onEmotionDetected(primary.segmentId);
       }
-
-      setResult(detected);
-
-      const color = INTENSITY_COLORS[detected.intensity] || '#3b82f6';
-      setEntries(prev => [{
-        id:        Date.now(),
-        // Store only the emotion label, never the raw text
-        text:      `[${detected.emotion}]`,
-        emotion:   detected.emotion,
-        intensity: detected.intensity,
-        segmentId: detected.segmentId,
-        color,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      }, ...prev].slice(0, 5));
-
-      if (detected.segmentId) onEmotionDetected(detected.segmentId);
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
@@ -261,7 +268,8 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
       {/* Toggle button */}
       <button
         onClick={onToggle}
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-semibold text-sm bg-white border border-slate-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all text-slate-700"
+        className="fixed right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-semibold text-sm bg-white border border-slate-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all text-slate-700"
+        style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))' }}
         aria-label={isOpen ? 'Close journal' : 'Open emotion journal'}
       >
         <span className="text-base">{isOpen ? '✕' : '📓'}</span>
@@ -278,7 +286,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
             <div className="w-9 h-1 rounded-full bg-slate-200" />
           </div>
 
-          <div className="flex-1 overflow-y-auto px-4 pb-6 pt-2">
+          <div className="flex-1 overflow-y-auto px-4 pt-2" style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}>
 
             {/* Header */}
             <div className="flex items-start justify-between mb-3 gap-3">
@@ -375,23 +383,28 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
             {/* Result */}
             {result && !error && (
               <div className="mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 animate-[fadeIn_0.2s_ease-out]">
-                <div className="flex items-center gap-2 mb-2 flex-wrap">
-                  <span className="font-semibold text-slate-800 text-base">{result.emotion}</span>
-                  <span
-                    className="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border"
-                    style={{
-                      background: INTENSITY_COLORS[result.intensity] + '15',
-                      color: INTENSITY_COLORS[result.intensity],
-                      borderColor: INTENSITY_COLORS[result.intensity] + '40',
-                    }}
-                  >
-                    {result.intensity}
-                  </span>
-                  <span className="text-[9px] text-slate-300 ml-auto">
-                    {result.fellBack ? 'keyword (AI unavailable)' : aiActive ? 'claude haiku' : 'keyword'}
-                  </span>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {result.emotions.map((e, i) => (
+                    <button
+                      key={i}
+                      onClick={() => e.segmentId && onEmotionOpen(e.segmentId)}
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border bg-white hover:bg-slate-50 active:scale-95 transition-all text-left"
+                      style={{ borderColor: INTENSITY_COLORS[e.intensity] + '50' }}
+                      title="Tap to explore on wheel"
+                    >
+                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: INTENSITY_COLORS[e.intensity] }} />
+                      <span className="font-semibold text-slate-800 text-sm">{e.emotion}</span>
+                      <span className="text-[10px] uppercase tracking-wide font-medium" style={{ color: INTENSITY_COLORS[e.intensity] }}>
+                        {e.intensity}
+                      </span>
+                      {e.segmentId && <span className="text-slate-300 text-[9px] ml-0.5">↗</span>}
+                    </button>
+                  ))}
                 </div>
-                <p className="text-slate-500 text-xs leading-relaxed">{result.insight}</p>
+                <p className="text-slate-500 text-xs leading-relaxed mb-2">{result.insight}</p>
+                <p className="text-[9px] text-slate-300">
+                  {result.fellBack ? 'keyword (AI unavailable)' : aiActive ? 'claude haiku · tap an emotion to explore' : 'keyword · tap an emotion to explore'}
+                </p>
               </div>
             )}
 

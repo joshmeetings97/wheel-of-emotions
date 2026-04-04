@@ -495,7 +495,7 @@ export const BLEND_EMOTIONS = [
   {
     id: 'love',
     name: 'Love',
-    blendAngle: -70, // between Joy (-90°) and Trust (-45°), at Joy\'s endAngle
+    blendAngle: -71.5, // between Joy (-90°) and Trust (-45°), at Joy\'s endAngle
     emotion1: 'joy',
     emotion2: 'trust',
     color: '#84CC16', // lime — between yellow and green
@@ -515,7 +515,7 @@ export const BLEND_EMOTIONS = [
   {
     id: 'submission',
     name: 'Submission',
-    blendAngle: -25,
+    blendAngle: -26.5,
     emotion1: 'trust',
     emotion2: 'fear',
     color: '#059669', // emerald — between trust-green and fear-green
@@ -535,7 +535,7 @@ export const BLEND_EMOTIONS = [
   {
     id: 'awe',
     name: 'Awe',
-    blendAngle: 20,
+    blendAngle: 18.5,
     emotion1: 'fear',
     emotion2: 'surprise',
     color: '#06B6D4', // cyan — between teal-green and cyan
@@ -555,7 +555,7 @@ export const BLEND_EMOTIONS = [
   {
     id: 'disapproval',
     name: 'Disapproval',
-    blendAngle: 65,
+    blendAngle: 63.5,
     emotion1: 'surprise',
     emotion2: 'sadness',
     color: '#3B82F6', // blue — between cyan and blue
@@ -575,7 +575,7 @@ export const BLEND_EMOTIONS = [
   {
     id: 'remorse',
     name: 'Remorse',
-    blendAngle: 110,
+    blendAngle: 108.5,
     emotion1: 'sadness',
     emotion2: 'disgust',
     color: '#6366F1', // indigo — between blue and violet
@@ -595,7 +595,7 @@ export const BLEND_EMOTIONS = [
   {
     id: 'contempt',
     name: 'Contempt',
-    blendAngle: 155,
+    blendAngle: 153.5,
     emotion1: 'disgust',
     emotion2: 'anger',
     color: '#DB2777', // pink — between violet and red
@@ -615,7 +615,7 @@ export const BLEND_EMOTIONS = [
   {
     id: 'aggressiveness',
     name: 'Aggressiveness',
-    blendAngle: 200,
+    blendAngle: 198.5,
     emotion1: 'anger',
     emotion2: 'anticipation',
     color: '#F97316', // orange — between red and orange
@@ -635,7 +635,7 @@ export const BLEND_EMOTIONS = [
   {
     id: 'optimism',
     name: 'Optimism',
-    blendAngle: 245,
+    blendAngle: 243.5,
     emotion1: 'anticipation',
     emotion2: 'joy',
     color: '#F59E0B', // amber — between orange and yellow
@@ -702,6 +702,40 @@ const KEYWORD_MAP = {
   submission:   ['submitted','deferred','yielded','not my place','gave in','comply','complied','obey','followed orders'],
 };
 
+const INTENSITY_KEYWORDS = {
+  intense: ['rage','grief','terror','ecstasy','amazement','loathing','admiration','vigilance'],
+  mild:    ['serenity','acceptance','apprehension','distraction','pensiveness','boredom','annoyance','interest'],
+};
+
+const INTENSITY_TO_CORE = {
+  ecstasy: 'joy', serenity: 'joy',
+  admiration: 'trust', acceptance: 'trust',
+  terror: 'fear', apprehension: 'fear',
+  amazement: 'surprise', distraction: 'surprise',
+  grief: 'sadness', pensiveness: 'sadness',
+  loathing: 'disgust', boredom: 'disgust',
+  rage: 'anger', annoyance: 'anger',
+  vigilance: 'anticipation', interest: 'anticipation',
+};
+
+function resolveEmotionEntry(key) {
+  const blendIds = BLEND_EMOTIONS.map(e => e.id);
+  if (blendIds.includes(key)) {
+    const blend = BLEND_EMOTIONS.find(e => e.id === key);
+    return { emotion: blend.name, intensity: 'moderate', segmentId: blend.id, _coreId: key };
+  }
+  let intensity = 'moderate';
+  if (INTENSITY_KEYWORDS.intense.includes(key)) intensity = 'intense';
+  if (INTENSITY_KEYWORDS.mild.includes(key)) intensity = 'mild';
+  const coreId = INTENSITY_TO_CORE[key] || key;
+  const coreEmotion = CORE_EMOTIONS.find(e => e.id === coreId);
+  const segmentId = coreEmotion ? `${coreId}-${intensity}` : null;
+  const emotionName = coreEmotion
+    ? coreEmotion.intensities.find(i => i.level === intensity)?.name || coreEmotion.name
+    : key;
+  return { emotion: emotionName, intensity, segmentId, _coreId: coreId };
+}
+
 export function detectEmotion(text) {
   const lower = text.toLowerCase();
   const scores = {};
@@ -709,67 +743,30 @@ export function detectEmotion(text) {
   Object.entries(KEYWORD_MAP).forEach(([emotion, keywords]) => {
     let score = 0;
     keywords.forEach(kw => {
-      if (lower.includes(kw)) score += kw.split(' ').length; // multi-word phrases score higher
+      if (lower.includes(kw)) score += kw.split(" ").length;
     });
     if (score > 0) scores[emotion] = score;
   });
 
   if (Object.keys(scores).length === 0) {
-    return { emotion: 'Joy', intensity: 'mild', segmentId: 'joy-mild', insight: "Your entry doesn\'t strongly signal a particular emotion — perhaps you\'re in a state of calm reflection." };
-  }
-
-  const topEmotion = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
-
-  // Map detected keyword-emotion to a segment
-  const coreEmotionIds = CORE_EMOTIONS.map(e => e.id);
-  const blendIds = BLEND_EMOTIONS.map(e => e.id);
-
-  // Try to match directly to an intensity or blend
-  if (blendIds.includes(topEmotion)) {
-    const blend = BLEND_EMOTIONS.find(e => e.id === topEmotion);
     return {
-      emotion: blend.name,
-      intensity: 'moderate',
-      segmentId: blend.id,
-      insight: generateInsight(topEmotion, 'blend'),
+      emotions: [{ emotion: "Joy", intensity: "mild", segmentId: "joy-mild" }],
+      insight: "Your entry doesn't strongly signal a particular emotion — perhaps you're in a state of calm reflection.",
     };
   }
 
-  // Check intensity-specific keywords
-  const intensityKeywords = {
-    intense: ['rage','grief','terror','ecstasy','amazement','loathing','admiration','vigilance'],
-    mild:    ['serenity','acceptance','apprehension','distraction','pensiveness','boredom','annoyance','interest'],
-  };
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const topScore = sorted[0][1];
+  // Include emotions scoring >= 30% of top score, up to 3
+  const topKeys = sorted.filter(([, s]) => s >= topScore * 0.3).slice(0, 3).map(([k]) => k);
 
-  let intensity = 'moderate';
-  if (intensityKeywords.intense.includes(topEmotion)) intensity = 'intense';
-  if (intensityKeywords.mild.includes(topEmotion)) intensity = 'mild';
-
-  // Resolve to core emotion
-  const intensityToCoreMap = {
-    ecstasy: 'joy', serenity: 'joy',
-    admiration: 'trust', acceptance: 'trust',
-    terror: 'fear', apprehension: 'fear',
-    amazement: 'surprise', distraction: 'surprise',
-    grief: 'sadness', pensiveness: 'sadness',
-    loathing: 'disgust', boredom: 'disgust',
-    rage: 'anger', annoyance: 'anger',
-    vigilance: 'anticipation', interest: 'anticipation',
-  };
-
-  const coreId = intensityToCoreMap[topEmotion] || topEmotion;
-  const segmentId = coreEmotionIds.includes(coreId) ? `${coreId}-${intensity}` : `${topEmotion}-${intensity}`;
-
-  const coreEmotion = CORE_EMOTIONS.find(e => e.id === coreId);
-  const emotionName = coreEmotion
-    ? coreEmotion.intensities.find(i => i.level === intensity)?.name || coreEmotion.name
-    : topEmotion;
+  const resolved = topKeys.map(resolveEmotionEntry);
+  const primary = resolved[0];
+  const insight = generateInsight(primary._coreId, primary.intensity);
 
   return {
-    emotion: emotionName,
-    intensity,
-    segmentId,
-    insight: generateInsight(coreId, intensity),
+    emotions: resolved.map(({ _coreId, ...e }) => e),
+    insight,
   };
 }
 
