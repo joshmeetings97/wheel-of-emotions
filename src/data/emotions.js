@@ -898,40 +898,339 @@ BLEND_EMOTIONS.forEach(blend => {
 });
 
 // Keyword-based emotion detection
+// ─── Text normalisation ──────────────────────────────────────────────────────
+// Collapse 3+ repeated characters to 1: "sooo" → "so", "tireddd" → "tired"
+// Preserves legitimate double letters: "feel" (ee), "good" (oo), "well" (ll)
+function normalizeText(raw) {
+  return raw
+    .toLowerCase()
+    .replace(/[''`]/g, "'")         // smart/backtick quotes → straight apostrophe
+    .replace(/(.)\1{2,}/g, '$1')    // 3+ repeated chars → 1: "sooo"→"so", "!!!"→"!"
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// ─── Negation detection ───────────────────────────────────────────────────────
+const NEGATORS = ["not","no","never","dont","don't","didn't","didnt","doesn't","doesnt",
+  "can't","cant","couldn't","couldnt","won't","wont","wouldn't","wouldnt",
+  "shouldn't","shouldnt","haven't","havent","hasn't","hasnt","barely","hardly",
+  "nothing","nowhere","nor","without","lack","lacking","far from","anything but"];
+
+// Returns true if `keyword` appears negated in `text` (a negator within 5 words before it)
+function isNegated(text, keyword) {
+  let searchFrom = 0;
+  while (true) {
+    const idx = text.indexOf(keyword, searchFrom);
+    if (idx === -1) break;
+    // Grab up to 40 chars before the keyword
+    const before = text.slice(Math.max(0, idx - 40), idx);
+    const beforeWords = before.trim().split(/\s+/);
+    // Check if any of the last 5 words before keyword is a negator
+    const window = beforeWords.slice(-5);
+    if (window.some(w => NEGATORS.includes(w.replace(/[^a-z']/g, '')))) return true;
+    searchFrom = idx + 1;
+  }
+  return false;
+}
+
+// ─── Intensifier detection ────────────────────────────────────────────────────
+const INTENSIFIERS = ["very","so","really","extremely","incredibly","deeply","truly",
+  "absolutely","totally","utterly","completely","super","insanely","overwhelmingly",
+  "profoundly","genuinely","beyond","unbearably","intensely","massively","terribly",
+  "awfully","desperately","hopelessly","wildly","fiercely","burning","burning with"];
+
+// Returns a score multiplier (1.0 baseline, up to 1.6) based on intensifiers near keyword
+function intensifierBoost(text, keyword) {
+  const idx = text.indexOf(keyword);
+  if (idx === -1) return 1.0;
+  const before = text.slice(Math.max(0, idx - 35), idx);
+  const after  = text.slice(idx + keyword.length, idx + keyword.length + 20);
+  const context = (before + ' ' + after).toLowerCase();
+  const count = INTENSIFIERS.filter(w => context.includes(w)).length;
+  return count === 0 ? 1.0 : Math.min(1.0 + count * 0.2, 1.6);
+}
+
+// ─── Keyword map ──────────────────────────────────────────────────────────────
 const KEYWORD_MAP = {
-  joy:          ['happy','happiness','joyful','glad','delighted','pleased','wonderful','great','amazing','fantastic','cheerful','elated','thrilled','excited','content','satisfied','enjoy','love','wonderful','blessed','lucky','grateful','thankful','smile','laugh','fun','celebration','celebrate'],
-  ecstasy:      ['ecstatic','euphoric','blissful','overjoyed','on top of the world','best day','incredible','unbelievable','best ever','beyond happy','overwhelmingly happy'],
-  serenity:     ['serene','calm','peaceful','content','at ease','relaxed','tranquil','gentle','quiet','still','rest','restful','settled'],
-  trust:        ['trust','believe','rely','confident','safe','secure','faith','honest','loyal','reliable','dependable','support','supportive','open','comfortable'],
-  admiration:   ['admire','admiration','respect','look up','inspired by','hero','amazing person','incredible person','brilliant','genius','role model','mentor','idol'],
-  acceptance:   ['accept','accepting','okay with','fine with','at peace with','embrace','acknowledge','open minded','tolerant','understanding'],
-  fear:         ['fear','afraid','scared','frightened','terrified','nervous','anxious','worry','worried','dread','panic','threat','danger','unsafe','insecure'],
-  terror:       ['terrified','terror','petrified','horror','horrified','nightmare','catastrophe','disaster','paralyzed by fear'],
-  apprehension: ['apprehensive','uneasy','unsure','uncertain','hesitant','wary','cautious','nervous about','worried about','concerned about'],
-  surprise:     ['surprised','unexpected','shocked','astonished','caught off guard','did not expect','wow','unbelievable','out of nowhere','sudden'],
-  amazement:    ['amazed','awestruck','jaw dropped','stunned','blown away','mind blown','speechless','unbelievable','extraordinary'],
-  distraction:  ['distracted','unfocused','scattered','lost focus','hard to concentrate','all over the place','diverted'],
-  sadness:      ['sad','unhappy','down','depressed','blue','gloomy','miserable','disappointed','heartbroken','hurt','crying','tears','cry','upset','low','empty','hollow','lonely','alone','isolated','miss','missing','lost','grief','mourning','sorrow'],
-  grief:        ['grief','grieving','devastated','heartbroken','lost someone','death','died','passed away','mourning','bereaved','inconsolable'],
-  pensiveness:  ['pensive','wistful','nostalgic','melancholy','bittersweet','reflective','reminiscing','wishing things were different','longing'],
-  disgust:      ['disgusting','disgusted','revolting','repulsed','gross','nauseating','horrible','appalling','awful','yuck','eww','repulsive'],
-  loathing:     ['loathe','loathing','hate','detest','abhor','despise','cannot stand','utterly disgusting','complete disgust'],
-  boredom:      ['bored','boring','dull','tedious','monotonous','uninteresting','nothing to do','listless','unstimulated'],
-  anger:        ['angry','anger','mad','furious','irate','livid','outraged','frustrated','irritated','annoyed','pissed','resentful','bitter','hostile'],
-  rage:         ['rage','raging','fuming','seething','exploding','volcanic','enraged','cannot control anger','blind rage','losing it'],
-  annoyance:    ['annoyed','irritated','bugged','minor frustration','slightly frustrated','little things','pet peeve','irked'],
-  anticipation: ['anticipating','looking forward','excited about','cant wait','upcoming','eager','hopeful','expectation','planning','preparing','about to'],
-  vigilance:    ['vigilant','hyper alert','on guard','watching carefully','hypervigilant','cant relax','on edge','high alert','ready for anything'],
-  interest:     ['interested','curious','intrigued','fascinated','engaged','drawn to','want to learn','wondering','exploring'],
+  joy: [
+    'happy','happiness','joyful','glad','delighted','pleased','wonderful','great','amazing',
+    'fantastic','cheerful','elated','thrilled','content','satisfied','enjoy','enjoying',
+    'enjoyed','love','blessed','lucky','grateful','thankful','smile','smiling','laugh',
+    'laughing','laughed','fun','celebrate','celebration','celebrating','good mood',
+    'feeling good','feels good','feel good','bright','lit up','beaming','grinning',
+    'floating','on cloud nine','over the moon','stoked','pumped','buzzing','alive',
+    'radiant','gleaming','wonderful time','great time','best time','having a good',
+    'so good','loving it','absolutely love','wonderful day','beautiful day',
+    'positive','upbeat','uplifted','lifted','light','lighthearted','buoyant',
+    'spring in my step','full of life','energized','refreshed','renewed','vibrant',
+    'good news','great news','exciting news','so happy','really happy','very happy',
+  ],
+
+  ecstasy: [
+    'ecstatic','euphoric','blissful','overjoyed','on top of the world','best day ever',
+    'incredible feeling','unbelievable','never felt better','beyond happy','best feeling',
+    'peak of happiness','so alive','absolutely incredible','nothing better','pure bliss',
+    'pure joy','complete happiness','absolute happiness','flying high','on fire',
+    'unstoppable','invincible','in heaven','seventh heaven','cloud nine',
+  ],
+
+  serenity: [
+    'serene','calm','peaceful','at ease','relaxed','tranquil','gentle','quiet','still',
+    'rest','restful','settled','centered','grounded','zen','mellow','at peace',
+    'chill','chilled','chilling','easy','cozy','comfortable','no stress','stress free',
+    'worry free','unbothered','going well','all good','doing well','okay','fine',
+    'not bad','pretty good','alright','decent','steady','stable','balanced',
+    'taking it easy','slow day','slow morning','enjoying the quiet','just relaxing',
+  ],
+
+  trust: [
+    'trust','trusting','trusted','believe','believing','rely','relying','confident',
+    'confidence','safe','secure','security','faith','honest','honesty','loyal','loyalty',
+    'reliable','dependable','support','supportive','open','comfortable','sure of',
+    'count on','counted on','backed up','in good hands','well supported','believe in',
+    'i know they will','have faith in','solid relationship','strong bond','feel supported',
+  ],
+
+  admiration: [
+    'admire','admiration','respect','respecting','look up to','inspired by','hero',
+    'role model','mentor','idol','brilliant','genius','talented','gifted','extraordinary',
+    'impressive','inspiring','in awe of','look at what they did','incredible person',
+    'amazing person','so talented','what a person','what they achieved','aspire to be',
+    'i want to be like','they are incredible','they are amazing',
+  ],
+
+  acceptance: [
+    'accept','accepting','accepted','okay with it','fine with it','at peace with','embrace',
+    'embracing','acknowledge','acknowledging','open minded','tolerant','understanding',
+    'let it go','letting go','made peace','moved on','moving on','whatever happens',
+    'come to terms','coming to terms','it is what it is','thats okay','that is okay',
+    'live with it','living with it','okay with how','i can deal','i can handle',
+  ],
+
+  fear: [
+    'fear','fearing','afraid','scared','frightened','terrified','nervous','anxious',
+    'anxiety','worry','worrying','worried','dread','dreading','panic','panicking',
+    'panicked','threat','threatened','dangerous','danger','unsafe','insecure','uneasy',
+    'stressed','stress','stressing','overwhelmed','overwhelming','on edge','shaky',
+    'trembling','heart racing','can\'t breathe','freaking out','spiraling','what if',
+    'worst case','something bad','going wrong','something wrong','scared of','afraid of',
+    'scared that','worried that','nervous about','anxious about','stressed about',
+    'terror','terrifying','frightening','petrifying','crippling','debilitating',
+    'losing control','out of control','helpless','powerless','vulnerable',
+    'tight chest','pit in my stomach','knot in my stomach','can\'t sleep','sleepless',
+  ],
+
+  terror: [
+    'terrified','terror','petrified','horror','horrified','nightmare','catastrophe',
+    'disaster','paralyzed by fear','frozen with fear','worst fear','complete terror',
+    'absolute horror','traumatized','traumatic','traumatizing','horrifying',
+    'blood runs cold','heart stopped','shaking uncontrollably','can\'t move',
+  ],
+
+  apprehension: [
+    'apprehensive','uneasy','unsure','uncertain','hesitant','wary','cautious',
+    'nervous about','worried about','concerned about','second guessing','second guess',
+    'not sure how','i hope it goes well','might not','could go wrong','don\'t know if',
+    'hard to tell','feels risky','taking a risk','uncertain about','not convinced',
+    'mixed feelings about','not sure if i','doubting','having doubts','doubt myself',
+  ],
+
+  surprise: [
+    'surprised','unexpected','shocked','astonishing','astonished','caught off guard',
+    'didn\'t expect','didn\'t see that coming','wow','out of nowhere','sudden','suddenly',
+    'plot twist','came out of nowhere','blindsided','out of the blue','not expecting',
+    'who knew','can you believe','i had no idea','news to me','total surprise',
+    'taken aback','jaw dropped','stunned','completely unexpected','never saw it coming',
+  ],
+
+  amazement: [
+    'amazed','awestruck','stunned','blown away','mind blown','speechless','extraordinary',
+    'jaw dropping','can\'t believe it','unbelievable','how is that possible','incredible',
+    'phenomenal','breathtaking','magnificent','spectacular','remarkable','unreal',
+    'beyond words','words can\'t describe','i have no words','stunning','mind blowing',
+  ],
+
+  distraction: [
+    'distracted','unfocused','scattered','lost focus','hard to concentrate','can\'t focus',
+    'all over the place','zoning out','mind wandering','drifting off','spacing out',
+    'can\'t stay on track','keep losing track','off task','diverted','pulled in every direction',
+    'not sure what to think','confused','confusing','mixed up','puzzled','muddled',
+    'foggy','brain fog','not sure what i feel','lost my train of thought','unclear',
+  ],
+
+  sadness: [
+    'sad','sadness','unhappy','down','depressed','depression','blue','gloomy','miserable',
+    'disappointed','heartbroken','hurt','crying','tears','cry','upset','low','empty',
+    'hollow','lonely','alone','isolated','miss','missing','lost','grief','mourning',
+    'sorrow','hopeless','worthless','broken','devastated','in pain','ache','aching',
+    'longing','yearning','nothing matters','what\'s the point','can\'t stop crying',
+    'feel like crying','want to cry','no one cares','no one understands','feel unseen',
+    'feel unheard','invisible','left out','left behind','abandoned','neglected',
+    'rejected','unwanted','unloved','never good enough','not good enough','failure',
+    'failed','let everyone down','heavy','heaviness','weight on my chest','so heavy',
+    'dragging myself','barely getting through','just getting through','numb',
+    'feeling nothing','disconnected','feel disconnected','don\'t feel anything',
+    'emotionally exhausted','emotionally drained','been through so much',
+  ],
+
+  grief: [
+    'grief','grieving','grieve','devastated','heartbroken','lost someone','death',
+    'died','passed away','mourning','bereaved','inconsolable','gone forever','never coming back',
+    'miss them so much','i miss them','i miss her','i miss him','hole in my life',
+    'hole in my heart','they\'re gone','i lost','loss of','losing them','lost my',
+  ],
+
+  pensiveness: [
+    'pensive','wistful','nostalgic','nostalgia','melancholy','bittersweet','reflective',
+    'reminiscing','wishing things were different','longing for','thinking about the past',
+    'looking back','used to','back when','remember when','things used to be','i miss how',
+    'simpler times','things have changed','not the same','miss the old days','old times',
+    'long ago','years ago','thinking back','reflecting on','fond memories','fond of',
+    'what could have been','might have been','if only','what if i had','regret but',
+  ],
+
+  disgust: [
+    'disgusting','disgusted','revolting','repulsed','gross','nauseating','horrible',
+    'appalling','yuck','eww','repulsive','makes me sick','feel sick','stomach turning',
+    'vile','putrid','foul','nauseated','that\'s wrong','morally wrong','unacceptable',
+    'outraged by','sickened','can\'t stand to look at','can\'t stomach','repugnant',
+    'abhorrent','offensive','deeply offensive','revolted','turns my stomach',
+  ],
+
+  loathing: [
+    'loathe','loathing','hate','hating','detest','abhor','despise','cannot stand',
+    'can\'t stand','utterly disgusting','complete disgust','deep hatred','deeply hate',
+    'i despise','i detest','absolute hatred','burning hatred','intense dislike',
+    'makes me furious just thinking','everything about it disgusts','pure hatred',
+  ],
+
+  boredom: [
+    'bored','boring','dull','tedious','monotonous','uninteresting','nothing to do',
+    'listless','unstimulated','tired','tiredness','exhausted','exhaustion','fatigued',
+    'fatigue','worn out','drained','run down','depleted','burned out','burnt out',
+    'burnout','no energy','low energy','flat','can\'t be bothered','apathetic',
+    'apathy','unmotivated','disengaged','checked out','going through the motions',
+    'zoned out','detached','lifeless','sluggish','lethargic','weary','spent',
+    'running on empty','no drive','lost all motivation','can\'t get started',
+    'can\'t get going','drag myself','dragging myself','so tired','really tired',
+    'absolutely exhausted','completely drained','feel empty','feel hollow',
+    'nothing feels worth it','just existing','surviving not thriving','autopilot',
+    'same thing every day','groundhog day','what\'s the point','no point',
+    'can\'t find the energy','just too tired','too tired to','tired of everything',
+  ],
+
+  anger: [
+    'angry','anger','mad','furious','irate','livid','outraged','frustrated','frustration',
+    'irritated','annoyed','pissed','resentful','resentment','bitter','bitterness','hostile',
+    'hostility','incensed','enraged','seething','infuriated','heated','steaming','fuming',
+    'boiling','this is unfair','that\'s unfair','so unfair','not fair','not right',
+    'this is wrong','can\'t believe this','how could they','how dare','this is ridiculous',
+    'absolutely ridiculous','fed up','sick of this','sick of it','over it','done with it',
+    'had enough','enough of this','i\'ve had it','at my limit','at my breaking point',
+    'this makes me so angry','makes me furious','makes me mad','drives me crazy',
+    'drives me nuts','ticked off','wound up','riled up','seeing red','lost my temper',
+  ],
+
+  rage: [
+    'rage','raging','fuming','seething','exploding','volcanic','enraged','blind rage',
+    'losing it','out of control anger','seeing red','beyond furious','cannot control',
+    'losing control','going to explode','absolutely livid','screaming','want to scream',
+    'want to break something','want to hit something','uncontrollable anger','violent anger',
+  ],
+
+  annoyance: [
+    'annoyed','irritated','bugged','irked','exasperated','fed up','minor frustration',
+    'slightly frustrated','little things','pet peeve','trivial','petty annoyance',
+    'mildly irritating','getting on my nerves','a bit annoying','kind of irritating',
+    'small thing that bothers','not a big deal but','bit of a nuisance','tiresome',
+  ],
+
+  anticipation: [
+    'anticipating','looking forward to','excited about','can\'t wait','upcoming','eager',
+    'hopeful','expectation','planning','preparing','about to','countdown','building up to',
+    'soon','coming up','in the future','what\'s next','next step','hope to','hoping to',
+    'plan to','plans to','intend to','going to','about to','ready for','waiting for',
+    'can barely wait','getting ready','gearing up','counting down','ready to','pumped for',
+  ],
+
+  vigilance: [
+    'vigilant','hyper alert','on guard','watching carefully','hypervigilant','can\'t relax',
+    'on edge','high alert','ready for anything','tense','suspicious','keeping watch',
+    'eyes open','staying alert','watching out','not letting my guard down','prepared for',
+    'bracing for','bracing myself','waiting for the other shoe','waiting for it to go wrong',
+    'ready for the worst','something feels off','something is wrong','gut feeling',
+    'uneasy feeling','can\'t shake the feeling','something doesn\'t feel right',
+  ],
+
+  interest: [
+    'interested','curious','curiosity','intrigued','fascinated','fascination','engaged',
+    'drawn to','want to learn','wondering','exploring','captivated','absorbed','invested in',
+    'keen on','want to know more','tell me more','learning about','digging into',
+    'researching','looking into','finding out','what if','how does','why does','how come',
+    'fascinating topic','really interesting','so interesting','that\'s interesting',
+    'want to understand','can\'t stop reading','fell down a rabbit hole','deep dive',
+  ],
+
   // blends
-  love:         ['love','loving','adore','cherish','devoted','affectionate','compassionate','warmth','tenderness','care deeply','in love'],
-  optimism:     ['optimistic','hopeful','positive','bright future','things will get better','looking up','promising','excited for future'],
-  awe:          ['awe','awestruck','majestic','sublime','transcendent','bigger than me','perspective','humbled','wonder'],
-  remorse:      ['remorse','regret','guilty','guilt','ashamed','shame','sorry','apologize','did wrong','messed up','let down','failed'],
-  contempt:     ['contempt','disdain','scorn','dismissive','superiority','look down on','pathetic','beneath me','worthless'],
-  aggressiveness: ['aggressive','assertive','forceful','driven hard','fighting for','will not back down','charging ahead','competitive','determined to win'],
-  disapproval:  ['disapprove','disappointed','not what I expected','let down','should have been','fell short','below expectations'],
-  submission:   ['submitted','deferred','yielded','not my place','gave in','comply','complied','obey','followed orders'],
+  love: [
+    'love','loving','adore','cherish','devoted','devotion','affectionate','affection',
+    'compassionate','compassion','warmth','tenderness','care deeply','in love','cared for',
+    'feel cared for','feel loved','feel cherished','unconditional','dearly','dear to me',
+    'means the world','everything to me','my everything','my world','heart full',
+    'full of love','overflowing with love','loving feelings','deep connection','soulmate',
+  ],
+
+  optimism: [
+    'optimistic','optimism','hopeful','positive','bright future','things will get better',
+    'looking up','promising','excited for future','it\'ll work out','will get through',
+    'going to be okay','it will be okay','better days','brighter days','turning around',
+    'silver lining','glass half full','believe it will work','confident about','see the good',
+  ],
+
+  awe: [
+    'awe','awestruck','majestic','sublime','transcendent','bigger than me','perspective',
+    'humbled','wonder','put things in perspective','feels so small','vast','infinite',
+    'overwhelmed by beauty','stunned by nature','beautiful beyond words','so much bigger',
+    'so much grander','reminds me how small','universe','cosmos','nature\'s beauty',
+  ],
+
+  remorse: [
+    'remorse','regret','guilty','guilt','ashamed','shame','sorry','apologize','did wrong',
+    'messed up','let down','let someone down','failed them','failed myself','i should have',
+    'shouldn\'t have','wish i hadn\'t','wish i had','made a mistake','i\'m so sorry',
+    'feel terrible about','feel awful about','can\'t forgive myself','what was i thinking',
+    'why did i do that','i regret','deep regret','filled with guilt','i feel guilty',
+    'terrible decision','bad choice i made','i hurt them','i caused harm',
+  ],
+
+  contempt: [
+    'contempt','disdain','scorn','dismissive','superiority','look down on','pathetic',
+    'beneath me','worthless person','not worth my time','waste of time','don\'t deserve',
+    'ridiculous person','so beneath me','what a joke','that\'s laughable','not impressed',
+    'couldn\'t care less','don\'t respect','zero respect','no respect for',
+  ],
+
+  aggressiveness: [
+    'aggressive','assertive','forceful','fighting for','will not back down','charging ahead',
+    'competitive','determined to win','going to fight','not giving up','pushing back',
+    'standing my ground','not letting them','taking action','going on the offensive',
+    'ready to fight','combative','driven hard','refuse to lose','i will not let',
+  ],
+
+  disapproval: [
+    'disapprove','disapproving','disappointed','not what i expected','let down','should have been',
+    'fell short','below expectations','not good enough','didn\'t meet','failed to',
+    'not what they promised','could have been better','expected more','expected better',
+    'that\'s not right','that\'s not okay','shouldn\'t have done that','shouldn\'t have said',
+    'wrong choice','bad decision','poor judgment','that was wrong of them',
+  ],
+
+  submission: [
+    'submitted','deferred','yielded','not my place','gave in','comply','complied','obey',
+    'followed orders','had to do it','no choice','had no choice','couldn\'t say no',
+    'went along with','just did what','had to go along','not worth fighting','let it happen',
+    'gave up trying','stopped resisting','accepted their decision',
+  ],
 };
 
 const INTENSITY_KEYWORDS = {
@@ -969,7 +1268,7 @@ function resolveEmotionEntry(key) {
 }
 
 export function detectEmotion(text) {
-  const lower = text.toLowerCase();
+  const normalized = normalizeText(text);
   const scores = {};
   const termsByKey = {}; // emotionKey -> matched keyword strings
 
@@ -977,10 +1276,12 @@ export function detectEmotion(text) {
     let score = 0;
     const matched = [];
     keywords.forEach(kw => {
-      if (lower.includes(kw)) {
-        score += kw.split(" ").length;
-        matched.push(kw);
-      }
+      if (!normalized.includes(kw)) return;
+      if (isNegated(normalized, kw)) return; // skip negated matches
+      const wordCount = kw.split(' ').length;
+      const boost = intensifierBoost(normalized, kw);
+      score += wordCount * boost;
+      matched.push(kw);
     });
     if (score > 0) {
       scores[emotion] = score;
@@ -989,11 +1290,7 @@ export function detectEmotion(text) {
   });
 
   if (Object.keys(scores).length === 0) {
-    return {
-      emotions: [{ emotion: "Joy", intensity: "mild", segmentId: "joy-mild" }],
-      insight: "Your entry doesn't strongly signal a particular emotion — perhaps you're in a state of calm reflection.",
-      matchedTerms: [],
-    };
+    return null; // no emotion detected — caller should show a "nothing found" state
   }
 
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);

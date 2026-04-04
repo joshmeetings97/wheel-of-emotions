@@ -231,6 +231,13 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
         detected = detectEmotion(trimmed);
       }
 
+      // detectEmotion returns null when no keywords match at all
+      if (!detected) {
+        setResult({ emotions: [], insight: null, matchedTerms: [], fellBack: false, isAI: false, noMatch: true });
+        setLoading(false);
+        return;
+      }
+
       // Ensure emotions array with resolved segmentIds
       const emotions = (detected.emotions || []).map(e => ({
         ...e,
@@ -416,7 +423,14 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
             )}
 
             {/* Result */}
-            {result && !error && (
+            {result && !error && result.noMatch && (
+              <div className="mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 animate-[fadeIn_0.2s_ease-out]">
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Couldn't detect a clear emotion in that entry. Try writing more about how you <em>feel</em>, or turn on AI for more nuanced analysis.
+                </p>
+              </div>
+            )}
+            {result && !error && !result.noMatch && (
               <div className="mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 animate-[fadeIn_0.2s_ease-out]">
                 <div className="flex flex-wrap gap-2 mb-3">
                   {result.emotions.filter(e => e.segmentId).map((e, i) => (
