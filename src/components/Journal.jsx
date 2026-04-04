@@ -412,7 +412,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
                     </button>
                   ))}
                 </div>
-                {/* Collapsible "Why this emotion?" */}
+                {/* Collapsible "Why these emotions?" */}
                 <div className="mt-1 border-t border-slate-100 pt-2">
                   <button
                     onClick={() => setWhyOpen(v => !v)}
@@ -424,29 +424,33 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
                     >
                       <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.17 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd"/>
                     </svg>
-                    <span className="font-medium">Why this emotion?</span>
+                    <span className="font-medium">Why {result.emotions.length > 1 ? 'these emotions' : 'this emotion'}?</span>
                     <span className="ml-auto text-[9px] text-slate-300">
                       {result.fellBack ? 'keyword fallback' : result.isAI ? 'claude haiku' : 'keyword'}
                     </span>
                   </button>
 
                   {whyOpen && (
-                    <div className="mt-2 space-y-2 animate-[fadeIn_0.15s_ease-out]">
-                      <p className="text-slate-500 text-xs leading-relaxed">{result.insight}</p>
-
-                      {/* Keyword mode: show which phrases triggered detection */}
-                      {!result.isAI && result.matchedTerms.length > 0 && (
-                        <div className="pt-1">
-                          <p className="text-[10px] text-slate-400 mb-1.5 font-medium">Phrases detected in your text:</p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {result.matchedTerms.map(({ term, emotion }, i) => (
-                              <span key={i} className="px-2 py-0.5 rounded-full bg-slate-100 text-[10px] text-slate-600 border border-slate-200">
-                                "{term}" <span className="text-slate-400">→ {emotion}</span>
-                              </span>
-                            ))}
-                          </div>
+                    <div className="mt-3 space-y-3 animate-[fadeIn_0.15s_ease-out]">
+                      {result.emotions.map((e, i) => (
+                        <div key={i} className="pl-3 border-l-2" style={{ borderColor: INTENSITY_COLORS[e.intensity] + '60' }}>
+                          <p className="text-xs font-semibold text-slate-700 mb-1">{e.emotion}</p>
+                          {/* AI mode: per-emotion reason from Claude */}
+                          {e.reason && (
+                            <p className="text-xs text-slate-500 leading-relaxed mb-1.5">{e.reason}</p>
+                          )}
+                          {/* Keyword mode: matched phrases */}
+                          {!result.isAI && e.matchedTerms && e.matchedTerms.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {e.matchedTerms.map((term, j) => (
+                                <span key={j} className="px-1.5 py-0.5 rounded-full bg-slate-100 text-[10px] text-slate-500 border border-slate-200">
+                                  "{term}"
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
                   )}
                 </div>

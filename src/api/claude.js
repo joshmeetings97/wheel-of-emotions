@@ -25,9 +25,10 @@ export async function analyzeWithClaude(journalEntry) {
 Analyze the journal entry and identify 1–3 distinct emotions present. Return ONLY valid JSON — no prose, no markdown, no explanation.
 
 Required format:
-{"emotions": [{"emotion": "<name>", "intensity": "<mild|moderate|intense>"}, ...], "insight": "<1-2 sentence insight>"}
+{"emotions": [{"emotion": "<name>", "intensity": "<mild|moderate|intense>", "reason": "<1 sentence explaining why this specific emotion is present, referencing the user's words>"}, ...], "insight": "<1-2 sentence overall insight>"}
 
 List emotions from most to least prominent. Include a second or third emotion only when clearly present.
+The reason field must reference specific words or phrases from the entry to justify each emotion.
 Each emotion name must be one of these exact values:
 Joy, Serenity, Ecstasy, Trust, Acceptance, Admiration, Fear, Apprehension, Terror,
 Surprise, Distraction, Amazement, Sadness, Pensiveness, Grief, Disgust, Boredom, Loathing,
@@ -58,7 +59,10 @@ Love, Submission, Awe, Disapproval, Remorse, Contempt, Aggressiveness, Optimism`
   // Normalise to { emotions: [...], insight } regardless of old single-emotion format
   if (parsed.emotions) return parsed;
   if (parsed.emotion) {
-    return { emotions: [{ emotion: parsed.emotion, intensity: parsed.intensity }], insight: parsed.insight };
+    return {
+      emotions: [{ emotion: parsed.emotion, intensity: parsed.intensity, reason: parsed.insight }],
+      insight: parsed.insight,
+    };
   }
   throw new Error('Unexpected response format from API');
 }

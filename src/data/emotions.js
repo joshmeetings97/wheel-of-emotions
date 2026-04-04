@@ -772,17 +772,17 @@ export function detectEmotion(text) {
   const primary = resolved[0];
   const insight = generateInsight(primary._coreId, primary.intensity);
 
-  // Build a flat list of {term, emotionName} pairs for display
-  const matchedTerms = topKeys.flatMap(k => {
-    const entry = resolved.find(r => r._coreId === k || r.emotion.toLowerCase() === k) || resolveEmotionEntry(k);
-    return (termsByKey[k] || []).map(t => ({ term: t, emotion: entry.emotion }));
+  // topKeys[i] and resolved[i] are parallel — attach matched terms + reason per emotion
+  const emotions = topKeys.map((k, i) => {
+    const { _coreId, ...e } = resolved[i];
+    return {
+      ...e,
+      matchedTerms: termsByKey[k] || [],
+      reason: generateInsight(_coreId, e.intensity),
+    };
   });
 
-  return {
-    emotions: resolved.map(({ _coreId, ...e }) => e),
-    insight,
-    matchedTerms,
-  };
+  return { emotions, insight };
 }
 
 function generateInsight(emotionId, intensity) {
