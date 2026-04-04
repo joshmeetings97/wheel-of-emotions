@@ -414,34 +414,21 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
             {result && !error && (
               <div className="mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 animate-[fadeIn_0.2s_ease-out]">
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {result.emotions.map((e, i) => (
-                    e.segmentId ? (
-                      <button
-                        key={i}
-                        onClick={() => onEmotionOpen(e.segmentId)}
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border bg-white hover:bg-slate-50 active:scale-95 transition-all text-left"
-                        style={{ borderColor: INTENSITY_COLORS[e.intensity] + '50' }}
-                        title="Tap to explore on wheel"
-                      >
-                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: INTENSITY_COLORS[e.intensity] }} />
-                        <span className="font-semibold text-slate-800 text-sm">{e.emotion}</span>
-                        <span className="text-[10px] uppercase tracking-wide font-medium" style={{ color: INTENSITY_COLORS[e.intensity] }}>
-                          {e.intensity}
-                        </span>
-                        <span className="text-slate-300 text-[9px] ml-0.5">↗</span>
-                      </button>
-                    ) : (
-                      <div
-                        key={i}
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border bg-slate-50 text-left"
-                        style={{ borderColor: INTENSITY_COLORS[e.intensity] + '30' }}
-                        title="This emotion isn't directly mapped on the wheel"
-                      >
-                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: INTENSITY_COLORS[e.intensity] + '60' }} />
-                        <span className="font-semibold text-slate-500 text-sm">{e.emotion}</span>
-                        <span className="text-[9px] text-slate-400 ml-0.5">not on wheel</span>
-                      </div>
-                    )
+                  {result.emotions.filter(e => e.segmentId).map((e, i) => (
+                    <button
+                      key={i}
+                      onClick={() => onEmotionOpen(e.segmentId)}
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border bg-white hover:bg-slate-50 active:scale-95 transition-all text-left"
+                      style={{ borderColor: INTENSITY_COLORS[e.intensity] + '50' }}
+                      title="Tap to explore on wheel"
+                    >
+                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: INTENSITY_COLORS[e.intensity] }} />
+                      <span className="font-semibold text-slate-800 text-sm">{e.emotion}</span>
+                      <span className="text-[10px] uppercase tracking-wide font-medium" style={{ color: INTENSITY_COLORS[e.intensity] }}>
+                        {e.intensity}
+                      </span>
+                      <span className="text-slate-300 text-[9px] ml-0.5">↗</span>
+                    </button>
                   ))}
                 </div>
                 {/* Collapsible "Why these emotions?" */}
