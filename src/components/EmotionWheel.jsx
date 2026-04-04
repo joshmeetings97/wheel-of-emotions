@@ -102,7 +102,15 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
       const emotion = CORE_EMOTIONS.find(e => e.id === seg.emotionId);
       const intensity = emotion?.intensities.find(i => i.level === seg.level)
                      || emotion?.intensities[2];
-      onSelect({ type:'emotion', emotion, intensity, level:intensity?.level || 'mild' });
+      // Outer ring segments have their own name (e.g. "Elated") distinct from the intensity name
+      const isOuter = seg.id.includes('-outer-');
+      onSelect({
+        type: 'emotion',
+        emotion,
+        intensity,
+        level: intensity?.level || 'mild',
+        outerName: isOuter ? seg.name : undefined,
+      });
     }
   }, [onSelect]);
 
@@ -114,6 +122,7 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
           <style>{`
             .seg { cursor:pointer; transition:filter 0.15s; }
             .seg:hover { filter:brightness(0.88); }
+            .seg:active { filter:brightness(0.80); }
             .seg:focus { outline:none; }
             @keyframes pulseRing {
               0%,100% { filter:brightness(1.1) drop-shadow(0 0 6px rgba(0,0,0,0.3)); }
@@ -209,11 +218,11 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
 
         {/* ── Center circle ── */}
         <circle cx={CX} cy={CY} r={R.hole} fill="white" stroke="white" strokeWidth="1"/>
-        <text x={CX} y={CY-9} textAnchor="middle" dominantBaseline="central"
-          fontSize="13" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
-          style={{pointerEvents:'none'}}>Emo</text>
-        <text x={CX} y={CY+9} textAnchor="middle" dominantBaseline="central"
-          fontSize="13" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
+        <text x={CX} y={CY-8} textAnchor="middle" dominantBaseline="central"
+          fontSize="11" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
+          style={{pointerEvents:'none'}}>Emotion</text>
+        <text x={CX} y={CY+8} textAnchor="middle" dominantBaseline="central"
+          fontSize="11" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
           style={{pointerEvents:'none'}}>Wheel</text>
 
         {/* ── Hover tooltip ── */}

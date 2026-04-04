@@ -167,7 +167,7 @@ function ConsentModal({ onAccept, onDecline }) {
   );
 }
 
-export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotionOpen }) {
+export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotionOpen, detailOpen }) {
   const [text, setText]               = useState('');
   const [loading, setLoading]         = useState(false);
   const [result, setResult]           = useState(null);
@@ -265,10 +265,10 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
         <ConsentModal onAccept={handleConsentAccept} onDecline={handleConsentDecline} />
       )}
 
-      {/* Toggle button */}
+      {/* Toggle button — hidden while detail panel is open to avoid overlap */}
       <button
         onClick={onToggle}
-        className="fixed right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-semibold text-sm bg-white border border-slate-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all text-slate-700"
+        className={`fixed right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-semibold text-sm bg-white border border-slate-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all text-slate-700 ${detailOpen ? 'hidden' : ''}`}
         style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))' }}
         aria-label={isOpen ? 'Close journal' : 'Open emotion journal'}
       >
@@ -298,17 +298,18 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
                     : 'Keyword analysis · fully private'}
                 </p>
               </div>
-              <div className="flex items-center gap-2 shrink-0 mt-0.5">
+              {/* AI toggle — outer button provides ≥44px touch target on mobile */}
+              <button
+                role="switch"
+                aria-checked={useAI && consentGiven}
+                onClick={handleAIToggle}
+                className="flex items-center gap-2 shrink-0 p-2 -m-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-300"
+              >
                 <span className="text-xs text-slate-500">AI</span>
-                <button
-                  role="switch"
-                  aria-checked={useAI && consentGiven}
-                  onClick={handleAIToggle}
-                  className={`relative w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-400 ${aiActive ? 'bg-slate-700' : 'bg-slate-200'}`}
-                >
+                <span className={`relative inline-flex w-9 h-5 rounded-full transition-colors duration-200 ${aiActive ? 'bg-slate-700' : 'bg-slate-200'}`}>
                   <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${aiActive ? 'translate-x-4' : 'translate-x-0'}`} />
-                </button>
-              </div>
+                </span>
+              </button>
             </div>
 
             {/* No key notice */}
@@ -344,7 +345,10 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
               rows={3}
               className="w-full resize-none rounded-2xl px-4 py-3 text-sm text-slate-700 placeholder-slate-300 border border-slate-200 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-all leading-relaxed mb-1"
             />
-            <p className="text-[10px] text-slate-300 text-right mb-3">⌘↵ to submit</p>
+            <p className="text-[10px] text-slate-300 text-right mb-3">
+              <span className="hidden sm:inline">⌘↵ to submit</span>
+              <span className="sm:hidden">Tap Detect Emotion to submit</span>
+            </p>
 
             {/* Buttons */}
             <div className="flex gap-2 mb-4">
@@ -411,7 +415,15 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
             {/* Session log */}
             {entries.length > 0 && (
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Session log</h3>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">Session log</h3>
+                  <button
+                    onClick={() => setEntries([])}
+                    className="text-[10px] text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    Clear
+                  </button>
+                </div>
                 <div className="space-y-1.5">
                   {entries.map(e => <EmotionChip key={e.id} entry={e} />)}
                 </div>

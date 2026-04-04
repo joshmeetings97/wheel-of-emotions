@@ -14,7 +14,7 @@ export const CORE_EMOTIONS = [
     centerAngle: -90,
     // Ring colors inner→outer (ring1 most intense, ring4 palest)
     ringColors: ['#8FA918', '#BDD23F', '#D9E897', '#EFF5C8'],
-    outer: ['Elated', 'Peaceful'],   // 2 sub-words for outermost ring
+    outer: ['Cheerful', 'Peaceful'],   // 2 sub-words for outermost ring
     colors: {
       intense: '#8FA918',
       core:    '#BDD23F',
@@ -194,7 +194,7 @@ export const CORE_EMOTIONS = [
     name: 'Surprise',
     centerAngle: 45,
     ringColors: ['#1B7A9E', '#3AA5CD', '#82CCE8', '#C4E8F5'],
-    outer: ['Astonished', 'Speechless'],
+    outer: ['Puzzled', 'Unsettled'],
     colors: {
       intense: '#1B7A9E',
       core:    '#3AA5CD',
@@ -234,7 +234,7 @@ export const CORE_EMOTIONS = [
       {
         level: 'mild',
         name: 'Distraction',
-        description: 'Distraction in Plutchik\'s model refers to a low-level, mild surprise — a gentle shift in attention caused by something slightly unexpected. It is the emotional experience of noticing the unexpected without strong reactivity. At low intensity it can refresh focus; at high levels it becomes disruptive.',
+        description: 'Distraction in Plutchik\'s model refers to mild surprise — a gentle, low-grade shift in attention caused by something slightly unexpected. It is the emotional experience of noticing the novel without strong reactivity. Used well, it can signal a need for a mental reset; when chronic, it may point to avoidance or underlying restlessness.',
         feelTips: [
           'Let mild novelty be refreshing — follow small curiosities without needing them to lead anywhere.',
           'Use moments of distraction as signals to shift tasks or take a mental break.',
@@ -254,7 +254,7 @@ export const CORE_EMOTIONS = [
     name: 'Sadness',
     centerAngle: 90,
     ringColors: ['#2E4DA0', '#5575C4', '#93ABE0', '#C8D4F2'],
-    outer: ['Lonely', 'Hopeless'],
+    outer: ['Gloomy', 'Forlorn'],
     colors: {
       intense: '#2E4DA0',
       core:    '#5575C4',
@@ -314,7 +314,7 @@ export const CORE_EMOTIONS = [
     name: 'Disgust',
     centerAngle: 135,
     ringColors: ['#7B3298', '#A459BD', '#C99DDA', '#E6CEF0'],
-    outer: ['Repulsed', 'Offended'],
+    outer: ['Displeased', 'Offended'],
     colors: {
       intense: '#7B3298',
       core:    '#A459BD',
@@ -374,7 +374,7 @@ export const CORE_EMOTIONS = [
     name: 'Anger',
     centerAngle: 180,
     ringColors: ['#B52A2A', '#D95C5C', '#ECA0A0', '#F7D4D4'],
-    outer: ['Hostile', 'Seething'],
+    outer: ['Cross', 'Peeved'],
     colors: {
       intense: '#B52A2A',
       core:    '#D95C5C',

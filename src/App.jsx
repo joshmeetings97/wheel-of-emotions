@@ -4,12 +4,24 @@ import EmotionDetail from './components/EmotionDetail';
 import Journal from './components/Journal';
 import { CORE_EMOTIONS, BLEND_EMOTIONS } from './data/emotions';
 
-// Convert a segment ID (e.g. "joy-moderate", "love") into a selection object
+// Convert a segment ID (e.g. "joy-moderate", "joy-outer-0", "love") into a selection object
 function resolveSegment(segmentId) {
   if (!segmentId) return null;
   const blend = BLEND_EMOTIONS.find(b => b.id === segmentId);
   if (blend) return { type: 'blend', data: blend };
-  // Format: "emotionId-level" where emotionId may itself contain hyphens (none currently)
+
+  // Outer ring format: "emotionId-outer-N"
+  const outerMatch = segmentId.match(/^(.+)-outer-(\d)$/);
+  if (outerMatch) {
+    const emotion = CORE_EMOTIONS.find(e => e.id === outerMatch[1]);
+    if (!emotion) return null;
+    const idx = parseInt(outerMatch[2], 10);
+    const outerName = emotion.outer?.[idx];
+    const intensity = emotion.intensities.find(i => i.level === 'mild') || emotion.intensities[2];
+    return { type: 'emotion', emotion, intensity, level: 'mild', outerName };
+  }
+
+  // Standard format: "emotionId-level"
   const lastDash = segmentId.lastIndexOf('-');
   if (lastDash === -1) return null;
   const emotionId = segmentId.slice(0, lastDash);
@@ -25,7 +37,7 @@ function HowToUse({ onClose }) {
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-md p-6 max-h-[85vh] overflow-y-auto animate-[fadeIn_0.2s_ease-out]">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-bold text-slate-800">How to use EmoWheel</h3>
+          <h3 className="text-base font-bold text-slate-800">How to use this wheel</h3>
           <button onClick={onClose} className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 text-sm transition-colors">✕</button>
         </div>
 
@@ -57,7 +69,7 @@ function HowToUse({ onClose }) {
           <div>
             <h4 className="font-semibold text-slate-700 mb-1.5">Emotion Journal</h4>
             <p className="text-xs leading-relaxed">
-              Tap <strong>Journal</strong> in the bottom-right corner and write freely about how you're feeling. EmoWheel will identify the emotion(s) present and highlight them on the wheel. Tap any detected emotion chip to open its detail panel. The AI toggle sends your text to Claude Haiku for more nuanced detection — keyword mode runs entirely in your browser.
+              Tap <strong>Journal</strong> in the bottom-right corner and write freely about how you're feeling. The wheel will identify the emotion(s) present and highlight them. Tap any detected emotion chip to open its detail panel. The AI toggle sends your text to Claude Haiku for more nuanced detection — keyword mode runs entirely in your browser.
             </p>
           </div>
         </div>
@@ -131,7 +143,7 @@ export default function App() {
             E
           </div>
           <div>
-            <h1 className="text-base font-bold text-slate-800 leading-none">EmoWheel</h1>
+            <h1 className="text-base font-bold text-slate-800 leading-none">Emotion Wheel</h1>
             <p className="text-[10px] text-slate-400 leading-none mt-0.5">Plutchik's Wheel of Emotions</p>
           </div>
         </div>
@@ -206,20 +218,13 @@ export default function App() {
         </div>
       </main>
 
-      {/* Mobile hint */}
-      {!panelOpen && !journalOpen && (
-        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 pointer-events-none z-10 lg:hidden">
-          <div className="px-4 py-2 rounded-full text-xs text-slate-500 bg-white/80 border border-slate-200 shadow-sm backdrop-blur-sm whitespace-nowrap">
-            Tap a segment to explore
-          </div>
-        </div>
-      )}
 
       <Journal
         isOpen={journalOpen}
         onToggle={() => setJournalOpen(o => !o)}
         onEmotionDetected={handleEmotionDetected}
         onEmotionOpen={handleEmotionOpen}
+        detailOpen={panelOpen}
       />
     </div>
   );

@@ -45,10 +45,10 @@ function RelatedChip({ id, accentColor, onClick }) {
 export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
   if (!selection) return null;
 
-  const { type, data, emotion, intensity, level } = selection;
+  const { type, data, emotion, intensity, level, outerName } = selection;
   const isBlend = type === 'blend';
 
-  const name        = isBlend ? data.name          : intensity?.name || emotion?.name;
+  const name        = isBlend ? data.name : outerName || intensity?.name || emotion?.name;
   const description = isBlend ? data.description   : intensity?.description;
   const feelTips    = isBlend ? data.feelTips      : intensity?.feelTips;
   const remedyTips  = isBlend ? data.remedyTips    : intensity?.remedyTips;
@@ -101,12 +101,16 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
           </div>
           <h2 className="text-xl font-bold text-slate-800 truncate">{name}</h2>
           {!isBlend && emotion && (
-            <p className="text-xs text-slate-400 mt-0.5">{emotion.name} family</p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              {outerName
+                ? `${emotion.name} family · variant of ${intensity?.name}`
+                : `${emotion.name} family`}
+            </p>
           )}
         </div>
         <button
           onClick={onClose}
-          className="shrink-0 w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center text-slate-400 hover:text-slate-600 text-sm"
+          className="shrink-0 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors flex items-center justify-center text-slate-400 hover:text-slate-600 text-sm"
           aria-label="Close"
         >✕</button>
       </div>
@@ -121,7 +125,7 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
           <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
         </div>
         {feelTips   && <Section title="Feel It"   items={feelTips}   icon="✦" />}
-        {remedyTips && <Section title="Remedy It" items={remedyTips} icon="↺" />}
+        {remedyTips && <Section title="Remedy It" items={remedyTips} icon="✓" />}
         {related?.length > 0 && (
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Related</h3>
