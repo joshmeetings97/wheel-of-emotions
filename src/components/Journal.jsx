@@ -116,25 +116,33 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected }) {
                 </p>
               </div>
 
-              {/* AI toggle — only show if a key is configured */}
-              {hasApiKey && (
-                <div className="flex items-center gap-2 shrink-0 mt-0.5">
-                  <span className="text-xs text-slate-500">AI</span>
-                  <button
-                    role="switch"
-                    aria-checked={useAI}
-                    onClick={() => setUseAI(v => !v)}
-                    className={`relative w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-400 ${useAI ? 'bg-slate-700' : 'bg-slate-200'}`}
-                  >
-                    <span
-                      className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${useAI ? 'translate-x-4' : 'translate-x-0'}`}
-                    />
-                  </button>
-                </div>
-              )}
+              {/* AI toggle — always visible */}
+              <div className="flex items-center gap-2 shrink-0 mt-0.5">
+                <span className="text-xs text-slate-500">AI</span>
+                <button
+                  role="switch"
+                  aria-checked={useAI}
+                  onClick={() => setUseAI(v => !v)}
+                  className={`relative w-9 h-5 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-400 ${useAI ? 'bg-slate-700' : 'bg-slate-200'}`}
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${useAI ? 'translate-x-4' : 'translate-x-0'}`}
+                  />
+                </button>
+              </div>
             </div>
 
-            {/* Privacy notice — shown when AI is on */}
+            {/* No key configured warning */}
+            {useAI && !hasApiKey && (
+              <div className="mb-3 flex gap-2 p-3 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-600 leading-relaxed">
+                <span className="shrink-0 mt-0.5">ℹ</span>
+                <span>
+                  No API key found in this build. Add <code className="font-mono bg-slate-200 px-1 rounded">VITE_ANTHROPIC_API_KEY</code> to your Netlify environment variables and redeploy to enable AI analysis.
+                </span>
+              </div>
+            )}
+
+            {/* Privacy notice — shown when AI is on and key exists */}
             {aiActive && (
               <div className="mb-3 flex gap-2 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-700 leading-relaxed">
                 <span className="shrink-0 mt-0.5">⚠</span>
