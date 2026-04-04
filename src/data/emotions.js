@@ -739,34 +739,49 @@ function resolveEmotionEntry(key) {
 export function detectEmotion(text) {
   const lower = text.toLowerCase();
   const scores = {};
+  const termsByKey = {}; // emotionKey -> matched keyword strings
 
   Object.entries(KEYWORD_MAP).forEach(([emotion, keywords]) => {
     let score = 0;
+    const matched = [];
     keywords.forEach(kw => {
-      if (lower.includes(kw)) score += kw.split(" ").length;
+      if (lower.includes(kw)) {
+        score += kw.split(" ").length;
+        matched.push(kw);
+      }
     });
-    if (score > 0) scores[emotion] = score;
+    if (score > 0) {
+      scores[emotion] = score;
+      termsByKey[emotion] = matched;
+    }
   });
 
   if (Object.keys(scores).length === 0) {
     return {
       emotions: [{ emotion: "Joy", intensity: "mild", segmentId: "joy-mild" }],
       insight: "Your entry doesn't strongly signal a particular emotion — perhaps you're in a state of calm reflection.",
+      matchedTerms: [],
     };
   }
 
   const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
   const topScore = sorted[0][1];
-  // Include emotions scoring >= 30% of top score, up to 3
   const topKeys = sorted.filter(([, s]) => s >= topScore * 0.3).slice(0, 3).map(([k]) => k);
 
   const resolved = topKeys.map(resolveEmotionEntry);
   const primary = resolved[0];
   const insight = generateInsight(primary._coreId, primary.intensity);
 
+  // Build a flat list of {term, emotionName} pairs for display
+  const matchedTerms = topKeys.flatMap(k => {
+    const entry = resolved.find(r => r._coreId === k || r.emotion.toLowerCase() === k) || resolveEmotionEntry(k);
+    return (termsByKey[k] || []).map(t => ({ term: t, emotion: entry.emotion }));
+  });
+
   return {
     emotions: resolved.map(({ _coreId, ...e }) => e),
     insight,
+    matchedTerms,
   };
 }
 
