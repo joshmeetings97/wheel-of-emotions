@@ -111,12 +111,12 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
   }, [onSelect]);
 
   return (
-    <div className="relative w-full max-w-[680px] mx-auto select-none">
+    <div className="relative w-full max-w-[680px] mx-auto select-none"
+      style={{ filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.13))' }}>
       <svg
         viewBox="0 0 680 680"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full"
-        style={{ filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.13))' }}
+        className="w-full"
       >
         <defs>
           <style>{`
