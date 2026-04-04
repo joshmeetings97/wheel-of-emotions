@@ -34,7 +34,7 @@ function RelatedChip({ id, accentColor, onClick }) {
   return (
     <button
       onClick={() => onClick(id)}
-      className="px-2.5 py-1 rounded-full text-xs font-medium border transition-all hover:scale-105 active:scale-95 bg-white"
+      className="px-3 py-2 rounded-full text-xs font-medium border transition-all hover:scale-105 active:scale-95 bg-white"
       style={{ borderColor: accentColor + '80', color: accentColor }}
     >
       {emotion.name}

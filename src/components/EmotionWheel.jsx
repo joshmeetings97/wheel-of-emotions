@@ -121,10 +121,10 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
       <svg viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg" className="w-full">
         <defs>
           <style>{`
-            .seg { cursor:pointer; transition:filter 0.15s; }
+            .seg { cursor:pointer; transition:filter 0.15s; touch-action:manipulation; }
             .seg:hover { filter:brightness(0.88); }
             .seg:active { filter:brightness(0.80); }
-            .seg:focus { outline:none; }
+            .seg:focus { outline:none; filter:brightness(0.88) drop-shadow(0 0 0 3px rgba(99,102,241,0.6)); }
             @keyframes pulseRing {
               0%,100% { filter:brightness(1.1) drop-shadow(0 0 6px rgba(0,0,0,0.3)); }
               50%      { filter:brightness(1.25) drop-shadow(0 0 18px rgba(0,0,0,0.5)); }
@@ -222,7 +222,7 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
           return <text key={`blend-${blend.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
             transform={`rotate(${textRot(angle)},${x},${y})`}
             fontSize={fs} fontWeight="600" fontFamily="Inter,Arial,sans-serif"
-            fill="white" style={{pointerEvents:'none'}}>{blend.name}</text>;
+            fill={textClr(blend.color)} style={{pointerEvents:'none'}}>{blend.name}</text>;
         })}
 
         {/* ── Center circle ── */}
@@ -234,14 +234,19 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
           fontSize="11" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
           style={{pointerEvents:'none'}}>Wheel</text>
 
-        {/* ── Hover tooltip ── */}
+        {/* ── Hover tooltip — clamped inside the 680×680 viewBox ── */}
         {hoverId && (() => {
           const seg = segments.find(s => s.id === hoverId);
           if (!seg) return null;
           const {x,y} = seg.mid;
           const dx=x-CX, dy=y-CY, len=Math.sqrt(dx*dx+dy*dy)||1;
-          const tx=x+(dx/len)*24, ty=y+(dy/len)*24;
           const w = Math.max(60, seg.name.length*7+16);
+          const pad = 8;
+          // Push outward then clamp so rect stays inside viewBox
+          let tx = x+(dx/len)*24;
+          let ty = y+(dy/len)*24;
+          tx = Math.max(w/2+pad, Math.min(680-w/2-pad, tx));
+          ty = Math.max(12+pad,  Math.min(680-12-pad,  ty));
           return <g style={{pointerEvents:'none'}}>
             <rect x={tx-w/2} y={ty-12} width={w} height={22} rx="5" fill="rgba(15,23,42,0.88)"/>
             <text x={tx} y={ty+1} textAnchor="middle" dominantBaseline="central"

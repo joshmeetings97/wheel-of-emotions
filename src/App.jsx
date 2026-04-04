@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import EmotionWheel from './components/EmotionWheel';
 import EmotionDetail from './components/EmotionDetail';
 import Journal from './components/Journal';
@@ -34,11 +34,12 @@ function resolveSegment(segmentId) {
 
 function HowToUse({ onClose }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-md p-6 max-h-[85vh] overflow-y-auto animate-[fadeIn_0.2s_ease-out]">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/30 backdrop-blur-sm"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-md p-6 m-4 max-h-[85vh] overflow-y-auto animate-[fadeIn_0.2s_ease-out]">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-bold text-slate-800">How to use this wheel</h3>
-          <button onClick={onClose} className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 text-sm transition-colors">✕</button>
+          <button onClick={onClose} className="w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 flex items-center justify-center text-slate-400 hover:text-slate-600 text-sm transition-colors">✕</button>
         </div>
 
         <div className="space-y-4 text-sm text-slate-600">
@@ -127,6 +128,16 @@ export default function App() {
     setJournalOpen(false);
   }, [openSelection]);
 
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (howToOpen) { setHowToOpen(false); return; }
+      if (panelOpen) { handleDetailClose(); return; }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [howToOpen, panelOpen, handleDetailClose]);
+
   const handleRelatedClick = useCallback((newSel) => {
     const segId = newSel.type === 'blend' ? newSel.data.id : `${newSel.emotion.id}-${newSel.level}`;
     openSelection(newSel, segId);
@@ -153,7 +164,7 @@ export default function App() {
           </p>
           <button
             onClick={() => setHowToOpen(true)}
-            className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors"
+            className="w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 flex items-center justify-center text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors"
             aria-label="How to use"
             title="How to use"
           >?</button>

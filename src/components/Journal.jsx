@@ -109,8 +109,9 @@ function Detail({ icon, color, children }) {
 // One-time consent modal shown before AI mode is first activated
 function ConsentModal({ onAccept, onDecline }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-md p-6 animate-[fadeIn_0.2s_ease-out]">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/30 backdrop-blur-sm"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-md p-6 m-4 animate-[fadeIn_0.2s_ease-out]">
         <h3 className="text-base font-bold text-slate-800 mb-1">Enable AI analysis?</h3>
         <p className="text-xs text-slate-500 mb-4 leading-relaxed">
           Before your journal text is sent, here's exactly what happens:
@@ -177,6 +178,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
   const [consentGiven, setConsentGiven] = useLocalStorage('emowheel-ai-consent', false);
   const [showConsent, setShowConsent] = useState(false);
   const [entries, setEntries]         = useLocalStorage('emowheel-journal', []);
+  const [hintDismissed, setHintDismissed] = useLocalStorage('emowheel-hint-dismissed', false);
   const textareaRef                   = useRef(null);
 
   const hasApiKey = Boolean(
@@ -369,12 +371,15 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
               onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleSubmit(); }}
               placeholder="How are you feeling right now? Write freely…"
               rows={3}
+              inputMode="text"
               className="w-full resize-none rounded-2xl px-4 py-3 text-sm text-slate-700 placeholder-slate-300 border border-slate-200 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-all leading-relaxed mb-1"
             />
-            <p className="text-[10px] text-slate-300 text-right mb-3">
-              <span className="hidden sm:inline">⌘↵ to submit</span>
-              <span className="sm:hidden">Tap Detect Emotion to submit</span>
-            </p>
+            {text.trim() && (
+              <p className="text-[10px] text-slate-300 text-right mb-3">
+                <span className="hidden sm:inline">⌘↵ to submit</span>
+              </p>
+            )}
+            {!text.trim() && <div className="mb-3" />}
 
             {/* Buttons */}
             <div className="flex gap-2 mb-4">
@@ -418,7 +423,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
                     <button
                       key={i}
                       onClick={() => onEmotionOpen(e.segmentId)}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border bg-white hover:bg-slate-50 active:scale-95 transition-all text-left"
+                      className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl border bg-white hover:bg-slate-50 active:scale-95 transition-all text-left min-h-[44px]"
                       style={{ borderColor: INTENSITY_COLORS[e.intensity] + '50' }}
                       title="Tap to explore on wheel"
                     >
@@ -476,8 +481,23 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
               </div>
             )}
 
+            {/* First-time mobile hint */}
+            {!hintDismissed && !result && entries.length === 0 && (
+              <div className="lg:hidden mb-3 flex items-start gap-2 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                <span className="text-slate-400 shrink-0 mt-0.5 text-base">👆</span>
+                <p className="text-xs text-slate-500 leading-relaxed flex-1">
+                  Tap any segment on the wheel to explore that emotion.
+                </p>
+                <button
+                  onClick={() => setHintDismissed(true)}
+                  className="shrink-0 text-slate-300 hover:text-slate-500 text-sm leading-none p-1"
+                  aria-label="Dismiss hint"
+                >✕</button>
+              </div>
+            )}
+
             {/* Session log */}
-            {entries.length > 0 && (
+            {entries.length > 0 ? (
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">Session log</h3>
@@ -492,7 +512,9 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
                   {entries.map(e => <EmotionChip key={e.id} entry={e} />)}
                 </div>
               </div>
-            )}
+            ) : result ? (
+              <p className="text-[10px] text-slate-300 text-center py-1">Log cleared</p>
+            ) : null}
           </div>
         </div>
       </div>
