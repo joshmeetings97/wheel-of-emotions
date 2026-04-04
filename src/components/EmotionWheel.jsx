@@ -132,16 +132,23 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
           `}</style>
         </defs>
 
-        {/* ── Segments ── */}
-        {segments.map((seg) => {
+        {/* ── Segments — unselected first, selected last so it renders on top ── */}
+        {[...segments.filter(s => s.id !== selectedId), ...segments.filter(s => s.id === selectedId)].map((seg) => {
           const isSel   = seg.id === selectedId;
           const isPulse = seg.id === pulseId;
+          // Scale selected segment outward from its midpoint for a clear "raised" look
+          const SEL_SCALE = 1.045;
+          const mx = seg.mid.x, my = seg.mid.y;
+          const selTransform = isSel
+            ? `translate(${mx * (1 - SEL_SCALE)}, ${my * (1 - SEL_SCALE)}) scale(${SEL_SCALE})`
+            : undefined;
           return (
             <path key={seg.id} d={seg.path}
               fill={seg.color}
-              stroke="white" strokeWidth={isSel ? 2.5 : 1.2} strokeLinejoin="round"
+              stroke="white" strokeWidth={isSel ? 3.5 : 1.2} strokeLinejoin="round"
               className={`seg ${isPulse ? 'pulse' : ''}`}
-              style={isSel ? { filter:'drop-shadow(0 3px 12px rgba(0,0,0,0.42)) brightness(1.07)' } : undefined}
+              transform={selTransform}
+              style={isSel ? { filter:'drop-shadow(0 4px 16px rgba(0,0,0,0.55)) brightness(1.12)' } : undefined}
               onClick={() => handleClick(seg)}
               onMouseEnter={() => setHoverId(seg.id)}
               onMouseLeave={() => setHoverId(null)}
