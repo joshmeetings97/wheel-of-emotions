@@ -41,26 +41,29 @@ Mapping guidance for common cases:
 - Relief, calm, peace, contentment → Serenity
 - Anxiety, stress, worry, nervousness → Fear or Apprehension
 - Excitement, enthusiasm → Anticipation or Vigilance
+- Not looking forward to, dreading, not keen on, mild aversion → Apprehension or Reluctant (NOT Boredom — these are negative anticipation, not disengagement)
 - Frustration, irritation → Annoyance
 - Shame, guilt, regret → Remorse
 - Confusion → Distraction or Surprise
-- Pride, gratitude, inspiration → Joy or Admiration
+- Pride, proud, accomplishment, achievement → Proud (NOT Joy, NOT Admiration — "Proud" is its own valid emotion)
+- Gratitude, thankfulness → Grateful
 - Loneliness → Sadness (genuine loss of connection)
 - Overwhelm → Fear (threat response) or Disgust (aversion to situation)
+- Boredom is ONLY for genuine low-energy disengagement (nothing to do, unstimulated, monotony) — do NOT use it for mild dread, reluctance, or negative anticipation
 
 Valid emotion names (use only these):
 Joy, Serenity, Ecstasy, Trust, Acceptance, Admiration, Fear, Apprehension, Terror,
 Surprise, Distraction, Amazement, Sadness, Pensiveness, Grief, Disgust, Boredom, Loathing,
 Anger, Annoyance, Rage, Anticipation, Interest, Vigilance,
 Love, Submission, Awe, Disapproval, Remorse, Contempt, Aggressiveness, Optimism,
-Cheerful, Playful, Peaceful, Grateful,
-Faithful, Assured, Comfortable, Valued,
-Worried, Nervous, Hesitant, Timid,
-Puzzled, Confused, Unsettled, Startled,
-Gloomy, Lonely, Forlorn, Disappointed,
-Displeased, Offended, Withdrawn, Reluctant,
-Cross, Peeved, Frustrated, Impatient,
-Eager, Hopeful, Curious, Inspired`,
+Cheerful, Playful, Peaceful, Grateful, Proud,
+Faithful, Assured, Comfortable, Valued, Secure,
+Worried, Nervous, Hesitant, Timid, Overwhelmed,
+Puzzled, Confused, Unsettled, Startled, Stunned,
+Gloomy, Lonely, Forlorn, Disappointed, Heartbroken,
+Displeased, Offended, Withdrawn, Reluctant, Repulsed,
+Cross, Peeved, Frustrated, Impatient, Resentful,
+Eager, Hopeful, Curious, Inspired, Excited`,
       messages: [{ role: 'user', content: journalEntry }],
     }),
   });
@@ -94,8 +97,9 @@ Eager, Hopeful, Curious, Inspired`,
   throw new Error('Unexpected response format from API');
 }
 
-// Called from ProcessEmotion — takes Q&A pairs and returns a plain-text reflection.
+// Called from ProcessEmotion — takes Q&A pairs and returns structured reflection + actions.
 // `pairs` is an array of { q: string, a: string } (answers already scrubbed of PII).
+// Returns { reflection: string, actions: [{timeframe, action}], followUp: string }
 export async function reflectWithClaude(emotionName, pairs) {
   const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
   if (!apiKey || apiKey === 'your_key_here') throw new Error('NO_API_KEY');
@@ -110,15 +114,26 @@ export async function reflectWithClaude(emotionName, pairs) {
     headers: getHeaders(apiKey),
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 300,
+      max_tokens: 600,
       system: `You are a compassionate, perceptive emotional processing guide.
-The user has been working through a feeling of ${emotionName} by answering a series of reflective questions.
-Write a personal, warm 2–3 sentence reflection that:
-1. Validates what they've shared without repeating it back word-for-word
-2. Names something courageous, honest, or insightful in their responses
-3. Offers one concrete, actionable next step tailored to what they wrote
+The user has been working through a feeling of ${emotionName} by answering reflective questions.
+Return ONLY valid JSON — no prose, no markdown, no explanation — in this exact format:
+{
+  "reflection": "<2–3 warm, personal sentences: (1) validate what they shared without repeating it verbatim, (2) name something honest or courageous in their responses, (3) offer one grounded insight specific to what they wrote>",
+  "actions": [
+    {"timeframe": "right now", "action": "<one specific thing completable in under 5 minutes, drawn directly from what they wrote>"},
+    {"timeframe": "today",     "action": "<one achievable thing today, specific to their situation>"},
+    {"timeframe": "this week", "action": "<one slightly larger step or practice to build on this>"}
+  ],
+  "followUp": "<a single reflective question to sit with over the next few days>"
+}
 
-Write directly to the person (use "you"). No labels, no headers, no formatting — plain prose only.`,
+Rules for actions:
+- Reference specific details from their answers — not generic advice like "practice self-care"
+- Each must be concrete and doable (a real action, not a vague intention)
+- "right now" must be completable in under 5 minutes
+- Write directly to the person using "you"
+- If they mentioned a specific person, goal, or situation, reference it`,
       messages: [{ role: 'user', content: qa }],
     }),
   });
@@ -129,5 +144,20 @@ Write directly to the person (use "you"). No labels, no headers, no formatting �
   }
 
   const data = await response.json();
-  return data.content[0]?.text?.trim() || '';
+  const text = data.content[0]?.text || '';
+
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    const match = text.match(/\{[\s\S]*\}/);
+    if (match) parsed = JSON.parse(match[0]);
+    else throw new Error('Unexpected response format from API');
+  }
+
+  return {
+    reflection: parsed.reflection || '',
+    actions:    Array.isArray(parsed.actions) ? parsed.actions : [],
+    followUp:   parsed.followUp || '',
+  };
 }

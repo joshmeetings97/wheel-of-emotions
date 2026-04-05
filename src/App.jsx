@@ -86,6 +86,10 @@ function HowToUse({ onClose }) {
   );
 }
 
+const ZOOM_STEP = 0.1;
+const ZOOM_MIN  = 0.5;
+const ZOOM_MAX  = 1.5;
+
 export default function App() {
   const [selectedId, setSelectedId]   = useState(null);
   const [selection, setSelection]     = useState(null);
@@ -93,6 +97,11 @@ export default function App() {
   const [journalOpen, setJournalOpen] = useState(false);
   const [panelOpen, setPanelOpen]     = useState(false);
   const [howToOpen, setHowToOpen]     = useState(false);
+  const [zoom, setZoom]               = useState(1.0);
+
+  const zoomIn  = useCallback(() => setZoom(z => Math.min(ZOOM_MAX, parseFloat((z + ZOOM_STEP).toFixed(1)))), []);
+  const zoomOut = useCallback(() => setZoom(z => Math.max(ZOOM_MIN, parseFloat((z - ZOOM_STEP).toFixed(1)))), []);
+  const zoomReset = useCallback(() => setZoom(1.0), []);
 
   const openSelection = useCallback((sel, segId) => {
     setSelection(sel);
@@ -158,10 +167,33 @@ export default function App() {
             <p className="text-[10px] text-slate-400 leading-none mt-0.5">Plutchik's Wheel of Emotions</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <p className="text-xs text-slate-400 hidden sm:block">
             Click any segment to explore · Journal to identify your emotion
           </p>
+          {/* Zoom controls */}
+          <div className="flex items-center gap-0.5 bg-slate-100 rounded-xl px-1 py-1">
+            <button
+              onClick={zoomOut}
+              disabled={zoom <= ZOOM_MIN}
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-200 active:bg-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-base font-bold leading-none"
+              aria-label="Zoom out"
+              title="Zoom out"
+            >−</button>
+            <button
+              onClick={zoomReset}
+              className="min-w-[3rem] h-9 px-1 rounded-lg flex items-center justify-center text-xs font-semibold text-slate-500 hover:bg-slate-200 active:bg-slate-300 transition-colors tabular-nums"
+              aria-label="Reset zoom"
+              title="Reset zoom"
+            >{Math.round(zoom * 100)}%</button>
+            <button
+              onClick={zoomIn}
+              disabled={zoom >= ZOOM_MAX}
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-200 active:bg-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-base font-bold leading-none"
+              aria-label="Zoom in"
+              title="Zoom in"
+            >+</button>
+          </div>
           <button
             onClick={() => setHowToOpen(true)}
             className="w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 flex items-center justify-center text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors"
@@ -172,7 +204,7 @@ export default function App() {
       </header>
 
       {/* ── Main layout ── */}
-      <main className="flex-1 flex flex-col lg:flex-row items-start overflow-hidden">
+      <main className="flex-1 flex flex-col lg:flex-row items-start overflow-hidden" style={{ zoom }}>
 
         {/* Wheel area */}
         <div className="flex-1 flex items-center justify-center p-4 md:p-8">

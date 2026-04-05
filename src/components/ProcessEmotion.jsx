@@ -3,6 +3,7 @@ import { PROCESS_QUESTIONS } from '../data/processQuestions';
 import { reflectWithClaude } from '../api/claude';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import BreathingExercise from './BreathingExercise';
+import GroundingExercise from './GroundingExercise';
 
 function scrubPII(text) {
   return text
@@ -154,12 +155,16 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
     return true;
   });
 
-  const [step, setStep]             = useState(0);
-  const [answers, setAnswers]       = useState(() => Array(questions.length).fill(''));
-  const [reflection, setReflection] = useState(null);
-  const [loading, setLoading]       = useState(false);
-  const [error, setError]           = useState(null);
-  const textareaRef                 = useRef(null);
+  const [step, setStep]               = useState(0);
+  const [answers, setAnswers]         = useState(() => Array(questions.length).fill(''));
+  const [reflection, setReflection]   = useState(null); // { reflection, actions, followUp }
+  const [loading, setLoading]         = useState(false);
+  const [error, setError]             = useState(null);
+  const [checkedActions, setCheckedActions] = useState([]);
+  const [expandedActions, setExpandedActions] = useState([]);
+  const [copied, setCopied]           = useState(false);
+  const [activePractice, setActivePractice] = useState(null); // null | 'breathing' | 'grounding'
+  const textareaRef                   = useRef(null);
 
   const [useAI]        = useLocalStorage('emowheel-use-ai', false);
   const [consentGiven] = useLocalStorage('emowheel-ai-consent', false);
@@ -175,6 +180,8 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
     setStep(0);
     setReflection(null);
     setError(null);
+    setCheckedActions([]);
+    setActivePractice(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questions.length]);
 
@@ -210,8 +217,10 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
     try {
       const pairs = questions.map((q, i) => ({ q: q.q, a: answers[i] || '' }));
       const sanitized = pairs.map(p => ({ ...p, a: scrubPII(p.a) }));
-      const text = await reflectWithClaude(emotionName, sanitized);
-      setReflection(text);
+      const result = await reflectWithClaude(emotionName, sanitized);
+      setReflection(result);
+      setCheckedActions(new Array(result.actions?.length || 0).fill(false));
+      setExpandedActions(new Array(result.actions?.length || 0).fill(false));
     } catch {
       setError('Could not get a reflection right now. Try again.');
     } finally {
@@ -219,10 +228,43 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
     }
   };
 
+  const toggleAction = (i) => {
+    setCheckedActions(prev => {
+      const next = [...prev]; next[i] = !next[i]; return next;
+    });
+  };
+
+  const handleCopy = async () => {
+    if (!reflection) return;
+    const lines = [
+      `Reflection on ${emotionName}`,
+      '',
+      reflection.reflection,
+    ];
+    if (reflection.actions?.length) {
+      lines.push('', 'Next steps:');
+      reflection.actions.forEach(a => {
+        lines.push(`• ${a.timeframe[0].toUpperCase() + a.timeframe.slice(1)} — ${a.action}`);
+      });
+    }
+    if (reflection.followUp) {
+      lines.push('', `Come back to: "${reflection.followUp}"`);
+    }
+    await navigator.clipboard.writeText(lines.join('\n'));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const answered = answers.filter((a, i) => isAnswered(questions[i], a)).length;
   const reset = () => {
     setStep(0); setAnswers(Array(questions.length).fill(''));
-    setReflection(null); setError(null);
+    setReflection(null); setError(null); setCheckedActions([]); setExpandedActions([]); setActivePractice(null);
+  };
+
+  const TIMEFRAME_COLOR = {
+    'right now': '#f59e0b',
+    'today':     accentColor,
+    'this week': '#94a3b8',
   };
 
   return (
@@ -373,82 +415,252 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
         </div>
 
       ) : (
-        /* ── Summary screen ── */
-        <div className="flex-1 overflow-y-auto">
-          <p className="text-xs font-semibold text-slate-500 mb-3">Your responses</p>
+        /* ── Summary / practice screen ── */
+        activePractice ? (
+          /* ── Active practice ── */
+          <div className="flex-1 flex flex-col">
+            <button
+              onClick={() => setActivePractice(null)}
+              className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 transition-colors mb-4 py-1 self-start"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd"/>
+              </svg>
+              Back to summary
+            </button>
+            {activePractice === 'breathing' ? (
+              <BreathingExercise accentColor={accentColor} targetCycles={3} onDone={() => setActivePractice(null)} />
+            ) : (
+              <GroundingExercise accentColor={accentColor} onDone={() => setActivePractice(null)} />
+            )}
+          </div>
+        ) : (
+          /* ── Summary content ── */
+          <div className="flex-1 overflow-y-auto">
+            <p className="text-xs font-semibold text-slate-500 mb-3">Your responses</p>
 
-          <div className="space-y-3 mb-5">
-            {questions.map((q, i) => {
-              if (!isAnswered(q, answers[i]) || answers[i] === 'done') return null;
-              return (
-                <div key={i} className="rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-3">
-                  {q.label && (
-                    <p className="text-[9px] font-bold uppercase tracking-widest mb-0.5" style={{ color: accentColor + 'aa' }}>
-                      {q.label}
+            <div className="space-y-3 mb-5">
+              {questions.map((q, i) => {
+                if (!isAnswered(q, answers[i]) || answers[i] === 'done') return null;
+                return (
+                  <div key={i} className="rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-3">
+                    {q.label && (
+                      <p className="text-[9px] font-bold uppercase tracking-widest mb-0.5" style={{ color: accentColor + 'aa' }}>
+                        {q.label}
+                      </p>
+                    )}
+                    <p className="text-[10px] text-slate-400 mb-1.5 leading-snug">{q.q}</p>
+                    {q.type === 'scale' ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg font-bold" style={{ color: accentColor }}>{answers[i]}</span>
+                        <span className="text-xs text-slate-400">/ 5 ·</span>
+                        <span className="text-xs text-slate-500">
+                          {Number(answers[i]) <= 2 ? q.scaleMin : Number(answers[i]) >= 4 ? q.scaleMax : 'In between'}
+                        </span>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-slate-700 leading-relaxed">{answers[i]}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* AI reflection */}
+            {settings.aiReflection && (
+              <div className="rounded-2xl border border-slate-200 overflow-hidden mb-4">
+                <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-slate-700">AI Reflection</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">
+                      {aiActive
+                        ? `Personalised to your ${emotionName.toLowerCase()} and what you shared.`
+                        : 'Turn on AI in the Journal to unlock personalised reflections.'}
                     </p>
-                  )}
-                  <p className="text-[10px] text-slate-400 mb-1.5 leading-snug">{q.q}</p>
-                  {q.type === 'scale' ? (
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold" style={{ color: accentColor }}>{answers[i]}</span>
-                      <span className="text-xs text-slate-400">/ 5 ·</span>
-                      <span className="text-xs text-slate-500">
-                        {Number(answers[i]) <= 2 ? q.scaleMin : Number(answers[i]) >= 4 ? q.scaleMax : 'In between'}
-                      </span>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-slate-700 leading-relaxed">{answers[i]}</p>
+                  </div>
+                  {reflection && (
+                    <button
+                      onClick={handleCopy}
+                      className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-[10px] font-medium text-slate-500 hover:text-slate-700 transition-all"
+                    >
+                      {copied ? (
+                        <>
+                          <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd"/>
+                          </svg>
+                          Copied
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2"/>
+                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                          </svg>
+                          Copy
+                        </>
+                      )}
+                    </button>
                   )}
                 </div>
-              );
-            })}
-          </div>
+                <div className="px-4 py-3">
+                  {reflection ? (
+                    <div className="space-y-4">
+                      {/* Reflection text */}
+                      <p className="text-sm text-slate-600 leading-relaxed">{reflection.reflection}</p>
 
-          {/* AI reflection */}
-          {settings.aiReflection && (
-            <div className="rounded-2xl border border-slate-200 overflow-hidden mb-4">
-              <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
-                <p className="text-xs font-semibold text-slate-700">AI Reflection</p>
-                <p className="text-[10px] text-slate-400 mt-0.5">
-                  {aiActive
-                    ? `Claude reads what you shared and offers a reflection specific to ${emotionName}.`
-                    : 'Turn on AI in the Journal to unlock personalised reflections.'}
-                </p>
+                      {/* Suggested actions */}
+                      {reflection.actions?.length > 0 && (
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">What to try</p>
+                          <div className="space-y-1.5">
+                            {reflection.actions.map((item, i) => {
+                              const color    = TIMEFRAME_COLOR[item.timeframe] || accentColor;
+                              const done     = checkedActions[i];
+                              const expanded = expandedActions[i];
+                              const toggleExpanded = () => setExpandedActions(prev => {
+                                const next = [...prev]; next[i] = !next[i]; return next;
+                              });
+                              return (
+                                <div
+                                  key={i}
+                                  className="rounded-xl border overflow-hidden transition-colors"
+                                  style={{
+                                    borderColor:     done ? '#e2e8f0' : color + '50',
+                                    backgroundColor: done ? '#f8fafc' : color + '08',
+                                  }}
+                                >
+                                  {/* Header row — always visible, tapping expands/collapses */}
+                                  <button
+                                    onClick={toggleExpanded}
+                                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left"
+                                  >
+                                    <span
+                                      className="text-[10px] font-bold uppercase tracking-wider flex-1"
+                                      style={{ color: done ? '#94a3b8' : color }}
+                                    >
+                                      {item.timeframe}
+                                    </span>
+                                    <svg
+                                      className="w-3 h-3 shrink-0 transition-transform duration-200"
+                                      style={{ color: done ? '#cbd5e1' : color + 'aa', transform: expanded ? 'rotate(0deg)' : 'rotate(-90deg)' }}
+                                      viewBox="0 0 20 20" fill="currentColor"
+                                    >
+                                      <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd"/>
+                                    </svg>
+                                  </button>
+
+                                  {/* Expanded content */}
+                                  {expanded && (
+                                    <div className="px-3 pb-2.5 border-t" style={{ borderColor: done ? '#e2e8f0' : color + '30' }}>
+                                      <p className={`text-xs leading-relaxed pt-2.5 ${done ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
+                                        {item.action}
+                                      </p>
+                                      <button
+                                        onClick={() => toggleAction(i)}
+                                        className="flex items-center gap-2 mt-2.5 text-[10px] font-medium transition-colors"
+                                        style={{ color: done ? '#94a3b8' : color }}
+                                      >
+                                        <div
+                                          className="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-200"
+                                          style={{
+                                            borderColor:     done ? '#cbd5e1' : color,
+                                            backgroundColor: done ? '#cbd5e1' : 'transparent',
+                                          }}
+                                        >
+                                          {done && (
+                                            <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                              <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd"/>
+                                            </svg>
+                                          )}
+                                        </div>
+                                        {done ? 'Mark incomplete' : 'Mark done'}
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Follow-up question */}
+                      {reflection.followUp && (
+                        <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-3.5 py-3">
+                          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1.5">Come back to this</p>
+                          <p className="text-xs text-slate-500 italic leading-relaxed">"{reflection.followUp}"</p>
+                        </div>
+                      )}
+                    </div>
+                  ) : error ? (
+                    <div className="space-y-2">
+                      <p className="text-xs text-red-500">{error}</p>
+                      <button onClick={handleReflect} className="text-xs font-medium text-slate-600 underline underline-offset-2">Try again</button>
+                    </div>
+                  ) : loading ? (
+                    <div className="flex items-center gap-2 text-xs text-slate-400 py-1">
+                      <svg className="animate-spin w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
+                      </svg>
+                      Reflecting on your {emotionName.toLowerCase()}…
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleReflect}
+                      disabled={!aiActive || answered === 0}
+                      className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-35 disabled:cursor-not-allowed text-white"
+                      style={{ backgroundColor: aiActive && answered > 0 ? accentColor : '#94a3b8' }}
+                    >
+                      {!aiActive ? 'Enable AI in Journal first' : answered === 0 ? 'Answer at least one question' : 'Reflect with AI'}
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="px-4 py-3">
-                {reflection ? (
-                  <p className="text-sm text-slate-600 leading-relaxed">{reflection}</p>
-                ) : error ? (
-                  <div className="space-y-2">
-                    <p className="text-xs text-red-500">{error}</p>
-                    <button onClick={handleReflect} className="text-xs font-medium text-slate-600 underline underline-offset-2">Try again</button>
-                  </div>
-                ) : loading ? (
-                  <div className="flex items-center gap-2 text-xs text-slate-400 py-1">
-                    <svg className="animate-spin w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
+            )}
+
+            {/* Practices */}
+            <div className="mb-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">Practices</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setActivePractice('breathing')}
+                  className="flex-1 flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all text-left"
+                >
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: accentColor + '15' }}>
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="1.8">
+                      <path strokeLinecap="round" d="M12 3c0 0-5 4-5 9a5 5 0 0010 0c0-5-5-9-5-9z"/>
+                      <path strokeLinecap="round" d="M12 12v6M9 15l3 3 3-3" strokeOpacity="0.5"/>
                     </svg>
-                    Reflecting on your {emotionName.toLowerCase()}…
                   </div>
-                ) : (
-                  <button
-                    onClick={handleReflect}
-                    disabled={!aiActive || answered === 0}
-                    className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-35 disabled:cursor-not-allowed text-white"
-                    style={{ backgroundColor: aiActive && answered > 0 ? accentColor : '#94a3b8' }}
-                  >
-                    {!aiActive ? 'Enable AI in Journal first' : answered === 0 ? 'Answer at least one question' : 'Reflect with AI'}
-                  </button>
-                )}
+                  <div>
+                    <p className="text-xs font-semibold text-slate-700">Breathing</p>
+                    <p className="text-[10px] text-slate-400">4 · 4 · 6 · ~1 min</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setActivePractice('grounding')}
+                  className="flex-1 flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all text-left"
+                >
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: accentColor + '15' }}>
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="1.8">
+                      <path strokeLinecap="round" d="M12 22V12M12 12C12 12 7 9 7 5a5 5 0 0110 0c0 4-5 7-5 7z"/>
+                      <path strokeLinecap="round" d="M9 19c-2 0-4-1-4-3M15 19c2 0 4-1 4-3" strokeOpacity="0.4"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-slate-700">Grounding</p>
+                    <p className="text-[10px] text-slate-400">5-4-3-2-1 · ~2 min</p>
+                  </div>
+                </button>
               </div>
             </div>
-          )}
 
-          <button onClick={reset} className="w-full text-xs text-slate-400 hover:text-slate-600 transition-colors py-2">
-            Start over
-          </button>
-        </div>
+            <button onClick={reset} className="w-full text-xs text-slate-400 hover:text-slate-600 transition-colors py-2">
+              Start over
+            </button>
+          </div>
+        )
       )}
     </div>
   );

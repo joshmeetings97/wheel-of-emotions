@@ -36,7 +36,7 @@ function RelatedChip({ id, accentColor, onClick }) {
   return (
     <button
       onClick={() => onClick(id)}
-      className="px-3 py-2 rounded-full text-xs font-medium border transition-all hover:scale-105 active:scale-95 bg-white"
+      className="px-3 py-2.5 rounded-full text-xs font-medium border transition-all hover:scale-105 active:scale-95 bg-white min-h-[36px]"
       style={{ borderColor: accentColor + '80', color: accentColor }}
     >
       {emotion.name}
@@ -122,7 +122,7 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
         </div>
         <button
           onClick={onClose}
-          className="shrink-0 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors flex items-center justify-center text-slate-400 hover:text-slate-600 text-sm"
+          className="shrink-0 w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors flex items-center justify-center text-slate-400 hover:text-slate-600 text-sm"
           aria-label="Close"
         >✕</button>
       </div>
@@ -170,7 +170,7 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
                     Process this emotion
                   </p>
                   <p className="text-[10px] text-slate-400 mt-0.5">
-                    {(() => { const id = isBlend ? data.id : emotion?.id; return (PROCESS_QUESTIONS[id] || PROCESS_QUESTIONS.default).length; })()} questions · optional AI reflection
+                    {(() => { const id = isBlend ? data.id : (outerName ? outerName.toLowerCase() : emotion?.id); return (PROCESS_QUESTIONS[id] || PROCESS_QUESTIONS.default).length; })()} questions · optional AI reflection
                   </p>
                 </div>
                 <svg className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors shrink-0" viewBox="0 0 20 20" fill="currentColor">

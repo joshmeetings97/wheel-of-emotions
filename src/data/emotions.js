@@ -71,6 +71,20 @@ export const CORE_EMOTIONS = [
           'Find something genuinely small if large gratitude feels inaccessible: a warm drink, a functioning body, today\'s light.',
         ],
       },
+      {
+        name: 'Proud',
+        description: 'Pride is the joy of self-recognition — the warm, expansive feeling that arises when you have done something that reflects who you are or who you are becoming. It is distinct from arrogance: healthy pride is specific, grounded in real effort or growth, and often carries a quiet satisfaction rather than a need for external validation.',
+        feelTips: [
+          'Let yourself feel it fully — pride is often the first emotion we deflect or minimise, even when it\'s earned.',
+          'Name what specifically you did that generated this: the decision, the effort, the courage, the growth.',
+          'Pride has a social dimension — share it with someone who will genuinely celebrate with you rather than deflect.',
+        ],
+        remedyTips: [
+          'If pride feels inaccessible, look for small wins: completing something, resisting an old pattern, showing up.',
+          'Write down one thing you handled well in the past week — even mundane competence deserves acknowledgment.',
+          'Distinguish between pride-in-performance and pride-in-character; the latter is more durable and worth cultivating.',
+        ],
+      },
     ],
     colors: {
       intense: '#8FA918',
@@ -186,6 +200,20 @@ export const CORE_EMOTIONS = [
           'If you feel undervalued, first check whether you\'ve clearly communicated your contributions and needs.',
           'Chronic under-valuation in a relationship is important information — it may be telling you about fit, not your worth.',
           'Build your sense of value from within as well: keep a record of what you\'ve made, solved, or improved.',
+        ],
+      },
+      {
+        name: 'Secure',
+        description: 'Security is the felt sense of being genuinely safe — held by a relationship, environment, or inner steadiness that won\'t suddenly disappear. Unlike Comfortable (which is ease without particular awareness) or Assured (which is self-confidence), Secure is specifically the absence of threat: the knowledge that you can be yourself without consequence, that things won\'t collapse, and that you are protected. It is one of the most foundational human needs.',
+        feelTips: [
+          'Name what specifically is providing this security — the person, the pattern of behaviour, the environment. Specificity makes it real rather than fragile.',
+          'Let yourself rest in it without scanning for what might disturb it. Security can become its own vigilance if you can\'t stop checking it\'s still there.',
+          'Notice what you do differently when you feel secure — this reveals the shape of your natural, unguarded self.',
+        ],
+        remedyTips: [
+          'If security feels chronically absent, identify whether it\'s relational, environmental, or inner security that\'s missing — each has different remedies.',
+          'Consistent small experiences of safety build security more reliably than large reassurances. Predictability matters.',
+          'Therapy focused on attachment patterns can be deeply useful when the sense of security was disrupted early in life.',
         ],
       },
     ],
@@ -305,6 +333,20 @@ export const CORE_EMOTIONS = [
           'Find contexts where you naturally feel confident and use them as a reference point for who you can be.',
         ],
       },
+      {
+        name: 'Overwhelmed',
+        description: 'Overwhelm is what happens when the demands on your attention, energy, or capacity feel greater than what you have available. It is fear without a single clear object — a generalised sense that everything is too much, too fast, or too big to manage. Unlike Worried (which has a specific scenario) or Nervous (which is anticipatory), overwhelm collapses the present moment under its own weight. It is one of the most common emotional states in modern life.',
+        feelTips: [
+          'Stop trying to process it all at once — overwhelm\'s central lie is that everything is equally urgent. Almost nothing is.',
+          'Reduce input immediately: silence notifications, close tabs, leave the room. Even five minutes with just one thing begins to lift it.',
+          'Write down everything that is overwhelming you — the act of externalizing it shrinks each item and makes the list finite.',
+        ],
+        remedyTips: [
+          'Triage ruthlessly: sort everything into "today," "this week," and "later." Most things tolerate being moved later.',
+          'Talk to someone — overwhelm thrives in isolation and diminishes remarkably quickly when verbalized.',
+          'Check the basics: overwhelm is severely amplified by sleep deprivation, hunger, and dehydration.',
+        ],
+      },
     ],
     colors: {
       intense: '#1A6E6A',
@@ -420,6 +462,20 @@ export const CORE_EMOTIONS = [
           'If you\'re easily startled in a particular context, examine whether underlying anxiety is raising your baseline alertness.',
           'Familiar environments and predictable routines lower startle sensitivity; chaos and unpredictability raise them.',
           'Grounding practices (feet on the floor, slow breath) quickly reset the system after being startled.',
+        ],
+      },
+      {
+        name: 'Stunned',
+        description: 'Being stunned is a deeper, more lingering form of surprise — the state of being stopped completely in your tracks by something you couldn\'t have anticipated. Unlike Startled (a reflexive physical jolt) or Unsettled (a diffuse unease), Stunned implies that normal processing has temporarily halted. You may feel speechless, blank, or momentarily unable to form a coherent response. It often precedes a significant emotional realisation.',
+        feelTips: [
+          'Give yourself permission to not respond immediately — stunned means your system needs a moment to catch up. Most situations allow more time than they seem to demand.',
+          'Notice whether the stun is beginning to move toward something good (wonder, relief) or something difficult (shock, grief), and let that guide what you do next.',
+          'Sit with the blankness briefly before trying to make sense of what happened.',
+        ],
+        remedyTips: [
+          'Grounding helps bring you back: feel your feet on the floor, breathe slowly, name what you can see around you.',
+          'If you need to respond before you\'ve processed, it\'s entirely reasonable to say "I need a moment" — or even "I\'ll come back to this."',
+          'If the stun persists beyond a few hours, talk to someone about what happened — shock that doesn\'t settle often needs to be spoken.',
         ],
       },
     ],
@@ -539,6 +595,20 @@ export const CORE_EMOTIONS = [
           'Allow time; the sting of disappointment fades more reliably than we expect in the moment.',
         ],
       },
+      {
+        name: 'Heartbroken',
+        description: 'Heartbreak is grief specifically located in connection — the acute pain of losing or being failed by someone or something that mattered deeply. It is more piercing and more personal than general sadness because it is bound up with love and attachment. Heartbreak carries both the loss of the person or relationship and the loss of the future you had imagined alongside them. It is one of the most physically felt of all emotional experiences.',
+        feelTips: [
+          'Let the pain be the size it actually is — heartbreak is not proportionate to the length of time or the logic of the attachment. It is proportionate to how much you cared.',
+          'Give yourself permission to grieve without a timeline. There is no "should be over it by now."',
+          'Find one person who can hold this with you without trying to fix, reframe, or rush it.',
+        ],
+        remedyTips: [
+          'Physical care matters more than usual when heartbroken: sleep, eat, move your body gently. The body carries grief and needs tending.',
+          'Limit contact with reminders of the loss during the acute phase — not as permanent avoidance, but as self-protection while you stabilise.',
+          'Heartbreak heals non-linearly. Setbacks, bad days, and sudden waves of grief are normal and do not mean you are not healing.',
+        ],
+      },
     ],
     colors: {
       intense: '#2E4DA0',
@@ -654,6 +724,20 @@ export const CORE_EMOTIONS = [
           'If you must proceed despite reluctance, identify one small aspect of the task that is genuinely manageable or worthwhile.',
           'If reluctance is chronic in a given area of life, it is worth examining whether the context itself needs to change.',
           'Avoid habitually overriding reluctance — it can numb an important signal over time.',
+        ],
+      },
+      {
+        name: 'Repulsed',
+        description: 'Repulsion is disgust at its most visceral — a strong physical and psychological aversion involving an almost involuntary pulling away. Unlike Displeased (more cognitive) or Offended (more interpersonal), Repulsion is bodily: nausea, recoiling, skin crawling. It is the body\'s sharpest signal that something feels profoundly wrong or deeply incompatible at the level of physical self-protection, and it is worth listening to.',
+        feelTips: [
+          'Trust the signal — repulsion has survival value. Your body is telling you something is deeply incompatible with your values or your safety.',
+          'Create immediate distance from the source. Repulsion does not respond well to sitting with it the way softer emotions do.',
+          'Name what specifically triggered the physical reaction — is it sensory, moral, or interpersonal? The type determines the response.',
+        ],
+        remedyTips: [
+          'Physical cleaning or transition rituals can genuinely help process repulsion — washing hands, changing clothes, or moving to a different space.',
+          'If repulsion is directed at something you can\'t avoid (a work environment, a family situation), addressing the source directly is usually more effective than managing the reaction.',
+          'If repulsion arises without a clear trigger, or if it is self-directed, it is worth exploring with a therapist.',
         ],
       },
     ],
@@ -773,6 +857,20 @@ export const CORE_EMOTIONS = [
           'Examine whether your speed expectations are realistic or whether they\'re importing urgency from another area of your life.',
         ],
       },
+      {
+        name: 'Resentful',
+        description: 'Resentment is anger that has been held, repeated, and left unresolved. It accumulates from grievances that were never addressed — injustices that were swallowed rather than spoken, needs that were consistently unmet, or wrongs that never received acknowledgment. Unlike fresh anger (which has energy and direction), resentment is anger directed backward at something already past, growing heavier the longer it is carried.',
+        feelTips: [
+          'Name the specific grievance at the centre of the resentment — many people carry vague resentment without being able to articulate exactly what they\'re resentful about.',
+          'Resentment usually means something was never said. Identify what you needed to express or be heard on, but wasn\'t.',
+          'Consider whether this resentment is asking for a direct conversation, a decision, a boundary, or for you to genuinely let something go.',
+        ],
+        remedyTips: [
+          'Resentment persists most fiercely when you feel powerless. Identifying one concrete action or thing you can say often reduces it.',
+          'Forgiveness, when and if it comes, is done for you — not for them. It releases you from carrying the weight of something unresolved.',
+          'If resentment feels chronic or pervasive across many relationships, it may be worth exploring with a therapist what pattern it is pointing to.',
+        ],
+      },
     ],
     colors: {
       intense: '#B52A2A',
@@ -888,6 +986,20 @@ export const CORE_EMOTIONS = [
           'If inspiration rarely visits, examine your environment — it thrives in novelty, beauty, and connection, and withers under relentless routine.',
           'When it arrives, protect the time it wants — don\'t schedule it out of existence.',
           'Distinguish between genuine inspiration (a pull) and the performance of enthusiasm — they feel different and require different responses.',
+        ],
+      },
+      {
+        name: 'Excited',
+        description: 'Excitement is anticipation with a full-body charge — a high-energy, positive readiness for something thrilling that is coming. It is more intense and physical than eagerness, and more immediate than hope. Excitement lights up the nervous system: heart quickens, attention narrows, everything feels vivid and close.',
+        feelTips: [
+          'Let excitement be felt fully — don\'t rush past it or immediately convert it to task-lists.',
+          'Share it with someone: vocalising excitement amplifies and anchors the positive emotion.',
+          'Notice where excitement lives in your body — chest, stomach, limbs — and breathe into it.',
+        ],
+        remedyTips: [
+          'If excitement tips into overwhelm, slow your breathing and name three grounding details around you.',
+          'High excitement can impair decision-making; delay major decisions until the charge settles.',
+          'If you rarely feel excited, look at what you\'re anticipating — chronic dread or flatness is worth examining.',
         ],
       },
     ],
@@ -1435,6 +1547,14 @@ const KEYWORD_MAP = {
     'grateful','gratitude','thankful','appreciate','appreciative','blessed','so thankful',
     'counting my blessings','feel fortunate','lucky to have',
   ],
+  proud: [
+    'proud','pride','feel proud','so proud','incredibly proud','bursting with pride',
+    'accomplished','nailed it','crushed it','aced it','killed it','smashed it',
+    'earned this','deserved this','did it','pulled it off','proved myself',
+    'feel good about what i did','pleased with myself','pleased with how i',
+    'achieved','achievement','milestone','huge win','big win','finally did it',
+    'worked hard for this','paid off','effort paid','this means a lot',
+  ],
 
   faithful: [
     'faithful','loyalty','loyal','devoted to','stand by','always there','dependable',
@@ -1554,6 +1674,48 @@ const KEYWORD_MAP = {
   inspired: [
     'inspired','inspiration','had an idea','light bulb moment','suddenly see it',
     'feel motivated to create','feel driven to','something clicked','vision for',
+  ],
+  excited: [
+    'excited','excitement','so excited','pumped','thrilled','can\'t wait','buzzing',
+    'electric feeling','amped up','full of energy about','fired up','stoked',
+    'counting down the days','heart racing with excitement','can barely contain',
+  ],
+
+  secure: [
+    'secure','feel secure','feel genuinely safe','deep sense of safety','truly safe',
+    'don\'t have to worry','nothing to fear here','protected','unconditionally accepted',
+    'safe to be myself','no threat here','completely secure',
+  ],
+
+  overwhelmed: [
+    'overwhelmed','too much','can\'t cope','everything at once','drowning in','swamped',
+    'more than I can handle','falling apart','too many things','can\'t keep up',
+    'spinning out','over capacity','stretched too thin','beyond my limit',
+  ],
+
+  stunned: [
+    'stunned','speechless','can\'t believe it','left me speechless','jaw dropped',
+    'couldn\'t form words','frozen in place','didn\'t know what to say',
+    'completely stopped me','didn\'t see that coming','mind went blank',
+  ],
+
+  heartbroken: [
+    'heartbroken','heart broken','broken heart','heart aches','heart hurts','devastated',
+    'shattered','crushed by loss','my heart','ache in my chest','grieving over',
+    'miss them so much','the love is gone','can\'t stop crying over','lost them',
+  ],
+
+  repulsed: [
+    'repulsed','that repulses me','physically sick','makes me gag','feel sick at','revolting',
+    'disgusting','nauseating','can\'t even look','my stomach turned','want to get away',
+    'visceral disgust','that\'s revolting','grossed out','makes my skin crawl',
+  ],
+
+  resentful: [
+    'resentful','resentment','still bitter','bitter about','haven\'t forgiven',
+    'holding a grudge','built up over time','never dealt with','simmering anger',
+    'keeps coming back to haunt me','can\'t let go of','never apologised','harboring',
+    'years of','festering','old wound','never got closure',
   ],
 };
 

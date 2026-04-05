@@ -44,7 +44,7 @@ function AINotice({ onReviewDetails }) {
         </span>
         <button
           onClick={() => setExpanded(v => !v)}
-          className="shrink-0 flex items-center gap-0.5 font-medium underline underline-offset-2 hover:text-amber-900 transition-colors"
+          className="shrink-0 flex items-center gap-0.5 font-medium underline underline-offset-2 hover:text-amber-900 transition-colors min-h-[44px] px-1 -mx-1"
           aria-expanded={expanded}
         >
           {expanded ? 'Less' : 'Details'}
@@ -295,9 +295,9 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
       {/* Drawer */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-40 transition-transform duration-300 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
-        style={{ maxHeight: '62vh' }}
+        style={{ maxHeight: 'min(62vh, calc(100dvh - 80px))' }}
       >
-        <div className="bg-white rounded-t-3xl border-t border-x border-slate-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: '62vh' }}>
+        <div className="bg-white rounded-t-3xl border-t border-x border-slate-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: 'min(62vh, calc(100dvh - 80px))' }}>
           <div className="flex justify-center pt-3 pb-1 shrink-0">
             <div className="w-9 h-1 rounded-full bg-slate-200" />
           </div>
@@ -517,7 +517,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
                   <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">Session log</h3>
                   <button
                     onClick={() => setEntries([])}
-                    className="text-[10px] text-slate-400 hover:text-slate-600 transition-colors"
+                    className="text-[10px] text-slate-400 hover:text-slate-600 transition-colors py-2 px-1 -my-2 -mr-1"
                   >
                     Clear
                   </button>
@@ -550,6 +550,10 @@ function findSegmentId(emotionName, intensity) {
     'playfulness': 'playful', 'loneliness': 'lonely', 'disappointment': 'disappointed',
     'frustration': 'frustrated', 'impatience': 'impatient', 'hesitation': 'hesitant',
     'withdrawal': 'withdrawn', 'reluctance': 'reluctant',
+    'pride': 'proud', 'accomplishment': 'proud', 'achievement': 'proud',
+    'excitement': 'excited', 'security': 'secure',
+    'overwhelm': 'overwhelmed', 'heartbreak': 'heartbroken',
+    'repulsion': 'repulsed', 'resentment': 'resentful',
   };
   const normalised = nounToAdj[lower];
   if (normalised && EMOTION_NAME_MAP[normalised]) return EMOTION_NAME_MAP[normalised];

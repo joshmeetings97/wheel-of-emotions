@@ -1,4 +1,4 @@
-// Guided processing questions — 4–5 per emotion.
+// Guided processing questions — 4–6 per emotion.
 // Psychological arc: REGULATE → GROUND → NAME → UNDERSTAND → NEED → ACT
 //
 // Question types:
@@ -15,11 +15,16 @@
 // Design principles:
 //   - Breathing (type:'breathe') for activating emotions (fear, anger) — regulated first
 //   - Somatic grounding before meaning-making in heavy emotions
+//   - Somatic moved to position 2 in anger (after breathing, before cognition) — clinically correct sequence
 //   - Scale questions where subjective calibration is clinically meaningful
 //   - Facts before interpretation in anger (CBT sequence)
 //   - No shame amplification in remorse — self-compassion framing throughout
-//   - Sadness paced deliberately slowly; no rushing to action
+//   - Sadness paced deliberately slowly; no rushing to action; self-compassion reframe included
 //   - Positive emotions (joy, trust, optimism) focus on anchoring and extending
+//   - Contempt: validate first, then invite secondary-emotion reflection
+//   - Surprise: always name what the emotion is transitioning into (surprise itself is brief)
+//   - Grateful: counterfactual question included (evidence-based; Emmons et al.)
+//   - Worried: adaptive vs rumination distinction included (productive worry vs circling)
 
 export const PROCESS_QUESTIONS = {
 
@@ -131,8 +136,8 @@ export const PROCESS_QUESTIONS = {
     {
       label: 'ACT',
       type: 'text',
-      q: 'What is one small thing you could do — or one person you could contact — that would help you feel even slightly less alone in this?',
-      placeholder: 'It doesn\'t have to solve the fear. Just one small move toward safety or support…',
+      q: 'What is one small, concrete action you could take today — even something that doesn\'t solve the fear — that would help you feel even slightly less at its mercy?',
+      placeholder: 'It doesn\'t have to fix anything. A tiny move toward agency changes the chemistry of fear…',
     },
   ],
 
@@ -153,14 +158,15 @@ export const PROCESS_QUESTIONS = {
     {
       label: 'UNDERSTAND',
       type: 'text',
-      q: 'Has this changed how you see the situation, or someone in it — even slightly?',
-      placeholder: 'What\'s different in your understanding now compared to before?',
+      q: 'As the initial shock settles, what other feeling is beginning to emerge — curiosity, worry, relief, excitement, dread, or something else?',
+      placeholder: 'Surprise is always brief. What is it becoming for you?',
+      instruction: 'Surprise quickly gives way to another emotion. Naming what\'s emerging helps you work with what\'s actually happening.',
     },
     {
       label: 'UNDERSTAND',
       type: 'text',
-      q: 'What does this unexpected development ask of you — a response, a decision, or simply time to absorb it?',
-      placeholder: 'Surprise often arrives with an implicit question: now what?',
+      q: 'Has this changed how you see the situation, or someone in it — even slightly?',
+      placeholder: 'What\'s different in your understanding now compared to before?',
       optional: true,
     },
     {
@@ -199,6 +205,13 @@ export const PROCESS_QUESTIONS = {
       placeholder: 'There\'s no wrong answer. What does this version of you actually need?',
     },
     {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'If a close friend came to you feeling exactly this — what would you say to them? What does that tell you about what you could offer yourself?',
+      placeholder: 'We are almost always kinder to others in pain than we are to ourselves…',
+      optional: true,
+    },
+    {
       label: 'ACT',
       type: 'text',
       q: 'Is there something unsaid — to yourself or to someone else — that wants to come out?',
@@ -215,18 +228,17 @@ export const PROCESS_QUESTIONS = {
       placeholder: 'Vague disgust is harder to act on than named disgust…',
     },
     {
-      label: 'UNDERSTAND',
+      label: 'GROUND',
       type: 'text',
-      q: 'What value, standard, or belief does this violate — what do you believe should be true that isn\'t?',
-      placeholder: 'Disgust is always a signal that something crossed a line. What is that line?',
+      q: 'Where do you feel this in your body — is there nausea, a pulling back, tension in the face or throat?',
+      placeholder: 'Disgust has strong physical signals. What is your body doing right now?',
+      somatic: true,
     },
     {
       label: 'UNDERSTAND',
-      type: 'scale',
-      q: 'How strongly does this feel like a real value violation versus a personal preference?',
-      scaleMin: 'More of a preference',
-      scaleMax: 'Deep value or principle',
-      optional: true,
+      type: 'text',
+      q: 'What value, standard, or belief does this violate — what do you believe should be true that isn\'t? And is this directed outward, or does any of it include how you feel about yourself?',
+      placeholder: 'Disgust is a signal that something crossed a line. What is that line — and what, or who, crossed it?',
     },
     {
       label: 'NEED',
@@ -251,6 +263,13 @@ export const PROCESS_QUESTIONS = {
       cycles: 3,
     },
     {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where is this anger sitting in your body right now?',
+      placeholder: 'Jaw, fists, chest, face, stomach — where is the heat or tension?',
+      somatic: true,
+    },
+    {
       label: 'NAME',
       type: 'text',
       q: 'Describe what happened — just the facts of the situation, without interpretation yet.',
@@ -271,11 +290,11 @@ export const PROCESS_QUESTIONS = {
       scaleMax: 'Completely warranted',
     },
     {
-      label: 'GROUND',
+      label: 'UNDERSTAND',
       type: 'text',
-      q: 'Where is this anger sitting in your body right now?',
-      placeholder: 'Jaw, fists, chest, face, stomach — where is the heat?',
-      somatic: true,
+      q: 'Sometimes anger sits on top of something softer — hurt, fear, grief, or disappointment. If you look underneath it right now, is there anything else present?',
+      placeholder: 'You don\'t have to find something. But it\'s worth a look…',
+      optional: true,
     },
     {
       label: 'ACT',
@@ -302,8 +321,8 @@ export const PROCESS_QUESTIONS = {
     {
       label: 'UNDERSTAND',
       type: 'text',
-      q: 'What feels most uncertain about this — what part don\'t you have figured out yet?',
-      placeholder: 'Naming the specific uncertainty tends to make it smaller…',
+      q: 'What feels most uncertain about this — and why does this particular outcome matter so much to you?',
+      placeholder: 'Naming the uncertainty and the stakes together usually makes both more manageable…',
     },
     {
       label: 'UNDERSTAND',
@@ -315,7 +334,7 @@ export const PROCESS_QUESTIONS = {
     {
       label: 'ACT',
       type: 'text',
-      q: 'What is one concrete thing you could do right now to feel more ready or more at ease?',
+      q: 'What is one concrete thing you could do right now to feel either more prepared, or more at ease with the uncertainty?',
       placeholder: 'One action, one preparation, one conversation — not everything, just one thing…',
     },
   ],
@@ -328,6 +347,7 @@ export const PROCESS_QUESTIONS = {
       type: 'text',
       q: 'Who or what is this love directed toward?',
       placeholder: 'A person, a place, a pursuit, a community, a version of yourself…',
+      instruction: 'Love takes many forms — romantic, familial, platonic, or for something you\'ve built or believe in. It can also be complicated, painful, or mixed. Bring whatever is present.',
     },
     {
       label: 'GROUND',
@@ -404,8 +424,21 @@ export const PROCESS_QUESTIONS = {
     {
       label: 'UNDERSTAND',
       type: 'text',
-      q: 'How has it shifted your perspective — even slightly? What looks different now compared to before?',
-      placeholder: 'Awe reliably changes scale. What has it made smaller, or bigger?',
+      q: 'What specifically triggered the sense of vastness — why this thing, at this moment? What in you recognised or responded to it?',
+      placeholder: 'Awe is selective. Something in you met something larger. What was it?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'How has it shifted your sense of scale — what looks smaller now, or bigger?',
+      placeholder: 'Awe reliably changes perspective. What has it shrunk, and what has it expanded?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Did this leave you feeling connected to something larger — and if so, what would you call that?',
+      placeholder: 'Other people, nature, time, something spiritual, the human project… what does "larger" mean for you here?',
+      optional: true,
     },
     {
       label: 'ACT',
@@ -421,6 +454,13 @@ export const PROCESS_QUESTIONS = {
       type: 'text',
       q: 'What fell short — describe the gap between what you expected and what actually happened.',
       placeholder: 'Be specific rather than general. The more concrete, the more workable…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where are you feeling this right now — is there a tightening, a pulling back, a heaviness anywhere?',
+      placeholder: 'Disapproval often has a physical quality. Where is it in your body?',
+      somatic: true,
     },
     {
       label: 'UNDERSTAND',
@@ -449,6 +489,13 @@ export const PROCESS_QUESTIONS = {
       q: 'What happened — describe your role in it as honestly as you can, without overstating or understating.',
       placeholder: 'No more and no less than your honest account. This is just for you…',
       instruction: 'Remorse is different from shame. Shame says "I am bad." Remorse says "I did something I wish I hadn\'t." This process is about the action, not your worth as a person.',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What was going on for you at the time — what were you dealing with, feeling, or believing that contributed to what happened?',
+      placeholder: 'Context doesn\'t erase responsibility — but understanding it clearly is part of genuine repair…',
+      instruction: 'This is not about making excuses. It\'s about understanding yourself well enough to do things differently.',
     },
     {
       label: 'UNDERSTAND',
@@ -482,14 +529,15 @@ export const PROCESS_QUESTIONS = {
     {
       label: 'NAME',
       type: 'text',
-      q: 'What specifically has fallen so far short in your view — name it precisely, not globally.',
-      placeholder: 'Contempt that\'s diffuse and general is harder to examine than contempt with a specific object…',
+      q: 'Who or what is this directed toward, and what specifically have they done — or failed to do — that brought you here?',
+      placeholder: 'Contempt has a specific target. Name it and what they did…',
     },
     {
       label: 'UNDERSTAND',
       type: 'text',
       q: 'Underneath this — is there hurt, disappointment, or fear that the contempt might be covering over?',
       placeholder: 'Contempt is often a secondary emotion. What might be beneath it?',
+      instruction: 'Contempt often develops as a kind of armor — a way to feel protected from something more painful. Checking what\'s beneath it doesn\'t mean the contempt is wrong.',
     },
     {
       label: 'UNDERSTAND',
@@ -534,6 +582,13 @@ export const PROCESS_QUESTIONS = {
       placeholder: 'Both answers are valid. This is just about accuracy, not judgment…',
     },
     {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'If you act from this energy right now — what do you realistically expect to happen? Is that the outcome you actually want?',
+      placeholder: 'Checking the likely outcome before acting is one of the most useful things you can do with high-drive states…',
+      optional: true,
+    },
+    {
       label: 'ACT',
       type: 'text',
       q: 'Where can this energy go right now in a way you\'d actually be proud of?',
@@ -547,6 +602,13 @@ export const PROCESS_QUESTIONS = {
       type: 'text',
       q: 'What specifically are you hopeful about — name it as concretely as possible.',
       placeholder: 'Vague hope is fragile. Named hope has traction. What exactly is the thing you believe in?',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where do you feel this optimism in your body — is there a lightness, a forward energy, an openness somewhere?',
+      placeholder: 'Optimism has a physical texture. Where is yours right now?',
+      somatic: true,
     },
     {
       label: 'UNDERSTAND',
@@ -564,8 +626,8 @@ export const PROCESS_QUESTIONS = {
     {
       label: 'UNDERSTAND',
       type: 'text',
-      q: 'What are you prepared to do if this hope doesn\'t pan out — what\'s your honest contingency?',
-      placeholder: 'Genuine optimism can hold a backup plan. Does yours?',
+      q: 'What would help you hold onto this even when doubt or setbacks arrive?',
+      placeholder: 'Hope doesn\'t have to be naive to be real. What would keep yours grounded?',
       optional: true,
     },
     {
@@ -597,6 +659,12 @@ export const PROCESS_QUESTIONS = {
       placeholder: 'Emotions are signals. What is this one pointing at?',
     },
     {
+      label: 'NEED',
+      type: 'text',
+      q: 'What do you need from yourself right now — to sit with this, to express it, to take action, or to let it go?',
+      placeholder: 'There\'s no wrong answer. Just what feels true right now…',
+    },
+    {
       label: 'ACT',
       type: 'text',
       q: 'What does this feeling need from you right now?',
@@ -610,6 +678,43 @@ export const PROCESS_QUESTIONS = {
   // Keys are outer emotion names lowercased.
   // EmotionDetail passes outerName.toLowerCase() as emotionId when available.
 
+  proud: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What specifically are you proud of — the decision, the effort, the growth, or the result?',
+      placeholder: 'Be as concrete as you can. The more specific, the more this lands…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where do you feel this in your body right now?',
+      placeholder: 'Warmth in the chest, standing taller, a kind of expansion or lightness…',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What does this say about you — what quality, value, or version of yourself does this reflect?',
+      placeholder: 'Pride is often a signal of who you are becoming. What is it pointing at?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How fully are you letting yourself feel this — without deflecting, minimising, or immediately moving on?',
+      scaleMin: 'Brushing past it',
+      scaleMax: 'Sitting with it fully',
+      instruction: 'Pride is one of the emotions we most quickly deflect — "it\'s not a big deal," "others have done more." Notice if that\'s happening.',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Is there someone you want to share this with — and is there a next step this pride is pointing you toward?',
+      placeholder: 'Pride shared tends to deepen. And earned pride usually points forward…',
+      optional: true,
+    },
+  ],
+
   grateful: [
     {
       label: 'NAME',
@@ -622,6 +727,12 @@ export const PROCESS_QUESTIONS = {
       type: 'text',
       q: 'What did that person or thing provide you — what specifically made it matter?',
       placeholder: 'Gratitude deepens when you understand exactly what was given…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What would your life, day, or sense of self look like without this person or thing?',
+      placeholder: 'Gratitude deepens in the space of imagining the absence. What would be missing?',
     },
     {
       label: 'UNDERSTAND',
@@ -653,6 +764,13 @@ export const PROCESS_QUESTIONS = {
     },
     {
       label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this worry helping you prepare for something, or is it circling the same ground without moving forward?',
+      placeholder: 'Productive worry solves or prepares. Rumination just repeats. Which is this right now?',
+      optional: true,
+    },
+    {
+      label: 'UNDERSTAND',
       type: 'scale',
       q: 'How much of what you\'re worrying about is actually within your influence?',
       scaleMin: 'Almost nothing I can do',
@@ -663,7 +781,6 @@ export const PROCESS_QUESTIONS = {
       type: 'text',
       q: 'What is true and stable right now — what can you name as certain in this moment?',
       placeholder: 'Worry lives in the future. What is actually present and okay right now?',
-      somatic: true,
     },
     {
       label: 'ACT',
@@ -699,6 +816,7 @@ export const PROCESS_QUESTIONS = {
       q: 'How strongly does the thought "no one would want to hear from me" feel true right now?',
       scaleMin: 'Not really true',
       scaleMax: 'Feels completely true',
+      instruction: 'Loneliness tends to generate a specific distorted belief — that reaching out would be unwelcome. Let\'s check how strongly that story is running.',
     },
     {
       label: 'ACT',
@@ -718,8 +836,8 @@ export const PROCESS_QUESTIONS = {
     {
       label: 'UNDERSTAND',
       type: 'text',
-      q: 'What is doing the blocking — a person, a circumstance, your own capacity, or something unclear?',
-      placeholder: 'Naming the obstacle precisely usually makes it more workable…',
+      q: 'What is doing the blocking — a person, a circumstance, your own capacity, or something unclear? Is this frustration directed outward, or partly at yourself?',
+      placeholder: 'Naming the obstacle and its direction usually makes it more workable…',
     },
     {
       label: 'UNDERSTAND',
@@ -736,10 +854,16 @@ export const PROCESS_QUESTIONS = {
       somatic: true,
     },
     {
+      label: 'NEED',
+      type: 'text',
+      q: 'What do you actually need here — to push harder, to be heard, to find a different path, or to let something go?',
+      placeholder: 'Frustration is often signaling an unmet need. What is yours?',
+    },
+    {
       label: 'ACT',
       type: 'text',
       q: 'Is the best next move to try harder, try differently, or step back entirely — what does your honest instinct say?',
-      placeholder: 'Frustration sometimes calls for persistence, and sometimes calls for a different approach entirely…',
+      placeholder: 'Frustration sometimes calls for persistence, and sometimes calls for a completely different approach…',
     },
   ],
 
@@ -751,6 +875,13 @@ export const PROCESS_QUESTIONS = {
       placeholder: 'Inspiration has a specific trigger. What was it?',
     },
     {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where do you feel this in your body right now — what does inspiration physically feel like for you?',
+      placeholder: 'Aliveness, clarity, forward energy, a kind of expansion — where is it?',
+      somatic: true,
+    },
+    {
       label: 'UNDERSTAND',
       type: 'text',
       q: 'What does this feel like it\'s calling you to do, make, or pursue?',
@@ -758,10 +889,10 @@ export const PROCESS_QUESTIONS = {
     },
     {
       label: 'UNDERSTAND',
-      type: 'scale',
-      q: 'How urgent does this feel — is it asking for action now, or is it a slower, longer pull?',
-      scaleMin: 'A slow, gentle pull',
-      scaleMax: 'I need to act on this immediately',
+      type: 'text',
+      q: 'What does the fact that THIS sparked you tell you — about what matters to you, or who you\'re becoming?',
+      placeholder: 'Inspiration is rarely random. What does this particular spark reveal about you?',
+      optional: true,
     },
     {
       label: 'ACT',
@@ -775,6 +906,242 @@ export const PROCESS_QUESTIONS = {
       q: 'What would get in the way of acting on this — what usually derails you when inspiration arrives?',
       placeholder: 'Naming the obstacle in advance is one of the most reliable ways to get past it…',
       optional: true,
+    },
+  ],
+
+  excited: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you excited about? Describe what\'s coming and why it matters to you.',
+      placeholder: 'The more specifically you can name it, the more real it feels…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where do you feel the excitement in your body right now?',
+      placeholder: 'Chest, stomach, arms, face — excitement has a physical charge…',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What does this excitement tell you about what you value or want more of in your life?',
+      placeholder: 'Excitement is a signal pointing toward something that matters…',
+    },
+    {
+      label: 'NEED',
+      type: 'text',
+      q: 'Is there anything that could dampen this or that you\'re nervous about? How are you holding both?',
+      placeholder: 'It\'s okay for anticipation and nerves to coexist…',
+      optional: true,
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What\'s one thing you can do right now to prepare, savour, or share this excitement?',
+      placeholder: 'Excitement benefits from being expressed or channelled…',
+    },
+  ],
+
+  secure: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is making you feel secure right now — a person, place, situation, or something inside you?',
+      placeholder: 'Being specific helps you understand what security is built on for you…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this feeling of security new, or have you been working toward it? What made it possible?',
+      placeholder: 'Security often has roots worth understanding…',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Take a moment to settle into this feeling. Let your body relax into the safety that\'s here.',
+    },
+    {
+      label: 'NAME',
+      type: 'scale',
+      q: 'How often do you feel this secure?',
+      scaleMin: 'Almost never',
+      scaleMax: 'Most of the time',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What does this security make possible for you that isn\'t possible when you feel unsafe?',
+      placeholder: 'Security creates conditions for other things — what opens up for you here?',
+    },
+  ],
+
+  overwhelmed: [
+    {
+      label: 'REGULATE',
+      type: 'breathe',
+      instruction: 'When overwhelmed, the first priority is helping your nervous system downshift. Breathe slowly before we continue.',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'What does being overwhelmed feel like in your body right now?',
+      placeholder: 'Chest tight, shoulders up, hard to breathe — notice what\'s happening physically…',
+      somatic: true,
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'List the things that are weighing on you. Don\'t filter — just get them out.',
+      placeholder: 'Overwhelm often has many sources. Naming them separates them from each other…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'Of everything on your list, how much is genuinely urgent today?',
+      scaleMin: 'Very little',
+      scaleMax: 'Almost all of it',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the single most important thing — the one thing that, if done, would ease the pressure most?',
+      placeholder: 'Not everything needs to happen today. What is the one true priority right now?',
+    },
+  ],
+
+  stunned: [
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Being stunned means your system got more than it could process at once. Breathing helps bring you back to the present.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What happened that stunned you? Write it out as plainly as you can.',
+      placeholder: 'You don\'t need to make sense of it yet — just describe what occurred…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'What does being stunned feel like right now — in your mind and your body?',
+      placeholder: 'Blank, frozen, can\'t form words — what is the felt experience?',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What was your expectation before this happened? How far was the gap between that and reality?',
+      placeholder: 'Being stunned is often a measure of the distance between what we anticipated and what occurred…',
+    },
+    {
+      label: 'NEED',
+      type: 'text',
+      q: 'What do you need most right now — space, support, information, or something else?',
+      placeholder: 'Being stunned often makes it hard to know what you need. That\'s okay — even a guess helps…',
+    },
+  ],
+
+  heartbroken: [
+    {
+      label: 'REGULATE',
+      type: 'breathe',
+      instruction: 'Heartbreak is one of the most physically felt emotions. Start with your breath — it is the quietest anchor when everything else hurts.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is the loss at the heart of this — what or who are you grieving?',
+      placeholder: 'Heartbreak is grief in the context of love or deep connection. Name what\'s been lost…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where does heartbreak live in your body right now?',
+      placeholder: 'Chest, throat, stomach — heartbreak is physical. Describe what you\'re carrying…',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What did this person or thing mean to you? What does their loss say about what you value?',
+      placeholder: 'The depth of grief is often proportional to the depth of meaning. What did this represent for you?',
+    },
+    {
+      label: 'NEED',
+      type: 'text',
+      q: 'What do you most need right now — to be held, to be alone, to be heard, or something else?',
+      placeholder: 'Give yourself permission to know what you need, even if you can\'t yet access it…',
+    },
+  ],
+
+  repulsed: [
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'What is your body doing right now — what physical sensations came with this feeling?',
+      placeholder: 'Repulsion is a visceral signal. Stomach, throat, skin — what does your body want to do?',
+      somatic: true,
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is triggering the repulsion — a thing, a behaviour, a situation, or something about a person?',
+      placeholder: 'Try to name it precisely. Repulsion often points to a values violation…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What does your reaction tell you about what you find unacceptable or deeply contrary to your values?',
+      placeholder: 'Disgust is the body\'s way of enforcing a boundary. What line is being crossed here?',
+    },
+    {
+      label: 'NEED',
+      type: 'scale',
+      q: 'What does this call for — creating distance or addressing it directly?',
+      scaleMin: 'Create distance',
+      scaleMax: 'Address it directly',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the most caring action you can take for yourself in response to this?',
+      placeholder: 'Whether it\'s removing yourself, setting a boundary, or speaking up — what does self-protection look like here?',
+    },
+  ],
+
+  resentful: [
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Resentment often comes with tension held in the body. Let the breath help loosen what\'s been held.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is the specific grievance at the centre of this resentment? Try to name it in one clear sentence.',
+      placeholder: 'Resentment often stays vague. The more precisely you can name it, the more workable it becomes…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'When did this resentment begin, and what has kept it alive? What hasn\'t been said or resolved?',
+      placeholder: 'Resentment is accumulated unprocessed anger. What was never expressed or acknowledged?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How much does holding onto this resentment cost you?',
+      scaleMin: 'Barely affects me',
+      scaleMax: 'Weighs on me daily',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What would need to happen — internally or externally — for this to begin to ease? What is one step toward that?',
+      placeholder: 'Letting go of resentment doesn\'t mean condoning what happened. It means freeing yourself from carrying it…',
     },
   ],
 };
