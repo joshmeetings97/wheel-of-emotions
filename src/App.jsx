@@ -43,6 +43,20 @@ function HowToUse({ onClose }) {
           <button onClick={onClose} className="w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 flex items-center justify-center text-slate-400 hover:text-slate-600 text-sm transition-colors">✕</button>
         </div>
 
+        {/* Biblical mode callout */}
+        <div className="mb-4 rounded-2xl bg-amber-50 border border-amber-200 px-4 py-3 flex gap-3 items-start">
+          <div className="shrink-0 mt-0.5 w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-amber-700">
+              <rect x="10.5" y="2" width="3" height="20" rx="1"/>
+              <rect x="4" y="8.5" width="16" height="3" rx="1"/>
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-amber-800 mb-0.5">Biblical mode available</p>
+            <p className="text-xs text-amber-700 leading-relaxed">Tap the cross icon in the header to replace all content with Scripture-based descriptions, NLT verses, and faith-rooted reflection questions.</p>
+          </div>
+        </div>
+
         <div className="space-y-4 text-sm text-slate-600">
           <div>
             <h4 className="font-semibold text-slate-700 mb-1.5">The four rings</h4>
@@ -82,12 +96,6 @@ function HowToUse({ onClose }) {
             </p>
           </div>
 
-          <div>
-            <h4 className="font-semibold text-slate-700 mb-1.5">Biblical mode</h4>
-            <p className="text-xs leading-relaxed">
-              Tap the <strong>cross icon</strong> in the header to switch to Biblical mode. All descriptions, tips, and guided reflection questions are replaced with content grounded in Scripture (NLT). AI reflections also shift to a pastoral frame with relevant verses. The setting is saved across sessions.
-            </p>
-          </div>
         </div>
 
         <button
