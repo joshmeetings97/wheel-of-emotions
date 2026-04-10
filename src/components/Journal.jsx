@@ -295,9 +295,9 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
       {/* Drawer */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-40 transition-transform duration-300 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
-        style={{ maxHeight: 'min(62vh, calc(100dvh - 80px))' }}
+        style={{ maxHeight: 'min(62svh, calc(100dvh - 80px))' }}
       >
-        <div className="bg-white rounded-t-3xl border-t border-x border-slate-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: 'min(62vh, calc(100dvh - 80px))' }}>
+        <div className="bg-white rounded-t-3xl border-t border-x border-slate-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: 'min(62svh, calc(100dvh - 80px))' }}>
           <div className="flex justify-center pt-3 pb-1 shrink-0">
             <div className="w-9 h-1 rounded-full bg-slate-200" />
           </div>

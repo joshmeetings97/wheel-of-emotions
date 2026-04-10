@@ -17,7 +17,7 @@ function resolveSegment(segmentId) {
     const emotion = CORE_EMOTIONS.find(e => e.id === outerMatch[1]);
     if (!emotion) return null;
     const idx = parseInt(outerMatch[2], 10);
-    const outerName = emotion.outer?.[idx];
+    const outerName = emotion.outer?.[idx]?.name;
     const intensity = emotion.intensities.find(i => i.level === 'mild') || emotion.intensities[2];
     return { type: 'emotion', emotion, intensity, level: 'mild', outerName };
   }
@@ -280,7 +280,7 @@ export default function App() {
             rounded-t-3xl lg:rounded-none
             border-t border-x lg:border-t-0 lg:border-x-0 lg:border-l
             border-slate-200 shadow-2xl lg:shadow-none
-            max-h-[80vh] lg:max-h-none lg:h-full"
+            max-h-[85svh] lg:max-h-none lg:h-full"
           >
             {/* Drag handle — mobile only */}
             <div className="flex justify-center pt-3 pb-1 shrink-0 lg:hidden">
@@ -288,7 +288,7 @@ export default function App() {
             </div>
 
             {panelOpen && selection && (
-              <div className="flex-1 overflow-y-auto p-6" style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}>
+              <div className="flex-1 min-h-0 overflow-y-auto p-6" style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}>
                 <EmotionDetail
                   selection={selection}
                   onClose={handleDetailClose}
