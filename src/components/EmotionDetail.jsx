@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { CORE_EMOTIONS, BLEND_EMOTIONS } from '../data/emotions';
 import { PROCESS_QUESTIONS } from '../data/processQuestions';
+import { CHRISTIAN_PROCESS_QUESTIONS } from '../data/processQuestions_christian';
+import { CHRISTIAN_CONTENT } from '../data/christianContent';
 import ProcessEmotion from './ProcessEmotion';
 
 const INTENSITY_BADGE = {
@@ -15,15 +17,29 @@ function Section({ title, items, icon }) {
       <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2 flex items-center gap-1.5">
         <span className="text-base leading-none">{icon}</span>{title}
       </h3>
-      <ul className="space-y-2">
-        {items.map((tip, i) => (
-          <li key={i} className="flex gap-2.5 text-sm text-slate-600 leading-relaxed">
-            <span className="mt-0.5 shrink-0 w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-400">
-              {i + 1}
-            </span>
-            <span>{tip}</span>
-          </li>
-        ))}
+      <ul className="space-y-3">
+        {items.map((tip, i) => {
+          const isObj = tip && typeof tip === 'object';
+          return (
+            <li key={i} className="flex gap-2.5 text-sm text-slate-600 leading-relaxed">
+              <span className="mt-0.5 shrink-0 w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-400">
+                {i + 1}
+              </span>
+              <span className="flex-1">
+                {isObj ? (
+                  <>
+                    <span>{tip.text}</span>
+                    {tip.scripture && (
+                      <span className="block mt-1.5 px-2.5 py-1.5 rounded-lg bg-amber-50 border border-amber-100 text-[11px] italic text-amber-800 leading-snug">
+                        {tip.scripture}
+                      </span>
+                    )}
+                  </>
+                ) : tip}
+              </span>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -44,7 +60,7 @@ function RelatedChip({ id, accentColor, onClick }) {
   );
 }
 
-export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
+export default function EmotionDetail({ selection, onClose, onRelatedClick, christianMode = false }) {
   const [processing, setProcessing] = useState(false);
 
   // Reset processing view whenever the selected emotion changes
@@ -61,10 +77,22 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
     : undefined;
 
   const name        = isBlend ? data.name        : outerName || intensity?.name || emotion?.name;
-  const description = isBlend ? data.description : outerData?.description || intensity?.description;
-  const feelTips    = isBlend ? data.feelTips    : outerData?.feelTips    || intensity?.feelTips;
-  const remedyTips  = isBlend ? data.remedyTips  : outerData?.remedyTips  || intensity?.remedyTips;
+  let   description = isBlend ? data.description : outerData?.description || intensity?.description;
+  let   feelTips    = isBlend ? data.feelTips    : outerData?.feelTips    || intensity?.feelTips;
+  let   remedyTips  = isBlend ? data.remedyTips  : outerData?.remedyTips  || intensity?.remedyTips;
   const related     = isBlend ? data.related     : emotion?.related;
+
+  // Apply Christian content overrides when mode is active
+  if (christianMode) {
+    const outerKey  = outerName?.toLowerCase();
+    const coreKey   = isBlend ? data.id : emotion?.id;
+    const cc = (outerKey && CHRISTIAN_CONTENT[outerKey]) || CHRISTIAN_CONTENT[coreKey];
+    if (cc) {
+      if (cc.description) description = cc.description;
+      if (cc.feelTips)    feelTips    = cc.feelTips;
+      if (cc.remedyTips)  remedyTips  = cc.remedyTips;
+    }
+  }
   const accentColor = isBlend
     ? data.color
     : emotion?.ringColors?.[level === 'intense' ? 0 : level === 'moderate' ? 1 : 2] || '#4f46e5';
@@ -139,6 +167,7 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
             emotionName={name}
             accentColor={accentColor}
             onBack={() => setProcessing(false)}
+            christianMode={christianMode}
           />
         ) : (
           <div className="space-y-0.5">
@@ -170,7 +199,13 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick }) {
                     Process this emotion
                   </p>
                   <p className="text-[10px] text-slate-400 mt-0.5">
-                    {(() => { const id = isBlend ? data.id : (outerName ? outerName.toLowerCase() : emotion?.id); return (PROCESS_QUESTIONS[id] || PROCESS_QUESTIONS.default).length; })()} questions · optional AI reflection
+                    {(() => {
+                    const id = isBlend ? data.id : (outerName ? outerName.toLowerCase() : emotion?.id);
+                    const qs = christianMode
+                      ? (CHRISTIAN_PROCESS_QUESTIONS[id] || CHRISTIAN_PROCESS_QUESTIONS.default)
+                      : (PROCESS_QUESTIONS[id] || PROCESS_QUESTIONS.default);
+                    return qs.length;
+                  })()} questions · optional AI reflection
                   </p>
                 </div>
                 <svg className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors shrink-0" viewBox="0 0 20 20" fill="currentColor">

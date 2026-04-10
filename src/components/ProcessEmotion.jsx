@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PROCESS_QUESTIONS } from '../data/processQuestions';
+import { CHRISTIAN_PROCESS_QUESTIONS } from '../data/processQuestions_christian';
 import { reflectWithClaude } from '../api/claude';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import BreathingExercise from './BreathingExercise';
@@ -142,12 +143,14 @@ function SettingsPanel({ settings, onChange, onClose }) {
   );
 }
 
-export default function ProcessEmotion({ emotionId, emotionName, accentColor, onBack }) {
+export default function ProcessEmotion({ emotionId, emotionName, accentColor, onBack, christianMode = false }) {
   const [settings, setSettings] = useLocalStorage('emowheel-process-settings', DEFAULT_SETTINGS);
   const [showSettings, setShowSettings] = useState(false);
 
   // Build filtered question list from settings
-  const rawQuestions = PROCESS_QUESTIONS[emotionId] || PROCESS_QUESTIONS.default;
+  const rawQuestions = christianMode
+    ? (CHRISTIAN_PROCESS_QUESTIONS[emotionId] || CHRISTIAN_PROCESS_QUESTIONS.default)
+    : (PROCESS_QUESTIONS[emotionId] || PROCESS_QUESTIONS.default);
   const questions = rawQuestions.filter(q => {
     if (q.type === 'breathe' && !settings.breathing) return false;
     if (q.somatic && !settings.somatic) return false;
@@ -217,7 +220,7 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
     try {
       const pairs = questions.map((q, i) => ({ q: q.q, a: answers[i] || '' }));
       const sanitized = pairs.map(p => ({ ...p, a: scrubPII(p.a) }));
-      const result = await reflectWithClaude(emotionName, sanitized);
+      const result = await reflectWithClaude(emotionName, sanitized, christianMode);
       setReflection(result);
       setCheckedActions(new Array(result.actions?.length || 0).fill(false));
       setExpandedActions(new Array(result.actions?.length || 0).fill(false));

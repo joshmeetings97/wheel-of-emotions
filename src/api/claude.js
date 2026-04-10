@@ -12,7 +12,7 @@ function getHeaders(apiKey) {
   };
 }
 
-export async function analyzeWithClaude(journalEntry) {
+export async function analyzeWithClaude(journalEntry, christianMode = false) {
   const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
 
   if (!apiKey || apiKey === 'your_key_here') {
@@ -63,7 +63,9 @@ Puzzled, Confused, Unsettled, Startled, Stunned,
 Gloomy, Lonely, Forlorn, Disappointed, Heartbroken,
 Displeased, Offended, Withdrawn, Reluctant, Repulsed,
 Cross, Peeved, Frustrated, Impatient, Resentful,
-Eager, Hopeful, Curious, Inspired, Excited`,
+Eager, Hopeful, Curious, Inspired, Excited${christianMode ? `
+
+CHRISTIAN MODE: The user is journalling from a faith perspective. In the insight field, include one relevant NLT (New Living Translation) scripture reference that speaks to the detected emotion — format it as: "…[insight text]. '[Book Chapter:Verse] — [brief NLT quote]'"` : ''}`,
       messages: [{ role: 'user', content: journalEntry }],
     }),
   });
@@ -100,7 +102,7 @@ Eager, Hopeful, Curious, Inspired, Excited`,
 // Called from ProcessEmotion — takes Q&A pairs and returns structured reflection + actions.
 // `pairs` is an array of { q: string, a: string } (answers already scrubbed of PII).
 // Returns { reflection: string, actions: [{timeframe, action}], followUp: string }
-export async function reflectWithClaude(emotionName, pairs) {
+export async function reflectWithClaude(emotionName, pairs, christianMode = false) {
   const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
   if (!apiKey || apiKey === 'your_key_here') throw new Error('NO_API_KEY');
 
@@ -133,7 +135,14 @@ Rules for actions:
 - Each must be concrete and doable (a real action, not a vague intention)
 - "right now" must be completable in under 5 minutes
 - Write directly to the person using "you"
-- If they mentioned a specific person, goal, or situation, reference it`,
+- If they mentioned a specific person, goal, or situation, reference it${christianMode ? `
+
+CHRISTIAN MODE: Frame everything through a biblical lens using NLT (New Living Translation) scripture:
+- Open the reflection with or weave in one specific NLT scripture that speaks directly to this emotion and what they shared
+- Ground at least one suggested action in scriptural wisdom — reference a specific verse
+- The followUp question should invite faith-based reflection (e.g. "What might God be inviting you into through this?")
+- Use language like "God may be inviting you…", "Scripture speaks to this when…", "This is something worth bringing to prayer…"
+- Be warm, pastoral, and personal — not preachy or lecturing` : ''}`,
       messages: [{ role: 'user', content: qa }],
     }),
   });

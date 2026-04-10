@@ -168,7 +168,7 @@ function ConsentModal({ onAccept, onDecline }) {
   );
 }
 
-export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotionOpen, detailOpen }) {
+export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotionOpen, detailOpen, christianMode = false }) {
   const [text, setText]               = useState('');
   const [loading, setLoading]         = useState(false);
   const [result, setResult]           = useState(null);
@@ -222,7 +222,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
       if (aiActive) {
         try {
           const sanitized = scrubPII(trimmed);
-          detected = await analyzeWithClaude(sanitized);
+          detected = await analyzeWithClaude(sanitized, christianMode);
         } catch {
           detected = detectEmotion(trimmed);
           fellBack = true;

@@ -3,6 +3,7 @@ import EmotionWheel from './components/EmotionWheel';
 import EmotionDetail from './components/EmotionDetail';
 import Journal from './components/Journal';
 import { CORE_EMOTIONS, BLEND_EMOTIONS } from './data/emotions';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 // Convert a segment ID (e.g. "joy-moderate", "joy-outer-0", "love") into a selection object
 function resolveSegment(segmentId) {
@@ -49,21 +50,21 @@ function HowToUse({ onClose }) {
               <li className="flex gap-2"><span className="shrink-0 font-bold text-slate-400">①</span><span><strong>Inner ring</strong> — the most intense form of each emotion (e.g. Ecstasy, Terror, Rage)</span></li>
               <li className="flex gap-2"><span className="shrink-0 font-bold text-slate-400">②</span><span><strong>Second ring</strong> — the core emotion name (Joy, Fear, Anger…)</span></li>
               <li className="flex gap-2"><span className="shrink-0 font-bold text-slate-400">③</span><span><strong>Third ring</strong> — the mild form (Serenity, Apprehension, Annoyance…)</span></li>
-              <li className="flex gap-2"><span className="shrink-0 font-bold text-slate-400">④</span><span><strong>Outer ring</strong> — nuanced sub-emotions within each family</span></li>
+              <li className="flex gap-2"><span className="shrink-0 font-bold text-slate-400">④</span><span><strong>Outer ring</strong> — nuanced sub-emotions within each family (e.g. Heartbroken, Resentful, Overwhelmed)</span></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold text-slate-700 mb-1.5">Blend zones</h4>
             <p className="text-xs leading-relaxed">
-              The narrow wedges between core emotions are <strong>blends</strong> — compound feelings made from two adjacent emotions. Remorse (Sadness + Disgust), Love (Joy + Trust), Awe (Trust + Fear), and five others. They only span the middle rings because they don't have the same intensity range as pure emotions.
+              The narrow wedges between core emotions are <strong>blends</strong> — compound feelings made from two adjacent emotions. Love (Joy + Trust), Awe (Fear + Trust), Remorse (Sadness + Disgust), and five others. They only span the middle rings because they don't have the same intensity range as pure emotions.
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold text-slate-700 mb-1.5">Exploring the wheel</h4>
+            <h4 className="font-semibold text-slate-700 mb-1.5">Detail panel</h4>
             <p className="text-xs leading-relaxed">
-              Tap or click any segment to open a detail panel with a description, tips for sitting with the emotion, ways to work through it, and related emotions to explore.
+              Tap or click any segment to open a detail panel with a description, tips for sitting with the emotion, ways to work through it, and related emotions to explore. Tap <strong>Process this emotion</strong> to begin a guided reflection with journaling questions and optional AI insight.
             </p>
           </div>
 
@@ -71,6 +72,20 @@ function HowToUse({ onClose }) {
             <h4 className="font-semibold text-slate-700 mb-1.5">Emotion Journal</h4>
             <p className="text-xs leading-relaxed">
               Tap <strong>Journal</strong> in the bottom-right corner and write freely about how you're feeling. The wheel will identify the emotion(s) present and highlight them. Tap any detected emotion chip to open its detail panel. The AI toggle sends your text to Claude Haiku for more nuanced detection — keyword mode runs entirely in your browser.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-slate-700 mb-1.5">Zoom</h4>
+            <p className="text-xs leading-relaxed">
+              Use the <strong>− / % / +</strong> controls in the header to zoom the wheel between 50% and 150%. Tap the percentage to reset to 100%.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-slate-700 mb-1.5">Biblical mode</h4>
+            <p className="text-xs leading-relaxed">
+              Tap the <strong>cross icon</strong> in the header to switch to Biblical mode. All descriptions, tips, and guided reflection questions are replaced with content grounded in Scripture (NLT). AI reflections also shift to a pastoral frame with relevant verses. The setting is saved across sessions.
             </p>
           </div>
         </div>
@@ -98,6 +113,7 @@ export default function App() {
   const [panelOpen, setPanelOpen]     = useState(false);
   const [howToOpen, setHowToOpen]     = useState(false);
   const [zoom, setZoom]               = useState(1.0);
+  const [christianMode, setChristianMode] = useLocalStorage('emowheel-christian', false);
 
   const zoomIn  = useCallback(() => setZoom(z => Math.min(ZOOM_MAX, parseFloat((z + ZOOM_STEP).toFixed(1)))), []);
   const zoomOut = useCallback(() => setZoom(z => Math.max(ZOOM_MIN, parseFloat((z - ZOOM_STEP).toFixed(1)))), []);
@@ -195,6 +211,21 @@ export default function App() {
             >+</button>
           </div>
           <button
+            onClick={() => setChristianMode(v => !v)}
+            className="w-11 h-11 rounded-full flex items-center justify-center transition-colors"
+            style={{
+              backgroundColor: christianMode ? '#fef3c7' : '#f1f5f9',
+              color: christianMode ? '#b45309' : '#64748b',
+            }}
+            aria-label={christianMode ? 'Disable Biblical mode' : 'Enable Biblical mode'}
+            title={christianMode ? 'Biblical mode on' : 'Biblical mode'}
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+              <rect x="10.5" y="2" width="3" height="20" rx="1"/>
+              <rect x="4" y="8.5" width="16" height="3" rx="1"/>
+            </svg>
+          </button>
+          <button
             onClick={() => setHowToOpen(true)}
             className="w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 flex items-center justify-center text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors"
             aria-label="How to use"
@@ -254,6 +285,7 @@ export default function App() {
                   selection={selection}
                   onClose={handleDetailClose}
                   onRelatedClick={handleRelatedClick}
+                  christianMode={christianMode}
                 />
               </div>
             )}
@@ -268,6 +300,7 @@ export default function App() {
         onEmotionDetected={handleEmotionDetected}
         onEmotionOpen={handleEmotionOpen}
         detailOpen={panelOpen}
+        christianMode={christianMode}
       />
     </div>
   );
