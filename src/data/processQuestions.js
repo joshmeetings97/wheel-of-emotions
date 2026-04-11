@@ -1144,4 +1144,486 @@ export const PROCESS_QUESTIONS = {
       placeholder: 'Letting go of resentment doesn\'t mean condoning what happened. It means freeing yourself from carrying it…',
     },
   ],
+
+  // ── Intensity-level emotions ──────────────────────────────────────────────
+
+  ecstasy: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is producing this — what are you experiencing or have just experienced that feels this extraordinary?',
+      placeholder: 'Ecstasy is rare. Describing exactly what is happening helps you stay in it longer…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where are you feeling this in your body right now — what does it actually feel like physically?',
+      placeholder: 'Warmth, expansion, tingling, lightness — where is the physical experience?',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What does the intensity of this moment tell you — about what matters most to you, or what you have been waiting for?',
+      placeholder: 'Peak joy is often a signal about what you deeply value. What is this moment revealing?',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'How do you want to honour or remember this? What would help you carry it forward?',
+      placeholder: 'Write it down, share it, create something — how do you hold onto this kind of moment?',
+    },
+  ],
+
+  serenity: [
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Serenity is here right now. Start by breathing slowly and letting the stillness land before you do anything else.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is producing this sense of peace? What conditions — inner or outer — have allowed it to be here?',
+      placeholder: 'Serenity is specific, even if it feels general. What is actually different right now?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How often do you experience this kind of quietness?',
+      scaleMin: 'Almost never',
+      scaleMax: 'Often',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What would help you return to this feeling when things become noisy again? What conditions is it worth protecting?',
+      placeholder: 'Serenity can be cultivated. What does it depend on for you?',
+    },
+  ],
+
+  admiration: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'Who or what are you admiring — and what specifically about them is moving you?',
+      placeholder: 'Admiration has a specific object and a specific quality. Name both as precisely as you can…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What does the fact that THIS quality moves you tell you — about your own values, or what you aspire to?',
+      placeholder: 'Admiration is rarely random. What does this particular quality reflect about who you want to be?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How much does this person or thing represent something you are working toward yourself?',
+      scaleMin: 'Feels entirely out of reach',
+      scaleMax: 'I\'m actively moving toward this',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Is there anything you want to do with this admiration — express it, learn from it, or let it redirect you?',
+      placeholder: 'Admiration that stays internal fades. What would you do with it if you acted on it?',
+      optional: true,
+    },
+  ],
+
+  acceptance: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you feeling accepted by or accepting of right now?',
+      placeholder: 'Acceptance can be receiving warmth from others, or finding peace with a situation. What is it here?',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Let yourself settle into this feeling. Acceptance doesn\'t need to be earned — receive it.',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is there anything you are finding it harder to accept — in yourself, in others, or in your circumstances?',
+      placeholder: 'Acceptance is rarely uniform. What sits alongside the things you can hold with ease?',
+      optional: true,
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What does this openness make possible — what can you engage with from this state that is harder from a more guarded place?',
+      placeholder: 'Acceptance creates conditions for other things. What opens up here?',
+    },
+  ],
+
+  terror: [
+    {
+      label: 'REGULATE',
+      type: 'breathe',
+      instruction: 'Terror needs regulation before reflection. Breathe slowly — the goal right now is just to bring the nervous system back enough to think.',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Name five things you can physically see or touch right now. Stay with the present moment.',
+      placeholder: 'Terror often pulls you into the future or the worst-case. Grounding in the immediate present is the first move…',
+      somatic: true,
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is the specific threat? Describe it as plainly as you can — not the worst case, just what is actually happening.',
+      placeholder: 'Terror is often bigger than the situation. Name what is real versus what the fear is adding…',
+    },
+    {
+      label: 'NEED',
+      type: 'text',
+      q: 'What do you need most right now — safety, information, support, or something else?',
+      placeholder: 'When terrified, it helps to know what would actually help. What is the most important thing right now?',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the one next action — not the whole solution, just the very next thing — that moves you toward safety?',
+      placeholder: 'Terror can make everything feel impossible. What is the smallest possible next step?',
+    },
+  ],
+
+  apprehension: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What specifically are you apprehensive about — what is the thing you are anticipating with unease?',
+      placeholder: 'Apprehension is often vague. The more precisely you name it, the more workable it becomes…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What is the worst realistic outcome you are imagining? How likely is it really?',
+      placeholder: 'Apprehension often inflates probability. Naming the worst case and reality-testing it usually helps…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How much of this apprehension is within your power to address through preparation?',
+      scaleMin: 'Almost none of it',
+      scaleMax: 'Most of it',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is one thing you can do today that would genuinely reduce this feeling — either through preparation or through acceptance?',
+      placeholder: 'Apprehension calls for either action or surrender — which does this situation need?',
+    },
+  ],
+
+  amazement: [
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Describe what you just experienced or encountered. Be as sensory and specific as possible — stay in the moment.',
+      placeholder: 'Amazement is easily lost to explanation. Stay in the experience before making sense of it…',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What specifically produced the sense of wonder — why this thing, at this moment?',
+      placeholder: 'Amazement is selective. Something in you met something larger. What was it?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'How has encountering this shifted your sense of scale — what looks different now?',
+      placeholder: 'Amazement reliably changes perspective. What has it enlarged or shrunk?',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What do you want to do with this feeling — share it, create something, or just sit with it?',
+      placeholder: 'Amazement invites a response. What feels right?',
+      optional: true,
+    },
+  ],
+
+  distraction: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is pulling your attention right now — what are you finding it hard to stay present to?',
+      placeholder: 'Naming what is competing for your attention is the first step to choosing what gets it…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this distraction pointing toward something — an unmet need, an avoided feeling, or an unfinished concern?',
+      placeholder: 'Distraction is rarely random. What might it be protecting you from or drawing you toward?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How much does this distraction feel within your control right now?',
+      scaleMin: 'Completely scattered',
+      scaleMax: 'I can redirect it',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the one thing that genuinely deserves your attention right now? What would it mean to return to it?',
+      placeholder: 'Even a small refocus — one breath, one deliberate choice — counts…',
+    },
+  ],
+
+  grief: [
+    {
+      label: 'REGULATE',
+      type: 'breathe',
+      instruction: 'Grief is one of the heaviest emotions the body carries. Start with your breath — slow and deliberate — before anything else.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is the loss at the centre of this grief — what or who are you grieving?',
+      placeholder: 'Grief is specific even when it feels overwhelming. Name what has been lost, even partially…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where are you feeling this in your body right now?',
+      placeholder: 'Chest, throat, stomach — grief has a weight and a location. Describe where yours lives…',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What did this person or thing mean to you — what did their presence make possible that their absence takes away?',
+      placeholder: 'The depth of grief reflects the depth of what was lost. What was this to you?',
+    },
+    {
+      label: 'NEED',
+      type: 'text',
+      q: 'What do you need most right now — to be held, to be alone, to be heard, or something else entirely?',
+      placeholder: 'Grief has different needs at different moments. What does it need from you or others right now?',
+    },
+  ],
+
+  pensiveness: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you reflecting on — what thought, memory, or question is occupying you?',
+      placeholder: 'Pensiveness is often quiet and hard to name. What is actually in the background?',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Let the quiet be here. Pensiveness doesn\'t need to be fixed — it sometimes just needs space.',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What emotion is beneath the pensiveness — sadness, longing, regret, or something else?',
+      placeholder: 'Pensiveness is often a soft container for something more specific underneath. What is it?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How heavy does this reflective mood feel right now?',
+      scaleMin: 'Gently bittersweet',
+      scaleMax: 'Quite heavy',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Is there anything this pensiveness is asking you to attend to — or is it asking you to simply let it be?',
+      placeholder: 'Sometimes the right response to pensiveness is action; sometimes it\'s stillness. Which is this?',
+      optional: true,
+    },
+  ],
+
+  loathing: [
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Loathing is a high-intensity state. Take a few slow breaths before engaging with it — strong disgust needs a little space before it can be processed clearly.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What specifically are you experiencing loathing toward — what is triggering this level of revulsion?',
+      placeholder: 'Loathing this intense usually has a very specific object. Name it as precisely as you can…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What values or boundaries does this violate so deeply that it produces this level of reaction?',
+      placeholder: 'Intense disgust is often a signal that something fundamental to you has been crossed. What is it?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'Is this loathing directed at a behaviour or situation — or has it become contempt for a person?',
+      scaleMin: 'Directed at the behaviour',
+      scaleMax: 'Directed at the person',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What does this call for — distance, action, or working through the reaction? What is the most constructive response?',
+      placeholder: 'Intense disgust wants to do something. What is the most responsible action available to you?',
+    },
+  ],
+
+  boredom: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you bored with — what situation, task, or context is producing this feeling of flatness?',
+      placeholder: 'Boredom usually has a specific source, even if it has spread. What is at the centre of it?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this genuine disengagement — nothing to do, no stimulation — or is it avoidance of something uncomfortable?',
+      placeholder: 'These look similar but have different causes and cures. Which is closer to true for you right now?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How long has this flatness been present?',
+      scaleMin: 'Just now',
+      scaleMax: 'For a long time',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is one thing — small, immediate — that would genuinely engage you right now? Not the perfect thing, just a real thing.',
+      placeholder: 'Boredom responds better to small genuine action than to waiting for motivation to arrive…',
+    },
+  ],
+
+  rage: [
+    {
+      label: 'REGULATE',
+      type: 'breathe',
+      instruction: 'Rage needs de-escalation before it can be worked with. Do not act or speak until you have breathed — slowly, deliberately — at least five times.',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where is this rage in your body right now — what does it feel like physically?',
+      placeholder: 'Heat, tension, pressure, shaking — locate it physically before going anywhere near the story…',
+      somatic: true,
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What happened? Describe the trigger as plainly as you can — just the facts, without the full emotional charge.',
+      placeholder: 'Not the full story yet — just what occurred. We\'ll get to meaning in a moment…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What is beneath the rage — what fear, grief, humiliation, or injustice is it sitting on top of?',
+      placeholder: 'Rage is almost always protecting something. What is the wound or need underneath it?',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What does this situation actually call for — once you are out of the heat of it — and what is one step you can take without acting from the rage itself?',
+      placeholder: 'Rage acted on immediately is almost always destructive. What is the wisest next move?',
+    },
+  ],
+
+  annoyance: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What specifically is annoying you — what did someone do or say, or what situation is producing this friction?',
+      placeholder: 'Annoyance is specific. Name the exact thing rather than keeping it vague…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this about the thing itself — or is it pointing to an unmet expectation, a need for control, or something bigger underneath?',
+      placeholder: 'Small irritations often carry bigger signals. What might this one be about?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'On reflection, how much does this actually matter?',
+      scaleMin: 'Not much at all',
+      scaleMax: 'More than it seems',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Is this worth addressing directly, or is it better to let it go? If it needs addressing, what is the calmest way to do that?',
+      placeholder: 'Most annoyances are better released than acted on. Which is true here?',
+      optional: true,
+    },
+  ],
+
+  vigilance: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you watching for — what is the specific concern or situation keeping you on alert?',
+      placeholder: 'Vigilance is always directed at something. What is it pointing toward?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this alertness serving you right now — is there a genuine reason to be on guard — or has it become habitual tension?',
+      placeholder: 'There is a difference between useful alertness and chronic anxiety. Which is this?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How much of what you are watching for is within your control to affect?',
+      scaleMin: 'Almost nothing',
+      scaleMax: 'Most of it',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Take a deliberate breath. Vigilance burns energy — even a brief pause to breathe helps you stay sharp for longer.',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the one most important thing to attend to right now — and what can be set down until later?',
+      placeholder: 'Sustained vigilance across too many things is exhausting. What truly deserves your attention now?',
+    },
+  ],
+
+  interest: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What has caught your interest — what are you drawn toward or curious about?',
+      placeholder: 'Interest has a specific object, even when it feels diffuse. What is it?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What is it about this particular thing that has your attention — what quality or question is pulling you in?',
+      placeholder: 'Interest is selective. Something in you is responding to something in this. What is the connection?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Does this feel like idle curiosity or something more significant — a direction, a calling, something worth pursuing?',
+      placeholder: 'Not all interest is equal. How significant does this feel?',
+      optional: true,
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the smallest step you could take to explore this further — today, without overthinking it?',
+      placeholder: 'Interest fades without a small action. What is one thing you could actually do?',
+    },
+  ],
 };

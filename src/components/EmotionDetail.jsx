@@ -166,7 +166,7 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick, chri
       <div className="flex-1 overflow-y-auto pr-0.5">
         {processing ? (
           <ProcessEmotion
-            emotionId={isBlend ? data.id : (outerName ? outerName.toLowerCase() : emotion?.id)}
+            emotionId={isBlend ? data.id : (outerName ? outerName.toLowerCase() : (intensity?.name?.toLowerCase() || emotion?.id))}
             emotionName={name}
             accentColor={accentColor}
             onBack={() => setProcessing(false)}
@@ -203,7 +203,7 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick, chri
                   </p>
                   <p className="text-[10px] text-slate-400 mt-0.5">
                     {(() => {
-                    const id = isBlend ? data.id : (outerName ? outerName.toLowerCase() : emotion?.id);
+                    const id = isBlend ? data.id : (outerName ? outerName.toLowerCase() : (intensity?.name?.toLowerCase() || emotion?.id));
                     const qs = christianMode
                       ? (CHRISTIAN_PROCESS_QUESTIONS[id] || CHRISTIAN_PROCESS_QUESTIONS.default)
                       : (PROCESS_QUESTIONS[id] || PROCESS_QUESTIONS.default);

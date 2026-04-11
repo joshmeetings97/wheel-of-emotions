@@ -469,6 +469,466 @@ export const CHRISTIAN_PROCESS_QUESTIONS = {
     },
   ],
 
+  // ── Intensity-level emotions ─────────────────────────────────────────────────
+
+  ecstasy: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is producing this overwhelming joy — what are you experiencing that feels this extraordinary?',
+      placeholder: '"You are filled with an inexpressible and glorious joy." (1 Peter 1:8). Describe what is happening…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where are you feeling this in your body right now?',
+      placeholder: 'Peak joy has a physical quality. Notice where it lives — warmth, lightness, expansion…',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Could this joy be a foretaste of what God has prepared — a glimpse of the fullness He promises? What does it make you believe about His goodness?',
+      placeholder: '"You will show me the way of life, granting me the joy of your presence." (Psalm 16:11)',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Write a brief act of worship — a prayer, a declaration, or a few lines of praise — in response to this moment.',
+      placeholder: '"Let everything that has breath praise the Lord!" (Psalm 150:6)',
+    },
+  ],
+
+  serenity: [
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: '"He lets me rest in green meadows; he leads me beside peaceful streams." (Psalm 23:2). Receive this peace before you analyse it.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What conditions has God placed you in that are allowing this peace? Name them specifically.',
+      placeholder: '"The Lord is my shepherd; I have all that I need." (Psalm 23:1). What does "enough" look like right now?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How often do you experience this kind of deep quiet?',
+      scaleMin: 'Almost never',
+      scaleMax: 'Often',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What practices or conditions make serenity more available to you? What is worth protecting in your rhythm of life?',
+      placeholder: '"You will keep in perfect peace all who trust in you, all whose thoughts are fixed on you!" (Isaiah 26:3)',
+    },
+  ],
+
+  admiration: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'Who or what are you admiring — and what specifically about them moves you?',
+      placeholder: '"Fix your thoughts on what is true, and honorable, and right, and pure, and lovely, and admirable." (Philippians 4:8)',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What does the quality you admire reflect about God\'s image in this person — and what does it reveal about what He may be calling you toward?',
+      placeholder: '"We are God\'s masterpiece, created to do the good things he planned for us." (Ephesians 2:10)',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How much does this admiration point you toward something you are being called to pursue yourself?',
+      scaleMin: 'Feels entirely out of reach',
+      scaleMax: 'I\'m being called toward this',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Express this admiration — to God for what He has made, and if possible to the person themselves. What would you say?',
+      placeholder: '"Encourage each other and build each other up." (1 Thessalonians 5:11)',
+    },
+  ],
+
+  acceptance: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you feeling accepted by or at peace with right now?',
+      placeholder: '"Accept each other just as Christ has accepted you." (Romans 15:7). Name what you are receiving or extending…',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: '"There is no condemnation for those who belong to Christ Jesus." (Romans 8:1). This is the deepest acceptance available. Breathe and receive it.',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is there something or someone you are finding harder to accept — that you sense God is inviting you toward peace with?',
+      placeholder: '"Make allowance for each other\'s faults and forgive anyone who offends you." (Colossians 3:13)',
+      optional: true,
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Who in your life needs the same unconditional welcome you are receiving? What would extending that look like?',
+      placeholder: '"Love your neighbor as yourself." (Matthew 22:39)',
+    },
+  ],
+
+  terror: [
+    {
+      label: 'REGULATE',
+      type: 'breathe',
+      instruction: '"Even when I walk through the darkest valley, I will not be afraid, for you are close beside me." (Psalm 23:4). He is here. Breathe first — slowly.',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Name five things you can physically see or touch right now. Stay in this moment.',
+      placeholder: 'Terror pulls you into the worst case. God is present in the present. Stay here first…',
+      somatic: true,
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is the specific threat? Describe what is actually happening — not the worst case, just what is real.',
+      placeholder: '"God is our refuge and strength, always ready to help in times of trouble." (Psalm 46:1). Name what you are facing…',
+    },
+    {
+      label: 'NEED',
+      type: 'text',
+      q: 'What do you need most right now — safety, prayer, support, information? Ask God for that specifically.',
+      placeholder: '"In my distress I cried out to the Lord; yes, I prayed to my God for help. He heard me." (Psalm 18:6)',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the one next faithful step — not the whole solution, just what is immediately in front of you?',
+      placeholder: '"Don\'t be afraid, for I am with you." (Isaiah 41:10). One step at a time, with Him.',
+    },
+  ],
+
+  apprehension: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What specifically are you apprehensive about? Name the concern before God.',
+      placeholder: '"Tell God what you need, and thank him for all he has done." (Philippians 4:6). Name it precisely…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What is the worst realistic outcome you are imagining? How does that sit alongside what God has promised?',
+      placeholder: '"God causes everything to work together for the good of those who love God." (Romans 8:28)',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: '"Be strong and courageous! Do not be afraid or discouraged. For the Lord your God is with you wherever you go." (Joshua 1:9). Breathe that in.',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What does faithfulness look like here — careful preparation, or surrender of the outcome? Write a prayer for whichever is needed.',
+      placeholder: '"Commit your actions to the Lord, and your plans will succeed." (Proverbs 16:3)',
+    },
+  ],
+
+  amazement: [
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Describe what you just encountered — as sensory and specific as possible. Stay in the experience.',
+      placeholder: '"Come, see the glorious works of the Lord!" (Psalm 66:5). Describe what stopped you…',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Could this be God at work — in creation, in a person, in an unexpected turn of events? What does this reveal about His character?',
+      placeholder: '"God can do much, much more than anything we can ask or imagine." (Ephesians 3:20)',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'How has this shifted your sense of what is possible — what does it enlarge your faith for?',
+      placeholder: '"For I am about to do something new. See, I have already begun!" (Isaiah 43:19)',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Let this become testimony — write a few sentences about what God has done or shown you here.',
+      placeholder: '"Publish his glorious deeds among the nations. Tell everyone about the amazing things he does." (Psalm 96:3)',
+    },
+  ],
+
+  distraction: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is pulling your attention right now — what are you finding hard to stay present to?',
+      placeholder: '"Look straight ahead, and fix your eyes on what lies before you." (Proverbs 4:25). What is scattering you?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is there something beneath this distraction — an anxiety, an avoidance, or something God may be trying to get your attention on?',
+      placeholder: '"Search me, O God, and know my heart; test me and know my anxious thoughts." (Psalm 139:23)',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: '"Be still, and know that I am God!" (Psalm 46:10). One breath. One moment. Return.',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the one thing God is asking you to attend to right now? Write it down and return to it.',
+      placeholder: '"Seek the Kingdom of God above all else, and live righteously." (Matthew 6:33)',
+    },
+  ],
+
+  grief: [
+    {
+      label: 'REGULATE',
+      type: 'breathe',
+      instruction: '"The Lord is close to the brokenhearted; he rescues those whose spirits are crushed." (Psalm 34:18). He is already here. Breathe — slowly.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What is the loss at the centre of this grief — what or who are you grieving?',
+      placeholder: 'Grief honours what mattered. Name what has been lost…',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where does this grief live in your body right now?',
+      placeholder: '"You keep track of all my sorrows. You have collected all my tears in your bottle." (Psalm 56:8). God notices what your body is carrying.',
+      somatic: true,
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Jesus wept at the grave of His friend. What does it mean to you that God does not stand outside your grief but has entered it?',
+      placeholder: '"He was despised and rejected… a man of sorrows, acquainted with deepest grief." (Isaiah 53:3)',
+    },
+    {
+      label: 'NEED',
+      type: 'text',
+      q: 'What do you need most right now — to be held by God, to grieve with someone, to be heard? Ask for that specifically.',
+      placeholder: '"He heals the brokenhearted and bandages their wounds." (Psalm 147:3)',
+    },
+  ],
+
+  pensiveness: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you quietly reflecting on — what thought, memory, or weight is present right now?',
+      placeholder: '"Pour out your heart to him, for God is our refuge." (Psalm 62:8). Name what is in the background…',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: '"Be still, and know that I am God." (Psalm 46:10). Pensiveness has something to say — give it space before you rush through it.',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What is beneath this reflective sadness — loss, longing, regret, or the weight of being human? Could God be inviting you to see something through this?',
+      placeholder: '"Sorrow is better than laughter! For sadness has a refining influence on us." (Ecclesiastes 7:3)',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Write a short prayer about what you are carrying — honest, unhurried, not requiring resolution.',
+      placeholder: '"Why am I discouraged? Why is my heart so sad? I will put my hope in God!" (Psalm 42:5)',
+    },
+  ],
+
+  loathing: [
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: 'Loathing this intense needs a breath before anything else. Slow down before engaging with it.',
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What specifically is producing this level of revulsion? Name it precisely before God.',
+      placeholder: '"Hate what is wrong. Hold tightly to what is good." (Romans 12:9). Name what you are reacting to…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this a righteous response to genuine evil — or has contempt for the person crept in alongside disgust at the behaviour?',
+      placeholder: '"Everyone has sinned; we all fall short of God\'s glorious standard." (Romans 3:23). Examine which is present…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'Is this feeling directed at a behaviour — or has it become contempt for a person?',
+      scaleMin: 'Directed at the behaviour',
+      scaleMax: 'Directed at the person',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What does love and wisdom require here — distance, action, or prayer for the person involved? Ask God to guide you toward good rather than merely away from wrong.',
+      placeholder: '"Do not be overcome by evil, but overcome evil with good." (Romans 12:21)',
+    },
+  ],
+
+  boredom: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you bored with — what situation or context is producing this flatness?',
+      placeholder: 'Boredom has a source. Name it before deciding what to do with it…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this genuine disengagement — or might it be the soul resisting stillness? Could God be using this space to invite something?',
+      placeholder: '"Be still, and know that I am God." (Psalm 46:10). What if the boredom is a doorway?',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'How long has this flatness been present?',
+      scaleMin: 'Just right now',
+      scaleMax: 'For a long time',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Is God redirecting you toward something new — or calling you to steward faithfully what is already in front of you?',
+      placeholder: '"Work willingly at whatever you do, as though you were working for the Lord." (Colossians 3:23)',
+    },
+  ],
+
+  rage: [
+    {
+      label: 'REGULATE',
+      type: 'breathe',
+      instruction: '"Don\'t sin by letting anger control you. Don\'t let the sun go down while you are still angry." (Ephesians 4:26). Breathe. Do not act or speak from this place yet.',
+    },
+    {
+      label: 'GROUND',
+      type: 'text',
+      q: 'Where is this rage in your body right now — what does it physically feel like?',
+      placeholder: 'Heat, pressure, tension — locate it physically before going near the story…',
+      somatic: true,
+    },
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What happened? Describe the trigger plainly — just the facts.',
+      placeholder: '"Be quick to listen, slow to speak, and slow to get angry." (James 1:19). Just the facts for now…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'What is beneath the rage — what fear, grief, injustice, or wound is it sitting on? What does God see underneath this?',
+      placeholder: '"Search me, O God, and know my heart; test me and know my anxious thoughts." (Psalm 139:23)',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What does faithfulness — not rage — require here? Write a prayer asking God for the strength to respond rather than react.',
+      placeholder: '"Do not repay evil for evil… Instead, pay them back with a blessing." (1 Peter 3:9)',
+    },
+  ],
+
+  annoyance: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What specifically is annoying you right now?',
+      placeholder: 'Name the exact thing rather than keeping it vague. Specificity helps…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this about the thing itself — or is it pointing to an unmet expectation or a deeper frustration? What might God be revealing through this irritation?',
+      placeholder: '"Sensible people control their temper; they earn respect by overlooking wrongs." (Proverbs 19:11)',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'scale',
+      q: 'On reflection, how much does this actually matter?',
+      scaleMin: 'Not much at all',
+      scaleMax: 'More than it seems',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Is this worth addressing, or is this a moment to practise overlooking an offence? Pray for the person or situation — even briefly.',
+      placeholder: '"Love does not keep a record of being wronged." (1 Corinthians 13:5). What does love require here?',
+    },
+  ],
+
+  vigilance: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What are you watching for — what concern is keeping you on alert?',
+      placeholder: '"Be on guard. Stand firm in the faith. Be courageous. Be strong." (1 Corinthians 16:13). Name what you are watching over…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this alertness God-given — a call to watch over something real — or has it tipped into anxious striving?',
+      placeholder: '"The Lord himself goes before you and will be with you." (Deuteronomy 31:8). You are not the only one watching.',
+    },
+    {
+      label: 'GROUND',
+      type: 'breathe',
+      instruction: '"Indeed, he who watches over Israel never slumbers or sleeps." (Psalm 121:4). You can rest — He does not.',
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'Give to God what you are watching over — name it and release it to the One who guards far better than you can.',
+      placeholder: '"The peace of God… will guard your hearts and minds as you live in Christ Jesus." (Philippians 4:7)',
+    },
+  ],
+
+  interest: [
+    {
+      label: 'NAME',
+      type: 'text',
+      q: 'What has caught your interest — what are you being drawn toward?',
+      placeholder: '"It is the glory of kings to search things out." (Proverbs 25:2). Name what is drawing you…',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Could this interest be God-given — something He has placed in you that points toward His purposes for you? What does it feel like it could lead to?',
+      placeholder: '"God is working in you, giving you the desire and the power to do what pleases him." (Philippians 2:13)',
+    },
+    {
+      label: 'UNDERSTAND',
+      type: 'text',
+      q: 'Is this idle curiosity or something more significant — a direction, a calling, something worth pursuing?',
+      placeholder: '"We are God\'s masterpiece… created to do the good things he planned for us long ago." (Ephesians 2:10)',
+      optional: true,
+    },
+    {
+      label: 'ACT',
+      type: 'text',
+      q: 'What is the smallest faithful step to explore this further — today, offered to God as you take it?',
+      placeholder: '"Call to me and I will answer you and tell you great and unsearchable things you do not know." (Jeremiah 33:3)',
+    },
+  ],
+
   // ── Blend emotions ──────────────────────────────────────────────────────────
 
   love: [
