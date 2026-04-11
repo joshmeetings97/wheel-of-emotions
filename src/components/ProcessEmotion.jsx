@@ -218,13 +218,14 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
   const handleReflect = async () => {
     setLoading(true); setError(null);
     try {
-      const pairs = questions.map((q, i) => ({ q: q.q, a: answers[i] || '' }));
+      const pairs = questions.map((q, i) => ({ q: q.q || q.instruction || '', a: answers[i] || '' })).filter(p => p.q);
       const sanitized = pairs.map(p => ({ ...p, a: scrubPII(p.a) }));
       const result = await reflectWithClaude(emotionName, sanitized, christianMode);
       setReflection(result);
       setCheckedActions(new Array(result.actions?.length || 0).fill(false));
       setExpandedActions(new Array(result.actions?.length || 0).fill(false));
-    } catch {
+    } catch (err) {
+      console.error('reflectWithClaude error:', err);
       setError('Could not get a reflection right now. Try again.');
     } finally {
       setLoading(false);
