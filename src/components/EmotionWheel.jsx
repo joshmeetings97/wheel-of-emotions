@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { CORE_EMOTIONS, BLEND_EMOTIONS } from '../data/emotions';
 
 // ─── Geometry ────────────────────────────────────────────────────────────────
@@ -65,7 +65,6 @@ function buildSegments() {
     });
 
     // Outer ring — N sub-segments evenly dividing the full angular span
-    // (including BLEND_SPAN/2 overlap on each side so there are no click dead-zones)
     const outerList = emotion.outer || [];
     if (outerList.length > 0) {
       const outerStart = a1 - BLEND_SPAN / 2;
@@ -83,9 +82,6 @@ function buildSegments() {
   });
 
   // Blend zones — span r1→r3 only (middle two rings).
-  // This makes clear they are a compound of two adjacent emotions,
-  // not a standalone emotion with their own full intensity range.
-  // The inner core (hole→r1) and outer sub-emotions (r3→r4) stay pure.
   BLEND_EMOTIONS.forEach((blend) => {
     const a1 = blend.blendAngle, a2 = blend.blendAngle + BLEND_SPAN;
     segs.push({ id:blend.id, type:'blend', name:blend.name, color:blend.color,
@@ -97,34 +93,209 @@ function buildSegments() {
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
-export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
-  const [hoverId, setHoverId] = useState(null);
+export default function EmotionWheel({ onSelect, selectedId, pulseId, spinMode = false }) {
+  const [hoverId, setHoverId]     = useState(null);
+  const [rotation, setRotation]   = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const segments = useMemo(() => buildSegments(), []);
 
+  const svgRef        = useRef(null);
+  const rotRef        = useRef(0);       // in-sync with rotation state, readable in callbacks
+  const draggingRef   = useRef(false);
+  const lastAngleRef  = useRef(0);
+  const lastTimeRef   = useRef(0);
+  const velocityRef   = useRef(0);
+  const animFrameRef  = useRef(null);
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+
+  const cancelAnim = useCallback(() => {
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+  }, []);
+
+  // Returns angle (degrees) from SVG center to pointer position
+  function getSvgAngle(e) {
+    const svg = svgRef.current;
+    if (!svg) return 0;
+    const rect = svg.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const touch = e.touches?.[0] ?? e.changedTouches?.[0];
+    const clientX = touch ? touch.clientX : e.clientX;
+    const clientY = touch ? touch.clientY : e.clientY;
+    return Math.atan2(clientY - cy, clientX - cx) * 180 / Math.PI;
+  }
+
+  // Eased animation from startRot → targetRot over duration ms, calls onDone when complete
+  const animateTo = useCallback((startRot, targetRot, duration, onDone) => {
+    const t0 = performance.now();
+    function frame(now) {
+      const p = Math.min((now - t0) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 4); // ease-out quartic
+      const r = startRot + (targetRot - startRot) * eased;
+      rotRef.current = r;
+      setRotation(r);
+      if (p < 1) {
+        animFrameRef.current = requestAnimationFrame(frame);
+      } else {
+        rotRef.current = targetRot;
+        setRotation(targetRot);
+        animFrameRef.current = null;
+        onDone?.();
+      }
+    }
+    cancelAnim();
+    animFrameRef.current = requestAnimationFrame(frame);
+  }, [cancelAnim]);
+
+  // ── Reset when spin mode is turned off ─────────────────────────────────────
+  useEffect(() => {
+    if (!spinMode) {
+      cancelAnim();
+      draggingRef.current = false;
+      setIsDragging(false);
+      // Snap back to neutral
+      rotRef.current = 0;
+      setRotation(0);
+    }
+  }, [spinMode, cancelAnim]);
+
+  // ── Pointer event handlers ─────────────────────────────────────────────────
+
+  const handlePointerDown = useCallback((e) => {
+    if (!spinMode) return;
+    cancelAnim();
+    draggingRef.current = true;
+    setIsDragging(true);
+    lastAngleRef.current = getSvgAngle(e);
+    lastTimeRef.current  = performance.now();
+    velocityRef.current  = 0;
+    // Capture pointer so move/up fire even outside the SVG
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
+    e.preventDefault();
+  }, [spinMode, cancelAnim]);
+
+  const handlePointerMove = useCallback((e) => {
+    if (!draggingRef.current) return;
+    const angle = getSvgAngle(e);
+    let delta = angle - lastAngleRef.current;
+    // Handle wraparound ±180
+    if (delta >  180) delta -= 360;
+    if (delta < -180) delta += 360;
+    const now = performance.now();
+    const dt  = now - lastTimeRef.current;
+    if (dt > 0) velocityRef.current = delta / dt * 16; // degrees per frame at 60 fps
+    lastAngleRef.current = angle;
+    lastTimeRef.current  = now;
+    rotRef.current += delta;
+    setRotation(r => r + delta);
+    e.preventDefault();
+  }, []);
+
+  const handlePointerUp = useCallback(() => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    setIsDragging(false);
+
+    const vel = velocityRef.current;
+    if (Math.abs(vel) < 0.05) return; // tap with no real drag — do nothing
+
+    // Weight each ring equally at 25% regardless of segment count.
+    // Blends are excluded — they don't belong to a single ring.
+    const rings = [
+      segments.filter(s => s.r1 === R.hole && s.r2 === R.r1), // ring 1 — intense
+      segments.filter(s => s.r1 === R.r1   && s.r2 === R.r2), // ring 2 — moderate
+      segments.filter(s => s.r1 === R.r2   && s.r2 === R.r3), // ring 3 — mild
+      segments.filter(s => s.r1 === R.r3   && s.r2 === R.r4), // ring 4 — outer
+    ];
+    const ring   = rings[Math.floor(Math.random() * 4)];
+    const target = ring[Math.floor(Math.random() * ring.length)];
+
+    const segCenterAngle = (target.a1 + target.a2) / 2;
+    const currentRot  = rotRef.current;
+    const currentNorm = ((currentRot % 360) + 360) % 360;
+
+    // Degrees clockwise / counterclockwise to align this segment to the "top" indicator (270° in SVG)
+    const alignCW  = ((270 - segCenterAngle - currentNorm) + 720) % 360;
+    const alignCCW = alignCW === 0 ? 0 : 360 - alignCW;
+
+    const speed          = Math.abs(vel);
+    const extraRotations = Math.max(2, Math.min(8, Math.round(speed / 3)));
+    const duration       = Math.max(1800, Math.min(5000, 2000 + speed * 120));
+
+    const targetRot = vel >= 0
+      ? currentRot + extraRotations * 360 + alignCW
+      : currentRot - extraRotations * 360 - alignCCW;
+
+    animateTo(currentRot, targetRot, duration, () => {
+      // Dispatch selection exactly like a click
+      if (target.type === 'blend') {
+        onSelect({ type: 'blend', data: BLEND_EMOTIONS.find(b => b.id === target.id) });
+      } else {
+        const emotion   = CORE_EMOTIONS.find(e => e.id === target.emotionId);
+        const intensity = emotion?.intensities.find(i => i.level === target.level)
+                       || emotion?.intensities[2];
+        const isOuter   = target.id.includes('-outer-');
+        onSelect({ type:'emotion', emotion, intensity, level: intensity?.level || 'mild',
+          outerName: isOuter ? target.name : undefined, segmentId: target.id });
+      }
+    });
+  }, [segments, animateTo, onSelect]);
+
+  // Attach pointer events to the SVG element when spin mode is active
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg || !spinMode) return;
+    svg.addEventListener('pointerdown',   handlePointerDown,  { passive: false });
+    svg.addEventListener('pointermove',   handlePointerMove,  { passive: false });
+    svg.addEventListener('pointerup',     handlePointerUp);
+    svg.addEventListener('pointercancel', handlePointerUp);
+    return () => {
+      svg.removeEventListener('pointerdown',   handlePointerDown);
+      svg.removeEventListener('pointermove',   handlePointerMove);
+      svg.removeEventListener('pointerup',     handlePointerUp);
+      svg.removeEventListener('pointercancel', handlePointerUp);
+    };
+  }, [spinMode, handlePointerDown, handlePointerMove, handlePointerUp]);
+
+  // ── Click handler (normal mode only) ──────────────────────────────────────
   const handleClick = useCallback((seg) => {
+    if (spinMode) return;
     if (seg.type === 'blend') {
       onSelect({ type:'blend', data:BLEND_EMOTIONS.find(b => b.id === seg.id) });
     } else {
       const emotion = CORE_EMOTIONS.find(e => e.id === seg.emotionId);
       const intensity = emotion?.intensities.find(i => i.level === seg.level)
                      || emotion?.intensities[2];
-      // Outer ring segments have their own name (e.g. "Elated") distinct from the intensity name
       const isOuter = seg.id.includes('-outer-');
       onSelect({
-        type: 'emotion',
-        emotion,
-        intensity,
+        type: 'emotion', emotion, intensity,
         level: intensity?.level || 'mild',
         outerName: isOuter ? seg.name : undefined,
         segmentId: seg.id,
       });
     }
-  }, [onSelect]);
+  }, [onSelect, spinMode]);
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+  const isAnimating = animFrameRef.current !== null;
 
   return (
     <div className="relative w-full max-w-[680px] mx-auto select-none"
       style={{ filter:'drop-shadow(0 4px 24px rgba(0,0,0,0.12))' }}>
-      <svg viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg" className="w-full">
+      <svg
+        ref={svgRef}
+        viewBox="0 0 680 680"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full"
+        style={{
+          cursor: spinMode ? (isDragging ? 'grabbing' : 'grab') : undefined,
+          touchAction: spinMode ? 'none' : undefined,
+        }}
+      >
         <defs>
           <style>{`
             .seg { cursor:pointer; transition:filter 0.15s; touch-action:manipulation; }
@@ -139,121 +310,154 @@ export default function EmotionWheel({ onSelect, selectedId, pulseId }) {
           `}</style>
         </defs>
 
-        {/* ── Segments — unselected first, selected last so it renders on top ── */}
-        {[...segments.filter(s => s.id !== selectedId), ...segments.filter(s => s.id === selectedId)].map((seg) => {
-          const isSel   = seg.id === selectedId;
-          const isPulse = seg.id === pulseId;
-          // Scale selected segment outward from its midpoint for a clear "raised" look
-          const SEL_SCALE = 1.045;
-          const mx = seg.mid.x, my = seg.mid.y;
-          const selTransform = isSel
-            ? `translate(${mx * (1 - SEL_SCALE)}, ${my * (1 - SEL_SCALE)}) scale(${SEL_SCALE})`
-            : undefined;
-          return (
-            <path key={seg.id} d={seg.path}
-              fill={seg.color}
-              stroke="white" strokeWidth={isSel ? 3.5 : 1.2} strokeLinejoin="round"
-              className={`seg ${isPulse ? 'pulse' : ''}`}
-              transform={selTransform}
-              style={isSel ? { filter:'drop-shadow(0 4px 16px rgba(0,0,0,0.55)) brightness(1.12)' } : undefined}
-              onClick={() => handleClick(seg)}
-              onMouseEnter={() => setHoverId(seg.id)}
-              onMouseLeave={() => setHoverId(null)}
-              role="button" tabIndex={0} aria-label={seg.name}
-              onKeyDown={e => e.key==='Enter' && handleClick(seg)}
-            />
-          );
-        })}
+        {/* ── Rotating group — everything spins together ── */}
+        <g transform={`rotate(${rotation}, ${CX}, ${CY})`}>
 
-        {/* ── Ring dividers ── */}
-        {[R.r1,R.r2,R.r3,R.r4].map(r => (
-          <circle key={r} cx={CX} cy={CY} r={r} fill="none" stroke="white" strokeWidth="1.5"/>
-        ))}
+          {/* Segments — unselected first, selected last so it renders on top */}
+          {[...segments.filter(s => s.id !== selectedId), ...segments.filter(s => s.id === selectedId)].map((seg) => {
+            const isSel   = seg.id === selectedId;
+            const isPulse = seg.id === pulseId;
+            const SEL_SCALE = 1.045;
+            const mx = seg.mid.x, my = seg.mid.y;
+            const selTransform = isSel
+              ? `translate(${mx * (1 - SEL_SCALE)}, ${my * (1 - SEL_SCALE)}) scale(${SEL_SCALE})`
+              : undefined;
+            return (
+              <path key={seg.id} d={seg.path}
+                fill={seg.color}
+                stroke="white" strokeWidth={isSel ? 3.5 : 1.2} strokeLinejoin="round"
+                className={`seg ${isPulse ? 'pulse' : ''}`}
+                transform={selTransform}
+                style={isSel ? { filter:'drop-shadow(0 4px 16px rgba(0,0,0,0.55)) brightness(1.12)' } : undefined}
+                onClick={() => handleClick(seg)}
+                onMouseEnter={() => !spinMode && setHoverId(seg.id)}
+                onMouseLeave={() => setHoverId(null)}
+                role="button" tabIndex={spinMode ? -1 : 0} aria-label={seg.name}
+                onKeyDown={e => !spinMode && e.key==='Enter' && handleClick(seg)}
+              />
+            );
+          })}
 
-        {/* ── Ring 1 labels (intense names) ── */}
-        {CORE_EMOTIONS.map((e) => {
-          const {a1,a2,r1,r2} = { a1:e.centerAngle-HALF, a2:e.centerAngle+HALF, r1:R.hole, r2:R.r1 };
-          const {x,y,angle} = midPt(r1,r2,a1,a2);
-          const name = e.intensities[0].name;
-          const fs = autoFont(name, r2-r1, 9);
-          return <text key={`r1-${e.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
-            transform={`rotate(${textRot(angle)},${x},${y})`}
-            fontSize={fs} fontWeight="600" fontFamily="Inter,Arial,sans-serif"
-            fill={textClr(e.ringColors?.[0])} style={{pointerEvents:'none'}}>{name}</text>;
-        })}
+          {/* Ring dividers */}
+          {[R.r1,R.r2,R.r3,R.r4].map(r => (
+            <circle key={r} cx={CX} cy={CY} r={r} fill="none" stroke="white" strokeWidth="1.5"/>
+          ))}
 
-        {/* ── Ring 2 labels (core emotion names) ── */}
-        {CORE_EMOTIONS.map((e) => {
-          const {a1,a2,r1,r2} = { a1:e.centerAngle-HALF, a2:e.centerAngle+HALF, r1:R.r1, r2:R.r2 };
-          const {x,y,angle} = midPt(r1,r2,a1,a2);
-          const name = e.name.toUpperCase();
-          const fs = autoFont(name, r2-r1, 10.5);
-          return <text key={`r2-${e.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
-            transform={`rotate(${textRot(angle)},${x},${y})`}
-            fontSize={fs} fontWeight="700" fontFamily="Inter,Arial,sans-serif"
-            fill={textClr(e.ringColors?.[1])} style={{pointerEvents:'none',letterSpacing:'0.02em'}}>{name}</text>;
-        })}
+          {/* Ring 1 labels (intense names) */}
+          {CORE_EMOTIONS.map((e) => {
+            const {a1,a2,r1,r2} = { a1:e.centerAngle-HALF, a2:e.centerAngle+HALF, r1:R.hole, r2:R.r1 };
+            const {x,y,angle} = midPt(r1,r2,a1,a2);
+            const name = e.intensities[0].name;
+            const fs = autoFont(name, r2-r1, 9);
+            return <text key={`r1-${e.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+              transform={`rotate(${textRot(angle)},${x},${y})`}
+              fontSize={fs} fontWeight="600" fontFamily="Inter,Arial,sans-serif"
+              fill={textClr(e.ringColors?.[0])} style={{pointerEvents:'none'}}>{name}</text>;
+          })}
 
-        {/* ── Ring 3 labels (mild names) ── */}
-        {CORE_EMOTIONS.map((e) => {
-          const {a1,a2,r1,r2} = { a1:e.centerAngle-HALF, a2:e.centerAngle+HALF, r1:R.r2, r2:R.r3 };
-          const {x,y,angle} = midPt(r1,r2,a1,a2);
-          const name = e.intensities[2].name;
-          const fs = autoFont(name, r2-r1, 9.5);
-          return <text key={`r3-${e.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
-            transform={`rotate(${textRot(angle)},${x},${y})`}
-            fontSize={fs} fontFamily="Inter,Arial,sans-serif"
-            fill={textClr(e.ringColors?.[2])} style={{pointerEvents:'none'}}>{name}</text>;
-        })}
+          {/* Ring 2 labels (core emotion names) */}
+          {CORE_EMOTIONS.map((e) => {
+            const {a1,a2,r1,r2} = { a1:e.centerAngle-HALF, a2:e.centerAngle+HALF, r1:R.r1, r2:R.r2 };
+            const {x,y,angle} = midPt(r1,r2,a1,a2);
+            const name = e.name.toUpperCase();
+            const fs = autoFont(name, r2-r1, 10.5);
+            return <text key={`r2-${e.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+              transform={`rotate(${textRot(angle)},${x},${y})`}
+              fontSize={fs} fontWeight="700" fontFamily="Inter,Arial,sans-serif"
+              fill={textClr(e.ringColors?.[1])} style={{pointerEvents:'none',letterSpacing:'0.02em'}}>{name}</text>;
+          })}
 
-        {/* ── Ring 4 labels (outer sub-emotions) ── */}
-        {CORE_EMOTIONS.map((e) => {
-          const outerList = e.outer || [];
-          if (outerList.length === 0) return null;
-          const outerStart = e.centerAngle - HALF - BLEND_SPAN / 2;
-          const outerEnd   = e.centerAngle + HALF + BLEND_SPAN / 2;
-          const segWidth   = (outerEnd - outerStart) / outerList.length;
-          return outerList.map((outerObj, idx) => {
-            const sa = outerStart + idx * segWidth;
-            const ea = sa + segWidth;
-            const {x, y, angle} = midPt(R.r3, R.r4, sa, ea);
-            const fs = autoFont(outerObj.name, R.r4 - R.r3, 8.5);
-            return <text key={`r4-${e.id}-${idx}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+          {/* Ring 3 labels (mild names) */}
+          {CORE_EMOTIONS.map((e) => {
+            const {a1,a2,r1,r2} = { a1:e.centerAngle-HALF, a2:e.centerAngle+HALF, r1:R.r2, r2:R.r3 };
+            const {x,y,angle} = midPt(r1,r2,a1,a2);
+            const name = e.intensities[2].name;
+            const fs = autoFont(name, r2-r1, 9.5);
+            return <text key={`r3-${e.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
               transform={`rotate(${textRot(angle)},${x},${y})`}
               fontSize={fs} fontFamily="Inter,Arial,sans-serif"
-              fill={textClr(e.ringColors?.[3])} style={{pointerEvents:'none'}}>{outerObj.name}</text>;
-          });
-        })}
+              fill={textClr(e.ringColors?.[2])} style={{pointerEvents:'none'}}>{name}</text>;
+          })}
 
-        {/* ── Blend zone labels (always visible, small) ── */}
-        {BLEND_EMOTIONS.map((blend) => {
-          const a1 = blend.blendAngle, a2 = blend.blendAngle + BLEND_SPAN;
-          const {x,y,angle} = midPt(R.r1,R.r2,a1,a2);
-          const fs = autoFont(blend.name, R.r2-R.r1, 7.5);
-          return <text key={`blend-${blend.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
-            transform={`rotate(${textRot(angle)},${x},${y})`}
-            fontSize={fs} fontWeight="600" fontFamily="Inter,Arial,sans-serif"
-            fill={textClr(blend.color)} style={{pointerEvents:'none'}}>{blend.name}</text>;
-        })}
+          {/* Ring 4 labels (outer sub-emotions) */}
+          {CORE_EMOTIONS.map((e) => {
+            const outerList = e.outer || [];
+            if (outerList.length === 0) return null;
+            const outerStart = e.centerAngle - HALF - BLEND_SPAN / 2;
+            const outerEnd   = e.centerAngle + HALF + BLEND_SPAN / 2;
+            const segWidth   = (outerEnd - outerStart) / outerList.length;
+            return outerList.map((outerObj, idx) => {
+              const sa = outerStart + idx * segWidth;
+              const ea = sa + segWidth;
+              const {x, y, angle} = midPt(R.r3, R.r4, sa, ea);
+              const fs = autoFont(outerObj.name, R.r4 - R.r3, 8.5);
+              return <text key={`r4-${e.id}-${idx}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+                transform={`rotate(${textRot(angle)},${x},${y})`}
+                fontSize={fs} fontFamily="Inter,Arial,sans-serif"
+                fill={textClr(e.ringColors?.[3])} style={{pointerEvents:'none'}}>{outerObj.name}</text>;
+            });
+          })}
 
-        {/* ── Center circle ── */}
+          {/* Blend zone labels */}
+          {BLEND_EMOTIONS.map((blend) => {
+            const a1 = blend.blendAngle, a2 = blend.blendAngle + BLEND_SPAN;
+            const {x,y,angle} = midPt(R.r1,R.r2,a1,a2);
+            const fs = autoFont(blend.name, R.r2-R.r1, 7.5);
+            return <text key={`blend-${blend.id}`} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+              transform={`rotate(${textRot(angle)},${x},${y})`}
+              fontSize={fs} fontWeight="600" fontFamily="Inter,Arial,sans-serif"
+              fill={textClr(blend.color)} style={{pointerEvents:'none'}}>{blend.name}</text>;
+          })}
+
+        </g>{/* end rotating group */}
+
+        {/* ── Fixed: center circle + text (doesn't rotate) ── */}
         <circle cx={CX} cy={CY} r={R.hole} fill="white" stroke="white" strokeWidth="1"/>
-        <text x={CX} y={CY-8} textAnchor="middle" dominantBaseline="central"
-          fontSize="11" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
-          style={{pointerEvents:'none'}}>Emotion</text>
-        <text x={CX} y={CY+8} textAnchor="middle" dominantBaseline="central"
-          fontSize="11" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
-          style={{pointerEvents:'none'}}>Wheel</text>
+        {spinMode ? (
+          <>
+            <text x={CX} y={CY-9} textAnchor="middle" dominantBaseline="central"
+              fontSize="10" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
+              style={{pointerEvents:'none'}}>Drag to</text>
+            <text x={CX} y={CY+9} textAnchor="middle" dominantBaseline="central"
+              fontSize="10" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
+              style={{pointerEvents:'none'}}>spin</text>
+          </>
+        ) : (
+          <>
+            <text x={CX} y={CY-8} textAnchor="middle" dominantBaseline="central"
+              fontSize="11" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
+              style={{pointerEvents:'none'}}>Emotion</text>
+            <text x={CX} y={CY+8} textAnchor="middle" dominantBaseline="central"
+              fontSize="11" fontWeight="800" fontFamily="Inter,Arial,sans-serif" fill="#1e293b"
+              style={{pointerEvents:'none'}}>Wheel</text>
+          </>
+        )}
 
-        {/* ── Hover tooltip — clamped inside the 680×680 viewBox ── */}
-        {hoverId && (() => {
+        {/* ── Spin indicator — top-center pointer, only in spin mode ── */}
+        {spinMode && (
+          <g style={{ pointerEvents: 'none' }}>
+            {/* Shadow */}
+            <polygon
+              points={`${CX},${CY - R.r4 + 6} ${CX - 10},${CY - R.r4 - 16} ${CX + 10},${CY - R.r4 - 16}`}
+              fill="rgba(0,0,0,0.15)"
+              transform="translate(1, 2)"
+            />
+            {/* Pointer */}
+            <polygon
+              points={`${CX},${CY - R.r4 + 6} ${CX - 10},${CY - R.r4 - 16} ${CX + 10},${CY - R.r4 - 16}`}
+              fill="#1e293b"
+            />
+          </g>
+        )}
+
+        {/* ── Hover tooltip — only when not in spin mode ── */}
+        {!spinMode && hoverId && (() => {
           const seg = segments.find(s => s.id === hoverId);
           if (!seg) return null;
           const {x,y} = seg.mid;
           const dx=x-CX, dy=y-CY, len=Math.sqrt(dx*dx+dy*dy)||1;
           const w = Math.max(60, seg.name.length*7+16);
           const pad = 8;
-          // Push outward then clamp so rect stays inside viewBox
           let tx = x+(dx/len)*24;
           let ty = y+(dy/len)*24;
           tx = Math.max(w/2+pad, Math.min(680-w/2-pad, tx));

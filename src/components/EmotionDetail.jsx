@@ -84,9 +84,12 @@ export default function EmotionDetail({ selection, onClose, onRelatedClick, chri
 
   // Apply Christian content overrides when mode is active
   if (christianMode) {
-    const outerKey  = outerName?.toLowerCase();
-    const coreKey   = isBlend ? data.id : emotion?.id;
-    const cc = (outerKey && CHRISTIAN_CONTENT[outerKey]) || CHRISTIAN_CONTENT[coreKey];
+    const outerKey     = outerName?.toLowerCase();
+    const intensityKey = !outerName && !isBlend ? intensity?.name?.toLowerCase() : undefined;
+    const coreKey      = isBlend ? data.id : emotion?.id;
+    const cc = (outerKey && CHRISTIAN_CONTENT[outerKey])
+            || (intensityKey && CHRISTIAN_CONTENT[intensityKey])
+            || CHRISTIAN_CONTENT[coreKey];
     if (cc) {
       if (cc.description) description = cc.description;
       if (cc.feelTips)    feelTips    = cc.feelTips;

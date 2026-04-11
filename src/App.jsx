@@ -33,7 +33,7 @@ function resolveSegment(segmentId) {
   return { type: 'emotion', emotion, intensity, level: intensity.level };
 }
 
-function HowToUse({ onClose }) {
+function HowToUse({ onClose, spinMode, onToggleSpin }) {
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/30 backdrop-blur-sm"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
@@ -98,9 +98,29 @@ function HowToUse({ onClose }) {
 
         </div>
 
+        {/* Spin mode toggle */}
+        <div className="mt-5 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-slate-700">Spin mode</p>
+              <p className="text-xs text-slate-400 mt-0.5">Drag the wheel to spin it — lands on a random emotion</p>
+            </div>
+            <button
+              role="switch"
+              aria-checked={spinMode}
+              onClick={onToggleSpin}
+              className="shrink-0 p-1.5 -m-1.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-300"
+            >
+              <span className={`relative inline-flex w-11 h-6 rounded-full transition-colors duration-200 ${spinMode ? 'bg-slate-700' : 'bg-slate-200'}`}>
+                <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${spinMode ? 'translate-x-5' : 'translate-x-0'}`} />
+              </span>
+            </button>
+          </div>
+        </div>
+
         <button
           onClick={onClose}
-          className="mt-5 w-full py-2.5 rounded-xl text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-white transition-all"
+          className="mt-4 w-full py-2.5 rounded-xl text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-white transition-all"
         >
           Got it
         </button>
@@ -122,6 +142,7 @@ export default function App() {
   const [howToOpen, setHowToOpen]     = useState(false);
   const [zoom, setZoom]               = useState(1.0);
   const [christianMode, setChristianMode] = useLocalStorage('emowheel-christian', false);
+  const [spinMode, setSpinMode]           = useLocalStorage('emowheel-spin', false);
 
   const zoomIn  = useCallback(() => setZoom(z => Math.min(ZOOM_MAX, parseFloat((z + ZOOM_STEP).toFixed(1)))), []);
   const zoomOut = useCallback(() => setZoom(z => Math.max(ZOOM_MIN, parseFloat((z - ZOOM_STEP).toFixed(1)))), []);
@@ -178,7 +199,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fc] flex flex-col">
-      {howToOpen && <HowToUse onClose={() => setHowToOpen(false)} />}
+      {howToOpen && <HowToUse onClose={() => setHowToOpen(false)} spinMode={spinMode} onToggleSpin={() => setSpinMode(v => !v)} />}
 
       {/* ── Header ── */}
       <header className="flex items-center justify-between px-6 py-3.5 bg-white border-b border-slate-200 shadow-sm">
@@ -251,6 +272,7 @@ export default function App() {
             onSelect={handleWheelSelect}
             selectedId={selectedId}
             pulseId={pulseId}
+            spinMode={spinMode}
           />
         </div>
 

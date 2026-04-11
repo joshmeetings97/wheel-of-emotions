@@ -5,6 +5,240 @@
 
 export const CHRISTIAN_CONTENT = {
 
+  // ── Intensity-level entries (each ring has its own biblical frame) ──────────
+
+  // Joy family
+  ecstasy: {
+    description: `Ecstasy is the peak of human delight — a foretaste of the joy that Scripture says is "inexpressible and glorious" (1 Peter 1:8). Moments of overwhelming joy are gifts pointing beyond themselves to the Author of joy. Receive them fully, and let them reorient your sense of what is ultimately real.`,
+    feelTips: [
+      { text: `This intensity of joy is rare — receive it as a gift rather than something you generated yourself.`, scripture: `1 Peter 1:8 — "You are filled with an inexpressible and glorious joy."` },
+      { text: `Let peak joy move you toward worship — the most natural response to overwhelming delight is gratitude to the Giver.`, scripture: `Psalm 16:11 — "You will show me the way of life, granting me the joy of your presence and the pleasures of living with you forever."` },
+      { text: `Share it — joy at this intensity belongs in community and testimony.`, scripture: `Psalm 34:3 — "Come, let us tell of the Lord's greatness; let us exalt his name together."` },
+    ],
+    remedyTips: [
+      { text: `If ecstasy has faded, remember that the fruit of the Spirit includes joy — it is available beyond the peaks.`, scripture: `Galatians 5:22 — "The Holy Spirit produces this kind of fruit in our lives… joy."` },
+      { text: `The deep joy Jesus spoke of is not circumstance-dependent — return to its source.`, scripture: `John 15:11 — "I have told you these things so that you will be filled with my joy. Yes, your joy will overflow!"` },
+      { text: `Worship in song is one of the most reliable paths back to elevated joy.`, scripture: `Colossians 3:16 — "Sing psalms and hymns and spiritual songs to God with thankful hearts."` },
+    ],
+  },
+
+  serenity: {
+    description: `Serenity is the quietest form of joy — the peace that "surpasses all understanding" (Philippians 4:7). Scripture frames it not as the absence of problems but as the presence of God in the midst of them. It is available even when happiness is not.`,
+    feelTips: [
+      { text: `Serenity is a gift of God's presence — receive it with gratitude and protect the stillness that sustains it.`, scripture: `Philippians 4:7 — "The peace of God, which exceeds anything we can understand, will guard your hearts and minds."` },
+      { text: `Let this quiet contentment be its own form of worship — resting in God without striving is a spiritual act.`, scripture: `Psalm 46:10 — "Be still, and know that I am God!"` },
+      { text: `Notice what conditions God has placed you in that allow this peace — they are worth naming and protecting.`, scripture: `Psalm 23:2–3 — "He lets me rest in green meadows; he leads me beside peaceful streams. He renews my strength."` },
+    ],
+    remedyTips: [
+      { text: `When serenity is disrupted, the path back is surrender, not problem-solving.`, scripture: `Philippians 4:6 — "Don't worry about anything; instead, pray about everything."` },
+      { text: `God actively leads you to rest — make space for Him to do that rather than filling every hour.`, scripture: `Matthew 11:28 — "Come to me, all of you who are weary and carry heavy burdens, and I will give you rest."` },
+      { text: `Fix your thoughts on what is eternal and unchanging when the noise of life disrupts your calm.`, scripture: `Isaiah 26:3 — "You will keep in perfect peace all who trust in you, all whose thoughts are fixed on you!"` },
+    ],
+  },
+
+  // Trust family
+  admiration: {
+    description: `Admiration is the deep respect and wonder that arises when you encounter someone who exemplifies true goodness, courage, or faithfulness. Biblically, the ultimate object of admiration is God Himself — "Great is the Lord! He is most worthy of praise!" (Psalm 145:3). Human admiration, rightly ordered, points us toward what is worth becoming.`,
+    feelTips: [
+      { text: `Let admiration teach you — identify specifically what quality you are seeing that moves you, and consider whether you are being called toward it.`, scripture: `Philippians 4:8 — "Fix your thoughts on what is true, and honorable, and right, and pure, and lovely, and admirable."` },
+      { text: `Express admiration directly to the person — encouragement and acknowledgment of others' goodness is a biblical practice.`, scripture: `1 Thessalonians 5:11 — "Encourage each other and build each other up."` },
+      { text: `Let admiration for people point you toward admiration for God — every quality you genuinely admire reflects something of His image.`, scripture: `Psalm 145:3 — "Great is the Lord! He is most worthy of praise! No one can measure his greatness."` },
+    ],
+    remedyTips: [
+      { text: `If your capacity for admiration has grown thin — if nothing seems worth respecting — ask God to open your eyes to what He has placed around you.`, scripture: `Psalm 19:1 — "The heavens proclaim the glory of God. The skies display his craftsmanship."` },
+      { text: `Read the lives of faithful men and women in Scripture and history — admiration grows when it is fed.`, scripture: `Hebrews 11:1 — "Faith is the confidence that what we hope for will actually happen…" (followed by the great hall of faith)` },
+      { text: `Admiration can be corrupted into envy — examine which is present and bring the honest answer to God.`, scripture: `Proverbs 14:30 — "A peaceful heart leads to a healthy body; jealousy is like cancer in the bones."` },
+    ],
+  },
+
+  acceptance: {
+    description: `Acceptance is trust in its mildest, most open form — the restful sense of being received and receiving others without conditions. Scripture grounds it in the unconditional welcome of God: "Accept each other just as Christ has accepted you." (Romans 15:7). Feeling accepted is a grace; extending it is a calling.`,
+    feelTips: [
+      { text: `Let this feeling of being accepted remind you of your deepest identity — received by God before you could earn it.`, scripture: `Romans 15:7 — "Accept each other just as Christ has accepted you so that God will be given glory."` },
+      { text: `Acceptance is the foundation for honest relationship — notice how it opens you to others when it is present.`, scripture: `1 John 4:19 — "We love each other because he loved us first."` },
+      { text: `Let it extend outward — who in your life needs the same unconditional welcome you are experiencing?`, scripture: `Galatians 3:28 — "There is no longer Jew or Gentile… you are all one in Christ Jesus."` },
+    ],
+    remedyTips: [
+      { text: `When acceptance feels absent — when rejection stings — return to the one verdict that cannot be reversed.`, scripture: `Romans 8:1 — "There is no condemnation for those who belong to Christ Jesus."` },
+      { text: `God's acceptance of you is not based on performance or approval — it is the ground everything else stands on.`, scripture: `Ephesians 1:6 — "God's glorious grace, which he has freely given us through his dearly loved Son."` },
+      { text: `Ask whether there is someone you are withholding acceptance from — the call to receive and give it runs in both directions.`, scripture: `Colossians 3:13 — "You must make allowance for each other's faults and forgive anyone who offends you."` },
+    ],
+  },
+
+  // Fear family
+  terror: {
+    description: `Terror is fear at its most overwhelming — the sense that danger is immediate, massive, and beyond your capacity to manage. Scripture speaks into this place directly: "Even when I walk through the darkest valley, I will not be afraid, for you are close beside me." (Psalm 23:4). The antidote in every case is the nearness of God, not the removal of the threat.`,
+    feelTips: [
+      { text: `In moments of terror, one breath at a time is enough. God is present in this exact moment, even now.`, scripture: `Psalm 46:1 — "God is our refuge and strength, always ready to help in times of trouble."` },
+      { text: `Call on Him directly — the Psalms model raw, urgent prayer in the face of overwhelming fear.`, scripture: `Psalm 18:6 — "In my distress I cried out to the Lord; yes, I prayed to my God for help. He heard me from his sanctuary."` },
+      { text: `His presence does not eliminate danger — it changes what danger requires of you.`, scripture: `Psalm 23:4 — "Even when I walk through the darkest valley, I will not be afraid, for you are close beside me."` },
+    ],
+    remedyTips: [
+      { text: `Terror often needs grounding before it needs theology — slow your breathing first, then bring your thoughts back to what is immediately true.`, scripture: `2 Timothy 1:7 — "God has not given us a spirit of fear and timidity, but of power, love, and self-discipline."` },
+      { text: `Tell someone. Terror carried alone grows; terror named in the presence of others and of God begins to shrink.`, scripture: `Galatians 6:2 — "Share each other's burdens, and in this way obey the law of Christ."` },
+      { text: `God is not overwhelmed by what overwhelms you. His sovereignty is not threatened by what threatens you.`, scripture: `Isaiah 41:10 — "Don't be afraid, for I am with you. Don't be discouraged, for I am your God."` },
+    ],
+  },
+
+  apprehension: {
+    description: `Apprehension is mild, anticipatory fear — the unsettled feeling before something uncertain. It is a common human experience that Scripture neither condemns nor dismisses. God's consistent response to His people's apprehension is not "stop feeling that" but "I am with you."`,
+    feelTips: [
+      { text: `Name what you are apprehensive about specifically — vague dread is harder to bring to God than a named concern.`, scripture: `Philippians 4:6 — "Tell God what you need, and thank him for all he has done."` },
+      { text: `Apprehension often signals that something matters to you — let it move you to prayer rather than avoidance.`, scripture: `Psalm 55:22 — "Give your burdens to the Lord, and he will take care of you."` },
+      { text: `His presence is the consistent answer — not certainty about outcomes, but certainty about who goes with you.`, scripture: `Joshua 1:9 — "Be strong and courageous! Do not be afraid or discouraged. For the Lord your God is with you wherever you go."` },
+    ],
+    remedyTips: [
+      { text: `Do the faithful preparation available to you, then release the outcome to God.`, scripture: `Proverbs 16:3 — "Commit your actions to the Lord, and your plans will succeed."` },
+      { text: `Apprehension is often about what might happen — Jesus explicitly redirected His followers to the present moment.`, scripture: `Matthew 6:34 — "Don't worry about tomorrow, for tomorrow will bring its own worries. Today's trouble is enough for today."` },
+      { text: `His past faithfulness is the evidence for what He will do in what you are facing.`, scripture: `Lamentations 3:22–23 — "Great is his faithfulness; his mercies begin afresh each morning."` },
+    ],
+  },
+
+  // Surprise family
+  amazement: {
+    description: `Amazement is surprise meeting wonder — the sudden recognition that something is far greater than you anticipated. Scripture frames God's works as the ultimate object of human amazement: "Come, see the glorious works of the Lord!" (Psalm 66:5). Let amazement be a doorway into worship.`,
+    feelTips: [
+      { text: `Stay in the amazement before you explain it. Wonder is too easily collapsed into analysis.`, scripture: `Psalm 66:5 — "Come, see the glorious works of the Lord; see how awesome his power is!"` },
+      { text: `Let this moment recalibrate your sense of what is possible — God consistently does more than we expect.`, scripture: `Ephesians 3:20 — "God can do much, much more than anything we can ask or imagine."` },
+      { text: `Express it — amazement shared becomes testimony, and testimony builds faith in others.`, scripture: `Psalm 96:3 — "Publish his glorious deeds among the nations. Tell everyone about the amazing things he does."` },
+    ],
+    remedyTips: [
+      { text: `If amazement has become rare — if little surprises you anymore — ask God to open your eyes to what He is doing around you.`, scripture: `Isaiah 43:19 — "For I am about to do something new. See, I have already begun! Do you not see it?"` },
+      { text: `Sustained attention to what God has made reliably recovers a sense of wonder.`, scripture: `Psalm 19:1 — "The heavens proclaim the glory of God. The skies display his craftsmanship."` },
+      { text: `Read accounts of what God has done — in Scripture, in history, in the lives of people around you.`, scripture: `Psalm 77:11 — "I will remember the deeds of the Lord; yes, I will remember your miracles of long ago."` },
+    ],
+  },
+
+  distraction: {
+    description: `Distraction — mild disorientation or scattered attention — is the lowest register of surprise. Scripture speaks to the scattered mind with an invitation to return to the one thing that centers: "Be still, and know that I am God." (Psalm 46:10). It is not a spiritual failure but an invitation to reorient.`,
+    feelTips: [
+      { text: `When your attention is scattered, name what is competing for it — you cannot address what you have not identified.`, scripture: `Proverbs 4:25 — "Look straight ahead, and fix your eyes on what lies before you."` },
+      { text: `One deliberate breath and one deliberate thought returned to God is enough to begin reorienting.`, scripture: `Psalm 46:10 — "Be still, and know that I am God!"` },
+      { text: `Distraction is often a symptom — ask what the underlying restlessness or anxiety is about.`, scripture: `Psalm 139:23 — "Search me, O God, and know my heart; test me and know my anxious thoughts."` },
+    ],
+    remedyTips: [
+      { text: `Simple rhythms — a fixed prayer time, a brief moment of silence — anchor scattered attention better than willpower.`, scripture: `Psalm 5:3 — "Each morning I bring my requests to you and wait expectantly."` },
+      { text: `Ask God to help you set your mind — attention is something He can guide, not just something you manage alone.`, scripture: `Colossians 3:2 — "Think about the things of heaven, not the things of earth."` },
+      { text: `What is one thing in front of you right now that faithfulness looks like? Start there.`, scripture: `Matthew 6:33 — "Seek the Kingdom of God above all else, and live righteously."` },
+    ],
+  },
+
+  // Sadness family
+  grief: {
+    description: `Grief is the deepest form of sadness — the full weight of profound loss. Scripture does not rush past it. Jesus wept (John 11:35). An entire book of the Bible is called Lamentations. "The Lord is close to the brokenhearted." (Psalm 34:18). Grief that is honoured before God is grief that can eventually heal.`,
+    feelTips: [
+      { text: `Give grief its full weight — do not rush the process or manage it into something easier to carry.`, scripture: `Ecclesiastes 3:4 — "There is a time to cry and a time to laugh. A time to grieve and a time to dance."` },
+      { text: `Jesus wept at the grave of His friend — your tears are not a sign of weak faith but of deep love.`, scripture: `John 11:35 — "Then Jesus wept."` },
+      { text: `Bring your grief to God in the same raw language the Psalms use — He is not fragile; He can hold all of it.`, scripture: `Psalm 56:8 — "You keep track of all my sorrows. You have collected all my tears in your bottle."` },
+    ],
+    remedyTips: [
+      { text: `Grief is not a problem to fix but a wound to tend. Let God be present in the tending.`, scripture: `Psalm 147:3 — "He heals the brokenhearted and bandages their wounds."` },
+      { text: `Let trusted people into the grief — carrying it alone is not holiness; it is isolation.`, scripture: `2 Corinthians 1:4 — "He comforts us in all our troubles so that we can comfort others."` },
+      { text: `Morning comes — not quickly, not predictably, but with certainty in God's economy.`, scripture: `Psalm 30:5 — "Weeping may last through the night, but joy comes with the morning."` },
+    ],
+  },
+
+  pensiveness: {
+    description: `Pensiveness is the quiet, reflective sadness that comes with contemplating what has been lost, what might have been, or the weight of being human. It is not despair — it is the soul looking inward. Scripture honours this kind of sober reflection as a path to wisdom and grateful living.`,
+    feelTips: [
+      { text: `Let pensiveness be an honest companion — it often carries wisdom that busyness prevents.`, scripture: `Ecclesiastes 7:3 — "Sorrow is better than laughter! For sadness has a refining influence on us."` },
+      { text: `Bring the reflective sadness to God rather than sitting with it alone — He is interested in what you are carrying.`, scripture: `Psalm 62:8 — "Pour out your heart to him, for God is our refuge."` },
+      { text: `Pensiveness often lives in the question "what matters?" — let it lead you toward clarity about what is worth investing in.`, scripture: `Psalm 90:12 — "Teach us to realize the brevity of life, so that we may grow in wisdom."` },
+    ],
+    remedyTips: [
+      { text: `When pensiveness shades toward hopelessness, preach to your own soul — recall what you know to be true about God's goodness.`, scripture: `Psalm 42:5 — "Why am I discouraged? Why is my heart so sad? I will put my hope in God!"` },
+      { text: `Small acts of beauty and gratitude gently lift pensiveness without denying it.`, scripture: `Philippians 4:8 — "Fix your thoughts on what is true, and honorable, and right, and pure, and lovely, and admirable."` },
+      { text: `This is a season, not a permanent state — morning comes.`, scripture: `Lamentations 3:22–23 — "Great is his faithfulness; his mercies begin afresh each morning."` },
+    ],
+  },
+
+  // Disgust family
+  loathing: {
+    description: `Loathing is disgust at its most intense — a deep moral revulsion at genuine evil. Scripture validates righteous hatred of sin while guarding fiercely against contempt for persons. God Himself is described as hating evil (Psalm 45:7); the question is whether your loathing is rightly directed and Spirit-governed.`,
+    feelTips: [
+      { text: `Intense moral revulsion at genuine evil is a right and biblical response — do not spiritualise it away.`, scripture: `Psalm 45:7 — "You love justice and hate evil."` },
+      { text: `Let this intensity fuel action rather than passive disgust — what does love require in response to this wrong?`, scripture: `Romans 12:21 — "Do not be overcome by evil, but overcome evil with good."` },
+      { text: `Examine whether you are hating the sin or the image-bearer. The distinction is everything.`, scripture: `Romans 3:23 — "Everyone has sinned; we all fall short of God's glorious standard."` },
+    ],
+    remedyTips: [
+      { text: `Strong feelings of loathing need the Spirit's governance to remain righteous rather than becoming destructive.`, scripture: `Galatians 5:22–23 — "The Holy Spirit produces… love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, and self-control."` },
+      { text: `Bring the feeling to God before acting from it. Righteous anger that is prayed over stays righteous; unprayed anger often doesn't.`, scripture: `Ephesians 4:26 — "Don't sin by letting anger control you. Don't let the sun go down while you are still angry."` },
+      { text: `Jesus' model was to absorb and transform evil, not merely to be repelled by it.`, scripture: `1 Peter 3:9 — "Don't repay evil for evil… Instead, pay them back with a blessing."` },
+    ],
+  },
+
+  boredom: {
+    description: `Boredom — genuine disengagement and lack of stimulation — can be a spiritual invitation rather than just an inconvenience. Much of what we call boredom is actually the soul's resistance to stillness. Practices like Sabbath, silence, and contemplative prayer reframe boredom as an opportunity to encounter God without distraction.`,
+    feelTips: [
+      { text: `Before reaching for stimulation, sit with the boredom for a moment — it may be hiding a more important feeling or need.`, scripture: `Psalm 46:10 — "Be still, and know that I am God!"` },
+      { text: `Boredom can signal that something you were investing in is no longer life-giving — ask whether God is redirecting you.`, scripture: `Proverbs 3:5–6 — "Seek his will in all you do, and he will show you which path to take."` },
+      { text: `Genuine rest — not distraction — is what God designed Sabbath for. Boredom is sometimes the doorway in.`, scripture: `Exodus 20:8 — "Remember to observe the Sabbath day by keeping it holy."` },
+    ],
+    remedyTips: [
+      { text: `Ask whether you are genuinely bored or actually restless and avoidant. The remedies are different.`, scripture: `Psalm 139:23 — "Search me, O God, and know my heart; test me and know my anxious thoughts."` },
+      { text: `Service to others is one of the most reliable antidotes to boredom — it reorients attention outward.`, scripture: `Galatians 5:13 — "Use your freedom to serve one another in love."` },
+      { text: `There is always something to do in God's kingdom — ask what needs doing where you are planted.`, scripture: `Colossians 3:23 — "Work willingly at whatever you do, as though you were working for the Lord."` },
+    ],
+  },
+
+  // Anger family
+  rage: {
+    description: `Rage is anger at its most consuming — a state where the normal constraints on thought and behaviour feel swept away. Scripture is direct: "Human anger does not produce the righteousness God desires." (James 1:20). Rage requires immediate de-escalation before it can be processed faithfully. The first priority is not insight but safety — yours and others'.`,
+    feelTips: [
+      { text: `Do not act from rage — the first and most important move is to create space before speaking or deciding anything.`, scripture: `Proverbs 29:11 — "Fools vent their anger, but the wise quietly hold it back."` },
+      { text: `Physical movement — walking, breathing — helps the body discharge the intensity before the mind can engage.`, scripture: `James 1:19–20 — "Be quick to listen, slow to speak, and slow to get angry. Human anger does not produce the righteousness God desires."` },
+      { text: `Rage almost always has something underneath it — fear, grief, or profound injustice. That is the real thing to address.`, scripture: `Psalm 139:23 — "Search me, O God, and know my heart; test me and know my anxious thoughts."` },
+    ],
+    remedyTips: [
+      { text: `Ask God to reveal what is beneath the rage — He is more interested in your healing than in your composure.`, scripture: `Psalm 4:4 — "Don't sin by letting anger control you. Think about it overnight and remain silent."` },
+      { text: `The cross is the model for receiving wrong without returning it — this is impossible without His strength.`, scripture: `1 Peter 3:9 — "Don't repay evil for evil. Don't retaliate with insults when people insult you. Instead, pay them back with a blessing."` },
+      { text: `Unforgiveness is rage's fuel. Ask God to begin the process of releasing what is feeding this.`, scripture: `Ephesians 4:31–32 — "Get rid of all bitterness, rage, anger… forgiving one another, just as God through Christ has forgiven you."` },
+    ],
+  },
+
+  annoyance: {
+    description: `Annoyance is the mildest form of anger — a brief friction that passes quickly if not fed. Scripture neither condemns the experience nor licenses dwelling in it. The practice of overlooking small offences is specifically commended as wisdom.`,
+    feelTips: [
+      { text: `Notice what is beneath the annoyance — often an unmet expectation or a need for control. The irritation is the symptom.`, scripture: `Proverbs 19:11 — "Sensible people control their temper; they earn respect by overlook wrongs."` },
+      { text: `Ask whether this is worth the energy it is taking. Most annoyances are not.`, scripture: `Proverbs 17:9 — "Love prospers when a fault is forgiven, but dwelling on it separates close friends."` },
+      { text: `Use small irritations as practice for the patience that more demanding situations will require.`, scripture: `Galatians 5:22 — "The Holy Spirit produces… patience… as fruit in our lives."` },
+    ],
+    remedyTips: [
+      { text: `Let it pass — choosing not to feed small annoyances is one of the quietest and most effective spiritual disciplines.`, scripture: `1 Corinthians 13:5 — "Love… is not irritable, and it keeps no record of being wronged."` },
+      { text: `If the same thing consistently annoys you, it is worth asking what it reveals about your expectations or your heart.`, scripture: `Matthew 7:3 — "Why worry about a speck in your friend's eye when you have a log in your own?"` },
+      { text: `Pray for the person or situation that is annoying you — it is very hard to remain annoyed at what you are praying for.`, scripture: `Matthew 5:44 — "Pray for those who persecute you!"` },
+    ],
+  },
+
+  // Anticipation family
+  vigilance: {
+    description: `Vigilance is anticipation at its most alert and watchful — the state of focused readiness. Scripture commends it: "Be on guard. Stand firm in the faith. Be courageous. Be strong." (1 Corinthians 16:13). Spiritually, vigilance is not anxiety but sober, prayerful attentiveness to what God has called you to watch over.`,
+    feelTips: [
+      { text: `Let this alertness be directed by wisdom, not fear — ask what specifically you are called to watch for.`, scripture: `1 Corinthians 16:13 — "Be on guard. Stand firm in the faith. Be courageous. Be strong."` },
+      { text: `Vigilance exercised in prayer is far more effective than vigilance exercised in worry.`, scripture: `1 Peter 5:8 — "Stay alert! Watch out for your great enemy, the devil."` },
+      { text: `Pair watchfulness with trust — you are not the only one who is watching.`, scripture: `Psalm 121:4 — "Indeed, he who watches over Israel never slumbers or sleeps."` },
+    ],
+    remedyTips: [
+      { text: `If vigilance has become hypervigilance — if you cannot rest — bring that exhaustion to God and examine whether you are trying to carry what He never asked you to.`, scripture: `Matthew 11:30 — "My yoke is easy to bear, and the burden I give you is light."` },
+      { text: `Rest is not the enemy of vigilance — it is what makes sustained watchfulness possible.`, scripture: `Psalm 127:2 — "It is useless for you to work so hard from early morning until late at night… for God gives rest to his loved ones."` },
+      { text: `Give God what you are watching over. He is a far more capable guardian than you are.`, scripture: `Philippians 4:7 — "The peace of God… will guard your hearts and minds as you live in Christ Jesus."` },
+    ],
+  },
+
+  interest: {
+    description: `Interest is the mildest form of anticipation — a gentle forward lean, an opening of attention toward something. Scripture honours the curious, seeking heart: "It is the glory of kings to search a thing out." (Proverbs 25:2). Interest, rightly ordered, is the beginning of discovery, learning, and often of calling.`,
+    feelTips: [
+      { text: `Follow the interest — it may be more than idle curiosity. Pay attention to what consistently draws your attention.`, scripture: `Proverbs 25:2 — "It is the glory of God to conceal things, but the glory of kings is to search things out."` },
+      { text: `Let interest be a form of attentiveness to what God has placed in the world for you to discover.`, scripture: `Psalm 111:2 — "How amazing are the deeds of the Lord! All who delight in him should ponder them."` },
+      { text: `Interest expressed in community often grows — share what you are exploring with someone.`, scripture: `Acts 17:11 — "The people of Berea… listened eagerly… They searched the Scriptures day after day."` },
+    ],
+    remedyTips: [
+      { text: `If interest feels flat — if nothing draws you — ask whether exhaustion, overcommitment, or grief has suppressed your natural curiosity.`, scripture: `Isaiah 40:31 — "Those who trust in the Lord will find new strength."` },
+      { text: `Try exposure to something new — interest is often rekindled by encounter, not by waiting for it to arrive.`, scripture: `Jeremiah 33:3 — "Call to me and I will answer you and tell you great and unsearchable things you do not know."` },
+      { text: `The deepest and most sustainable interest is in God Himself — the inexhaustible subject.`, scripture: `Psalm 27:4 — "The one thing I ask of the Lord… is to live in the house of the Lord all the days of my life, delighting in the Lord's perfections."` },
+    ],
+  },
+
   // ── Core emotions ──────────────────────────────────────────────────────────
 
   joy: {
