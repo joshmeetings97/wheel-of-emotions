@@ -356,6 +356,13 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
               {/* Question */}
               <p className="text-sm font-semibold text-slate-800 leading-relaxed mb-4">{q.q}</p>
 
+              {/* Persistent scripture callout (Christian mode) — shown above textarea so it stays visible while typing */}
+              {christianMode && q.placeholder && /\([1-3]?\s?[A-Z][a-zA-Z]+\s+\d+/.test(q.placeholder) && (
+                <div className="mb-3 px-3 py-2.5 rounded-xl bg-amber-50 border border-amber-100 text-[11px] italic text-amber-800 leading-snug">
+                  {q.placeholder}
+                </div>
+              )}
+
               {/* Scale input */}
               {q.type === 'scale' ? (
                 <ScaleInput
@@ -373,7 +380,11 @@ export default function ProcessEmotion({ emotionId, emotionName, accentColor, on
                   onKeyDown={e => {
                     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && answers[step].trim()) handleNext();
                   }}
-                  placeholder={q.placeholder}
+                  placeholder={
+                    christianMode && q.placeholder && /\([1-3]?\s?[A-Z][a-zA-Z]+\s+\d+/.test(q.placeholder)
+                      ? 'Write your reflection…'
+                      : q.placeholder
+                  }
                   rows={4}
                   className="w-full resize-none rounded-2xl px-4 py-3 text-sm text-slate-700 placeholder-slate-300 border border-slate-200 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-all leading-relaxed"
                 />
