@@ -363,15 +363,15 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
         <ConsentModal onAccept={handleConsentAccept} onDecline={handleConsentDecline} />
       )}
 
-      {/* Toggle button — hidden while detail panel is open to avoid overlap */}
+      {/* Toggle button — hidden when drawer is open or detail panel is open */}
       <button
         onClick={onToggle}
-        className={`fixed right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-semibold text-sm bg-white border border-slate-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all text-slate-700 ${detailOpen ? 'hidden' : ''}`}
+        className={`fixed right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-2xl font-semibold text-sm bg-white border border-slate-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all text-slate-700 ${isOpen || detailOpen ? 'hidden' : ''}`}
         style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))' }}
-        aria-label={isOpen ? 'Close journal' : 'Open emotion journal'}
+        aria-label="Open emotion journal"
       >
-        <span className="text-base">{isOpen ? '✕' : '📓'}</span>
-        <span>{isOpen ? 'Close' : 'Journal'}</span>
+        <span className="text-base">📓</span>
+        <span>Journal</span>
       </button>
 
       {/* Drawer */}
@@ -396,18 +396,25 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
                     : 'Keyword analysis · fully private'}
                 </p>
               </div>
+              <div className="flex items-center gap-2 shrink-0">
               {/* AI toggle — outer button provides ≥44px touch target on mobile */}
               <button
                 role="switch"
                 aria-checked={useAI && consentGiven}
                 onClick={handleAIToggle}
-                className="flex items-center gap-2 shrink-0 p-2 -m-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-300"
+                className="flex items-center gap-2 p-2 -m-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-300"
               >
                 <span className="text-xs text-slate-500">AI</span>
                 <span className={`relative inline-flex w-9 h-5 rounded-full transition-colors duration-200 ${aiActive ? 'bg-slate-700' : 'bg-slate-200'}`}>
                   <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${aiActive ? 'translate-x-4' : 'translate-x-0'}`} />
                 </span>
               </button>
+              <button
+                onClick={onToggle}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors flex items-center justify-center text-slate-400 hover:text-slate-600 text-xs"
+                aria-label="Close journal"
+              >✕</button>
+              </div>
             </div>
 
             {/* No key notice */}
