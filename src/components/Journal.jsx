@@ -42,8 +42,29 @@ function EmotionChip({ entry }) {
         )}
       </button>
       {expanded && entry.text && (
-        <div className="px-3 pb-3 pt-0.5 border-t border-slate-200 bg-white">
+        <div className="px-3 pb-3 pt-2 border-t border-slate-200 bg-white space-y-2.5">
           <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">{entry.text}</p>
+          {entry.emotions?.some(e => e.reason || e.matchedTerms?.length > 0) && (
+            <div className="pt-2 border-t border-slate-100 space-y-2">
+              {entry.emotions.map((e, i) => (
+                <div key={i} className="pl-2.5 border-l-2" style={{ borderColor: INTENSITY_COLORS[e.intensity] + '60' }}>
+                  <p className="text-[10px] font-semibold text-slate-700 mb-0.5">{e.emotion}</p>
+                  {e.reason && (
+                    <p className="text-[10px] text-slate-500 leading-relaxed">{e.reason}</p>
+                  )}
+                  {!entry.isAI && e.matchedTerms?.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-0.5">
+                      {e.matchedTerms.map((term, j) => (
+                        <span key={j} className="px-1.5 py-0.5 rounded-full bg-slate-100 text-[10px] text-slate-500 border border-slate-200">
+                          "{term}"
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -294,6 +315,8 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
           segmentId: primary.segmentId,
           color,
           text: trimmed,
+          emotions,
+          isAI: aiActive && !fellBack,
           date: now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }),
           time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }, ...prev].slice(0, 100));
