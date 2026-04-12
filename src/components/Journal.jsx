@@ -21,12 +21,31 @@ function scrubPII(text) {
 }
 
 function EmotionChip({ entry }) {
+  const [expanded, setExpanded] = useState(false);
   return (
-    <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
-      <span className="font-medium text-slate-700">{entry.emotion}</span>
-      <span className="text-slate-400">{entry.intensity}</span>
-      <span className="ml-auto text-slate-300">{entry.time}</span>
+    <div className="rounded-xl bg-slate-50 border border-slate-200 text-xs overflow-hidden">
+      <button
+        onClick={() => entry.text && setExpanded(v => !v)}
+        className={`w-full flex items-center gap-2 px-3 py-2 text-left ${entry.text ? 'hover:bg-slate-100 active:bg-slate-100 transition-colors' : ''}`}
+      >
+        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: entry.color }} />
+        <span className="font-medium text-slate-700 flex-1 truncate">{entry.emotion}</span>
+        <span className="text-slate-400 shrink-0">{entry.intensity}</span>
+        <span className="text-slate-300 shrink-0">{entry.time}</span>
+        {entry.text && (
+          <svg
+            className={`w-3 h-3 text-slate-300 shrink-0 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+            viewBox="0 0 20 20" fill="currentColor"
+          >
+            <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd"/>
+          </svg>
+        )}
+      </button>
+      {expanded && entry.text && (
+        <div className="px-3 pb-3 pt-0.5 border-t border-slate-200 bg-white">
+          <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">{entry.text}</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -80,7 +99,7 @@ function AINotice({ onReviewDetails }) {
             <strong>PII stripped before sending</strong> — emails, phone numbers, URLs and dates are removed from your text automatically.
           </Detail>
           <Detail icon="✓" color="text-green-700">
-            <strong>Text not stored here</strong> — only the detected emotion label is saved in your session log, never your words.
+            <strong>Stored on this device only</strong> — your journal text and detected emotions are saved in your browser's local storage, never on a server.
           </Detail>
           <Detail icon="↺" color="text-amber-700">
             <strong>Processed by Anthropic</strong> — your text is still read by Anthropic's servers. Toggle AI off for fully private analysis.
@@ -142,7 +161,7 @@ function ConsentModal({ onAccept, onDecline }) {
           </li>
           <li className="flex gap-2.5 text-xs text-slate-600 leading-relaxed">
             <span className="mt-0.5 shrink-0 text-green-600">✓</span>
-            <span><strong>Not stored here.</strong> Only the detected emotion label is saved locally — never the text itself.</span>
+            <span><strong>Stored on this device only.</strong> Your journal text and detected emotions are saved in your browser's local storage — never on a server.</span>
           </li>
           <li className="flex gap-2.5 text-xs text-slate-600 leading-relaxed">
             <span className="mt-0.5 shrink-0 text-amber-500">↺</span>
@@ -274,6 +293,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
           intensity: primary.intensity,
           segmentId: primary.segmentId,
           color,
+          text: trimmed,
           date: now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }),
           time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }, ...prev].slice(0, 100));
