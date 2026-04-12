@@ -525,7 +525,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
             {/* History */}
             {entries.length > 0 ? (
               <div>
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-1">
                   <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">History</h3>
                   <button
                     onClick={() => setEntries([])}
@@ -534,6 +534,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
                     Clear all
                   </button>
                 </div>
+                <p className="text-[10px] text-slate-300 mb-2">Stored on this device only · never sent to a server</p>
                 {(() => {
                   // Group entries by date
                   const groups = [];
