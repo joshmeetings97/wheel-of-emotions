@@ -346,7 +346,7 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
           isAI: aiActive && !fellBack,
           date: now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }),
           time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        }, ...prev].slice(0, 100));
+        }, ...prev].slice(0, 500));
 
         if (primary.segmentId) onEmotionDetected(primary.segmentId);
       }
