@@ -31,6 +31,16 @@ function EmotionChip({ entry }) {
   );
 }
 
+function formatDateHeading(dateStr) {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const fmt = d => d.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+  if (dateStr === fmt(today)) return 'Today';
+  if (dateStr === fmt(yesterday)) return 'Yesterday';
+  return dateStr;
+}
+
 // Collapsible privacy notice shown while AI mode is active
 function AINotice({ onReviewDetails }) {
   const [expanded, setExpanded] = useState(false);
@@ -257,14 +267,16 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
       const primary = emotions[0];
       if (primary) {
         const color = INTENSITY_COLORS[primary.intensity] || '#3b82f6';
+        const now = new Date();
         setEntries(prev => [{
           id:        Date.now(),
           emotion:   emotions.map(e => e.emotion).join(' · '),
           intensity: primary.intensity,
           segmentId: primary.segmentId,
           color,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        }, ...prev].slice(0, 5));
+          date: now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }),
+          time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        }, ...prev].slice(0, 100));
 
         if (primary.segmentId) onEmotionDetected(primary.segmentId);
       }
@@ -510,24 +522,41 @@ export default function Journal({ isOpen, onToggle, onEmotionDetected, onEmotion
               </div>
             )}
 
-            {/* Session log */}
+            {/* History */}
             {entries.length > 0 ? (
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">Session log</h3>
+                  <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">History</h3>
                   <button
                     onClick={() => setEntries([])}
                     className="text-[10px] text-slate-400 hover:text-slate-600 transition-colors py-2 px-1 -my-2 -mr-1"
                   >
-                    Clear
+                    Clear all
                   </button>
                 </div>
-                <div className="space-y-1.5">
-                  {entries.map(e => <EmotionChip key={e.id} entry={e} />)}
-                </div>
+                {(() => {
+                  // Group entries by date
+                  const groups = [];
+                  let currentDate = null;
+                  for (const e of entries) {
+                    const d = e.date || 'Earlier';
+                    if (d !== currentDate) { groups.push({ date: d, items: [] }); currentDate = d; }
+                    groups[groups.length - 1].items.push(e);
+                  }
+                  return groups.map(g => (
+                    <div key={g.date} className="mb-3">
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">
+                        {formatDateHeading(g.date)}
+                      </p>
+                      <div className="space-y-1.5">
+                        {g.items.map(e => <EmotionChip key={e.id} entry={e} />)}
+                      </div>
+                    </div>
+                  ));
+                })()}
               </div>
             ) : result ? (
-              <p className="text-[10px] text-slate-300 text-center py-1">Log cleared</p>
+              <p className="text-[10px] text-slate-300 text-center py-1">History cleared</p>
             ) : null}
           </div>
         </div>
